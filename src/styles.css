@@ -1428,6 +1428,9 @@ td {
   overflow-wrap: anywhere;
 }
 .catalog-status-page h1 {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
   margin: 16px 0 24px;
 }
 .catalog-status-page section {
@@ -1459,4 +1462,9 @@ td {
 .publisher-scan code {
   white-space: normal;
   overflow-wrap: anywhere;
+}
+
+.catalog-status-page a {
+  color: var(--navy);
+  text-decoration: underline;
 }
