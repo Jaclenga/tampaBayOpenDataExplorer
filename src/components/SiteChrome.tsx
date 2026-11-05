@@ -24,9 +24,8 @@ export function SiteHeader() {
         <nav aria-label="Main navigation">
           <a href="#catalog">Browse data</a>
           <a href="#publishers">Publishers</a>
-          <a href="#about">About this project</a>
-          <a href="https://jaclenga.github.io/tampaBayOpenData/">
-            Documentation ↗
+          <a href="https://github.com/Jaclenga/tampaBayOpenDataExplorer">
+            GitHub
           </a>
         </nav>
       </div>
