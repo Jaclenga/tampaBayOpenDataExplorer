@@ -545,6 +545,12 @@ footer {
   text-decoration: none;
   margin-bottom: 16px;
 }
+footer a:hover,
+footer a:focus-visible {
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+}
 .footer-grid h2 {
   font-size: 14px;
   color: #fff;
