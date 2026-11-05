@@ -19,8 +19,7 @@ export function SiteHeader({ catalog = false }: { catalog?: boolean }) {
             <MainNavigation />
           </div>
           <p>
-            Discover and access public datasets from local governments across
-            the Tampa Bay region
+            Discover public datasets across the Tampa Bay area
           </p>
         </div>
       </header>

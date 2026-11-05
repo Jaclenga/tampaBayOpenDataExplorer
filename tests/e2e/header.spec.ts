@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { installApi } from "./helpers";
 const title = "Explore public data across Tampa Bay";
 const subtitle =
-  "Discover and access public datasets from local governments across the Tampa Bay region";
+  "Discover public datasets across the Tampa Bay area";
 for (const width of [1440, 768, 390, 320]) {
   test(`text-only civic header fits ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
