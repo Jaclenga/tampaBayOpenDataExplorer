@@ -277,45 +277,6 @@ header {
 .topics button:hover {
   border-color: var(--coral);
 }
-.publisher-section {
-  padding: 23px 0;
-  background: var(--paper);
-  border-bottom: 1px solid var(--line);
-  scroll-margin-top: 20px;
-}
-.publisher-section .shell {
-  display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: 28px;
-}
-.publisher-section h2 {
-  margin: 1px 0 0;
-  font-size: 15px;
-}
-.publisher-links {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px 25px;
-}
-.publisher-links button {
-  min-height: 28px;
-  border: 0;
-  background: none;
-  color: var(--navy);
-  padding: 0;
-  text-align: left;
-  font-size: 13px;
-  line-height: 1.45;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-.publisher-links button span {
-  color: var(--coral-dark);
-  margin-left: 4px;
-}
-.publisher-links button:hover {
-  color: var(--coral-dark);
-}
 .catalog {
   padding-top: 34px;
   padding-bottom: 64px;
@@ -885,16 +846,9 @@ td {
   .nav nav a {
     font-size: 13px;
   }
-  .nav nav a:last-child {
-    display: none;
-  }
   .catalog-layout {
     grid-template-columns: 220px minmax(0, 1fr);
     gap: 28px;
-  }
-  .publisher-section .shell {
-    grid-template-columns: 1fr;
-    gap: 13px;
   }
   .footer-grid {
     gap: 30px;
@@ -922,9 +876,6 @@ td {
   }
   .nav nav {
     gap: 15px;
-  }
-  .nav nav a:nth-child(n + 3) {
-    display: none;
   }
   .nav nav a {
     font-size: 12px;
@@ -962,16 +913,6 @@ td {
   .topics button,
   .topics > span {
     font-size: 12px;
-  }
-  .publisher-links {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 11px 20px;
-  }
-  .publisher-links button {
-    font-size: 12px;
-  }
-  .publisher-section {
-    padding: 19px 0;
   }
   .catalog {
     padding-top: 27px;

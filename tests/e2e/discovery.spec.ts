@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import { installApi } from "./helpers";
 
-test("search submission, topic links, and publisher links lead to filtered results", async ({
+test("search submission, topic links, and publisher filters lead to filtered results", async ({
   page,
 }) => {
   const api = await installApi(page);
@@ -19,7 +19,12 @@ test("search submission, topic links, and publisher links lead to filtered resul
     page.getByRole("link", { name: "Street centerlines", exact: true }),
   ).toBeVisible();
   await expect(page.getByRole("searchbox")).toHaveValue("");
-  await page.getByRole("button", { name: "Test County", exact: false }).click();
+  await page
+    .getByRole("button", { name: "Clear all filters", exact: true })
+    .click();
+  await page
+    .getByRole("combobox", { name: "Publisher", exact: true })
+    .selectOption("Test County");
   await expect(page.locator(".dataset-card")).toHaveCount(1);
   await expect(
     page.getByRole("link", { name: "Budget allocations", exact: true }),
@@ -37,7 +42,7 @@ test("section navigation returns from a dataset without treating section names a
   ).toBeVisible();
   await page
     .getByRole("navigation", { name: "Main navigation" })
-    .getByRole("link", { name: "Publishers", exact: true })
+    .getByRole("link", { name: "Browse data", exact: true })
     .click();
   await expect(
     page.getByRole("heading", { name: "Tampa Bay Open Data", exact: true }),

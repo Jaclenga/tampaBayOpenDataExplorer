@@ -43,9 +43,6 @@ export default function CatalogPage({
     () => sortCatalog(searchCatalog(catalog.datasets, filters), sort),
     [catalog, filters, sort],
   );
-  const publishers = [
-    ...new Set(catalog.datasets.map((d) => d.publisher)),
-  ].sort();
   const sourceOnly = new Set(
     access.datasets
       .filter(
@@ -82,22 +79,6 @@ export default function CatalogPage({
             {topics.map((topic) => (
               <button key={topic} onClick={() => browse({ category: topic })}>
                 {topic}
-              </button>
-            ))}
-          </div>
-        </div>
-      </section>
-      <section
-        id="publishers"
-        className="publisher-section"
-        aria-label="Browse by publisher"
-      >
-        <div className="shell">
-          <h2>Publishers</h2>
-          <div className="publisher-links">
-            {publishers.map((publisher) => (
-              <button key={publisher} onClick={() => browse({ publisher })}>
-                {publisher} <span aria-hidden="true">→</span>
               </button>
             ))}
           </div>

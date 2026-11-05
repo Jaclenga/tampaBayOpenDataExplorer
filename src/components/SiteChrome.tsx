@@ -23,7 +23,6 @@ export function SiteHeader() {
         </a>
         <nav aria-label="Main navigation">
           <a href="#catalog">Browse data</a>
-          <a href="#publishers">Publishers</a>
           <a href="https://github.com/Jaclenga/tampaBayOpenDataExplorer">
             GitHub
           </a>
