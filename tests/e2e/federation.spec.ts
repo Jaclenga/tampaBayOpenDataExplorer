@@ -24,10 +24,9 @@ test("new discoveries join the catalog, retain provenance, and query filtered li
   await page.goto("/");
   await expect(page.locator(".dataset-card")).toHaveCount(4);
   expect(queries).toHaveLength(0);
-  await page
-    .getByRole("combobox", { name: "Catalog group" })
-    .selectOption("discovered");
-  await expect(page.locator(".dataset-card")).toHaveCount(1);
+  await expect(
+    page.getByRole("combobox", { name: "Catalog group" }),
+  ).toHaveCount(0);
   await page
     .getByRole("link", { name: "Newly published parks", exact: true })
     .click();

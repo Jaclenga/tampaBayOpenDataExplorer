@@ -74,19 +74,6 @@ export default function FilterPanel({
         </select>
       </label>
       <label>
-        Catalog group
-        <select
-          value={filters.verification ?? ""}
-          onChange={(event) =>
-            onChange({ ...filters, verification: event.target.value })
-          }
-        >
-          <option value="">Curated and discovered</option>
-          <option value="curated">Curated R-package subset</option>
-          <option value="discovered">Automatically discovered</option>
-        </select>
-      </label>
-      <label>
         Source platform
         <select
           value={filters.platform ?? ""}
