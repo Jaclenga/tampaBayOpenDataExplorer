@@ -12,10 +12,12 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",
-    "test:all": "npm run catalog:validate && npm run typecheck && npm run lint && npm run test:coverage && npm run test:e2e",
+    "test:all": "npm run catalog:validate && npm run access:validate && npm run typecheck && npm run lint && npm run test:coverage && npm run test:e2e",
     "test:e2e": "playwright test",
     "catalog:generate": "node scripts/generate-catalog.mjs",
     "catalog:validate": "tsx scripts/validate-catalog.ts",
+    "access:audit": "node scripts/audit-access.mjs",
+    "access:validate": "tsx scripts/validate-access.ts",
     "deploy": "npm run build && wrangler pages deploy dist --project-name=tampabay-open-data-explorer"
   },
   "dependencies": {

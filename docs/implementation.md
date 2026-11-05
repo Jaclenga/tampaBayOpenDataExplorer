@@ -28,6 +28,14 @@ An optional manual `node scripts/live-smoke.mjs` production-origin browser check
 
 Remaining external setup: push this local repository to the intended GitHub remote and configure CI deployment secrets if GitHub-driven deployment is desired. Live API compatibility can change; routine CI intentionally does not query government infrastructure.
 
+## Production access audit and rollout
+
+The repository is now on GitHub at `Jaclenga/tampaBayOpenDataExplorer`. The initial Application checks run `41939095639` passed completely, including Linux Chromium tests. Local Wrangler authentication is used for the requested rollout; configuring GitHub deployment secrets is a separate optional step.
+
+An explicit Chromium audit from `https://tampabay-open-data-explorer.pages.dev` checked all 52 endpoints. Each check fetched metadata and, when successful, queried at most one record with WGS84 geometry. At most two checks ran concurrently. The committed `public/access.json` records 31 available results and 21 source-only results: 20 Tampa browser-access failures and one Clearwater critical-assets authentication requirement. The report is independent of the package catalog and validates against all catalog IDs/endpoints and its upstream revision.
+
+Source-only cards and detail pages clearly explain the limitation and link to the publisher. Their detail view does not mount the record-preview hook, preventing known-failing record requests and misleading export controls. Available entries keep normal previews. CI validates the static report and tests source-only behavior without live government calls. Refresh the audit after catalog changes or when investigating a publisher's restored browser access.
+
 ## Complexity refactor
 
 Preview state and request cancellation now live in `useDatasetPreview`; the detail component assembles focused provenance/fields, records/map, and download components. HTTP handling is separate from ArcGIS schema/query logic. Query construction, page validation, record-ID validation, and geometry normalization use named helpers with early returns. Public ArcGIS exports and the existing behavior tests remain intact.

@@ -1,4 +1,13 @@
 @import "tailwindcss";
+.source-only-badge {
+  background: #fff0df;
+  color: #794519;
+  border: 1px solid #dfbf98;
+  border-radius: 4px;
+  padding: 6px 9px;
+  font-size: 11px;
+  margin-bottom: 14px;
+}
 @theme {
   --font-sans: "Segoe UI", Arial, sans-serif;
 }

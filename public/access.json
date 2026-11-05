@@ -1,0 +1,424 @@
+{
+  "schemaVersion": 1,
+  "checkedAt": "2026-11-05T00:13:17.448Z",
+  "catalogCommit": "2ef47d2f007e7d4f887b103990b893bbf6e7ddae",
+  "origin": "https://tampabay-open-data-explorer.pages.dev",
+  "datasets": [
+    {
+      "id": "tampa/construction-permits",
+      "endpoint": "https://arcgis.tampagov.net/arcgis/rest/services/Planning/PermitsAll/FeatureServer/0",
+      "status": "source-only",
+      "stage": "metadata",
+      "reason": "Browser request failed: the publisher may block cross-origin access or be unreachable.",
+      "recordCount": null
+    },
+    {
+      "id": "tampa/development-cases",
+      "endpoint": "https://arcgis.tampagov.net/arcgis/rest/services/Planning/ActiveEntitlementLocations/FeatureServer/0",
+      "status": "source-only",
+      "stage": "metadata",
+      "reason": "Browser request failed: the publisher may block cross-origin access or be unreachable.",
+      "recordCount": null
+    },
+    {
+      "id": "tampa/capital-projects",
+      "endpoint": "https://arcgis.tampagov.net/arcgis/rest/services/OpenData/CapitalProjects/MapServer/0",
+      "status": "source-only",
+      "stage": "metadata",
+      "reason": "Browser request failed: the publisher may block cross-origin access or be unreachable.",
+      "recordCount": null
+    },
+    {
+      "id": "tampa/city-boundary",
+      "endpoint": "https://arcgis.tampagov.net/arcgis/rest/services/OpenData/Boundary/MapServer/6",
+      "status": "source-only",
+      "stage": "metadata",
+      "reason": "Browser request failed: the publisher may block cross-origin access or be unreachable.",
+      "recordCount": null
+    },
+    {
+      "id": "tampa/neighborhoods",
+      "endpoint": "https://arcgis.tampagov.net/arcgis/rest/services/OpenData/Boundary/MapServer/5",
+      "status": "source-only",
+      "stage": "metadata",
+      "reason": "Browser request failed: the publisher may block cross-origin access or be unreachable.",
+      "recordCount": null
+    },
+    {
+      "id": "tampa/council-districts",
+      "endpoint": "https://arcgis.tampagov.net/arcgis/rest/services/OpenData/Boundary/MapServer/0",
+      "status": "source-only",
+      "stage": "metadata",
+      "reason": "Browser request failed: the publisher may block cross-origin access or be unreachable.",
+      "recordCount": null
+    },
+    {
+      "id": "tampa/riverwalk",
+      "endpoint": "https://arcgis.tampagov.net/arcgis/rest/services/OpenData/Planning/MapServer/4",
+      "status": "source-only",
+      "stage": "metadata",
+      "reason": "Browser request failed: the publisher may block cross-origin access or be unreachable.",
+      "recordCount": null
+    },
+    {
+      "id": "tampa/parks",
+      "endpoint": "https://arcgis.tampagov.net/arcgis/rest/services/Parks/ParksPolygons/MapServer/0",
+      "status": "source-only",
+      "stage": "metadata",
+      "reason": "Browser request failed: the publisher may block cross-origin access or be unreachable.",
+      "recordCount": null
+    },
+    {
+      "id": "tampa/fire-stations",
+      "endpoint": "https://arcgis.tampagov.net/arcgis/rest/services/OpenData/Fire/MapServer/10",
+      "status": "source-only",
+      "stage": "metadata",
+      "reason": "Browser request failed: the publisher may block cross-origin access or be unreachable.",
+      "recordCount": null
+    },
+    {
+      "id": "tampa/bike-lanes",
+      "endpoint": "https://arcgis.tampagov.net/arcgis/rest/services/OpenData/Transportation/MapServer/0",
+      "status": "source-only",
+      "stage": "metadata",
+      "reason": "Browser request failed: the publisher may block cross-origin access or be unreachable.",
+      "recordCount": null
+    },
+    {
+      "id": "tampa/recycling-pickup",
+      "endpoint": "https://arcgis.tampagov.net/arcgis/rest/services/OpenData/SolidWaste/MapServer/3",
+      "status": "source-only",
+      "stage": "metadata",
+      "reason": "Browser request failed: the publisher may block cross-origin access or be unreachable.",
+      "recordCount": null
+    },
+    {
+      "id": "tampa/community-redevelopment",
+      "endpoint": "https://arcgis.tampagov.net/arcgis/rest/services/OpenData/Planning/MapServer/0",
+      "status": "source-only",
+      "stage": "metadata",
+      "reason": "Browser request failed: the publisher may block cross-origin access or be unreachable.",
+      "recordCount": null
+    },
+    {
+      "id": "tampa/high-injury-network",
+      "endpoint": "https://arcgis.tampagov.net/arcgis/rest/services/OpenData/Transportation/MapServer/10",
+      "status": "source-only",
+      "stage": "metadata",
+      "reason": "Browser request failed: the publisher may block cross-origin access or be unreachable.",
+      "recordCount": null
+    },
+    {
+      "id": "tampa/historic-district-local",
+      "endpoint": "https://arcgis.tampagov.net/arcgis/rest/services/OpenData/Planning/MapServer/1",
+      "status": "source-only",
+      "stage": "metadata",
+      "reason": "Browser request failed: the publisher may block cross-origin access or be unreachable.",
+      "recordCount": null
+    },
+    {
+      "id": "tampa/historic-landmarks-local",
+      "endpoint": "https://arcgis.tampagov.net/arcgis/rest/services/OpenData/Planning/MapServer/29",
+      "status": "source-only",
+      "stage": "metadata",
+      "reason": "Browser request failed: the publisher may block cross-origin access or be unreachable.",
+      "recordCount": null
+    },
+    {
+      "id": "tampa/police-districts",
+      "endpoint": "https://arcgis.tampagov.net/arcgis/rest/services/OpenData/LawEnforcement/MapServer/1",
+      "status": "source-only",
+      "stage": "metadata",
+      "reason": "Browser request failed: the publisher may block cross-origin access or be unreachable.",
+      "recordCount": null
+    },
+    {
+      "id": "tampa/street-speed-reductions",
+      "endpoint": "https://arcgis.tampagov.net/arcgis/rest/services/OpenData/Transportation/MapServer/4",
+      "status": "source-only",
+      "stage": "metadata",
+      "reason": "Browser request failed: the publisher may block cross-origin access or be unreachable.",
+      "recordCount": null
+    },
+    {
+      "id": "tampa/truck-routes",
+      "endpoint": "https://arcgis.tampagov.net/arcgis/rest/services/OpenData/Transportation/MapServer/5",
+      "status": "source-only",
+      "stage": "metadata",
+      "reason": "Browser request failed: the publisher may block cross-origin access or be unreachable.",
+      "recordCount": null
+    },
+    {
+      "id": "tampa/water-service-area",
+      "endpoint": "https://arcgis.tampagov.net/arcgis/rest/services/OpenData/UtilityWater/MapServer/1",
+      "status": "source-only",
+      "stage": "metadata",
+      "reason": "Browser request failed: the publisher may block cross-origin access or be unreachable.",
+      "recordCount": null
+    },
+    {
+      "id": "tampa/zoning-districts",
+      "endpoint": "https://arcgis.tampagov.net/arcgis/rest/services/OpenData/Planning/MapServer/28",
+      "status": "source-only",
+      "stage": "metadata",
+      "reason": "Browser request failed: the publisher may block cross-origin access or be unreachable.",
+      "recordCount": null
+    },
+    {
+      "id": "stpete/stpete-parks",
+      "endpoint": "https://services2.arcgis.com/9qPLjNtocjo438CJ/arcgis/rest/services/Parks_view/FeatureServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "stpete/stpete-city-boundary",
+      "endpoint": "https://services2.arcgis.com/9qPLjNtocjo438CJ/arcgis/rest/services/CityLimits_view/FeatureServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "stpete/stpete-streets",
+      "endpoint": "https://services2.arcgis.com/9qPLjNtocjo438CJ/arcgis/rest/services/Streets_view/FeatureServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "clearwater/clearwater-park-buffers",
+      "endpoint": "https://gis.myclearwater.com/arcgis/rest/services/ArcGISMapServices/Clearwater_Park_Buffers/MapServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "clearwater/clearwater-zoning",
+      "endpoint": "https://gis.myclearwater.com/arcgis/rest/services/ArcGISMapServices/Zoning_WGS84/MapServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "clearwater/clearwater-libraries",
+      "endpoint": "https://gis.myclearwater.com/arcgis/rest/services/ArcGISMapServices/ClearwaterServicesApp_WGS84/MapServer/1",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "hillsborough/hillsborough-libraries",
+      "endpoint": "https://services.arcgis.com/apTfC6SUmnNfnxuF/arcgis/rest/services/Libraries_hc/FeatureServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "hillsborough/hillsborough-sidewalks",
+      "endpoint": "https://services.arcgis.com/apTfC6SUmnNfnxuF/arcgis/rest/services/Sidewalks/FeatureServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "hillsborough/hillsborough-parks",
+      "endpoint": "https://services.arcgis.com/apTfC6SUmnNfnxuF/arcgis/rest/services/Parks_and_Recreation/FeatureServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "pinellas/pinellas-fire-stations",
+      "endpoint": "https://services.arcgis.com/f5HgUpxURgEzTccH/ArcGIS/rest/services/Pinellas_PSSFireStation_view/FeatureServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "pinellas/pinellas-park-boundaries",
+      "endpoint": "https://services.arcgis.com/f5HgUpxURgEzTccH/ArcGIS/rest/services/Pinellas_ParkBoundaries_view/FeatureServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "pinellas/pinellas-trail",
+      "endpoint": "https://services.arcgis.com/f5HgUpxURgEzTccH/ArcGIS/rest/services/Pinellas_PinellasTrail_view/FeatureServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "tampa-bay/tbrpc-developments-of-regional-impact",
+      "endpoint": "https://services3.arcgis.com/RgIBbQIF0Y6T3AX6/arcgis/rest/services/Developments_of_Regional_Impact/FeatureServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "tampa-bay/tbrpc-regional-storm-surge-zones",
+      "endpoint": "https://services3.arcgis.com/RgIBbQIF0Y6T3AX6/arcgis/rest/services/region_storm_surge_zones/FeatureServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "tampa-bay/tbrpc-regional-data-centers",
+      "endpoint": "https://services3.arcgis.com/RgIBbQIF0Y6T3AX6/arcgis/rest/services/Tampa_Bay_Region_Data_Centers/FeatureServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "stpete/stpete-zoning-districts",
+      "endpoint": "https://services2.arcgis.com/9qPLjNtocjo438CJ/ArcGIS/rest/services/ZoningDistricts_view/FeatureServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "stpete/stpete-future-land-use",
+      "endpoint": "https://services2.arcgis.com/9qPLjNtocjo438CJ/ArcGIS/rest/services/FutureLandUse_view/FeatureServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "stpete/stpete-sidewalks",
+      "endpoint": "https://services2.arcgis.com/9qPLjNtocjo438CJ/ArcGIS/rest/services/Sidewalks_view/FeatureServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "stpete/stpete-public-works-projects",
+      "endpoint": "https://services2.arcgis.com/9qPLjNtocjo438CJ/ArcGIS/rest/services/PWAProjectTracking/FeatureServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "clearwater/clearwater-future-land-use",
+      "endpoint": "https://gis.myclearwater.com/arcgis/rest/services/ArcGISMapServices/FLU_w_PPC_Colors_WGS84/MapServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "clearwater/clearwater-critical-assets",
+      "endpoint": "https://services1.arcgis.com/3GsNorcb0Mn5rMt8/arcgis/rest/services/Vulnerability_Assessment/FeatureServer/11",
+      "status": "source-only",
+      "stage": "metadata",
+      "reason": "ArcGIS 499: Token Required",
+      "recordCount": null
+    },
+    {
+      "id": "clearwater/clearwater-sidewalks",
+      "endpoint": "https://gis.myclearwater.com/arcgis/rest/services/PublicWorksServices/PW_Sup_Sidewalks_NAD83/MapServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "pinellas/pinellas-countywide-plan",
+      "endpoint": "https://services.arcgis.com/f5HgUpxURgEzTccH/ArcGIS/rest/services/Pinellas_Countywide_Plan_Map_Categories_view/FeatureServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "pinellas/pinellas-bicycle-facilities",
+      "endpoint": "https://services.arcgis.com/f5HgUpxURgEzTccH/ArcGIS/rest/services/Pinellas_BicycleFacilities_view/FeatureServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "pinellas/pinellas-sidewalks",
+      "endpoint": "https://services.arcgis.com/f5HgUpxURgEzTccH/ArcGIS/rest/services/Pinellas_Sidewalk_view/FeatureServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "pinellas/pinellas-assisted-housing",
+      "endpoint": "https://services.arcgis.com/f5HgUpxURgEzTccH/ArcGIS/rest/services/Pinellas_AssistedHousing_view/FeatureServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "hillsborough/hillsborough-hart-routes",
+      "endpoint": "https://services.arcgis.com/apTfC6SUmnNfnxuF/ArcGIS/rest/services/HART_Bus_Stops_and_Routes/FeatureServer/21",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "hillsborough/hillsborough-fema-flood-zones",
+      "endpoint": "https://services.arcgis.com/apTfC6SUmnNfnxuF/arcgis/rest/services/FloodZone_FEMA/FeatureServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "hillsborough/hillsborough-zoning",
+      "endpoint": "https://services.arcgis.com/apTfC6SUmnNfnxuF/arcgis/rest/services/Zoning/FeatureServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "hillsborough/hillsborough-water-quality",
+      "endpoint": "https://services.arcgis.com/apTfC6SUmnNfnxuF/arcgis/rest/services/EPC_WQM_DATA/FeatureServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "hillsborough/hillsborough-land-cover-2023",
+      "endpoint": "https://services.arcgis.com/apTfC6SUmnNfnxuF/arcgis/rest/services/LandUseLandCover_SWFWMD2023/FeatureServer/64",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    },
+    {
+      "id": "tampa-bay/tbrpc-regional-boundary",
+      "endpoint": "https://services3.arcgis.com/RgIBbQIF0Y6T3AX6/arcgis/rest/services/tbrpc_regional_boundary/FeatureServer/0",
+      "status": "available",
+      "stage": "complete",
+      "reason": null,
+      "recordCount": 1
+    }
+  ]
+}

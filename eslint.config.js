@@ -23,6 +23,7 @@ export default ts.config(
         console: "readonly",
         process: "readonly",
         URL: "readonly",
+        URLSearchParams: "readonly",
         fetch: "readonly",
         AbortSignal: "readonly",
         setTimeout: "readonly",

@@ -58,6 +58,8 @@ Set `TBOD_SOURCE` to use another package checkout. `scripts/generate_catalog.R` 
 
 `TBOD_OUTPUT` optionally sets a different output path, used by integration tests to keep the committed catalog untouched.
 
+After changing the catalog, refresh `public/access.json` with `npm run access:audit` and validate it with `npm run access:validate`. This explicit maintenance command checks metadata and at most one record per endpoint from the production browser origin, with two concurrent requests. It records source-only failures instead of removing datasets. Review and commit both snapshots together. Routine CI validates the saved report without making publisher requests.
+
 The weekly/manual catalog workflow generates against upstream main and fails if dataset content differs, attaching an artifact for review. It never silently publishes a changed or partial collection. Normal CI uses the committed snapshot and makes no government requests.
 
 ## Reliability and limits
@@ -72,7 +74,7 @@ Exports always contain only loaded records. No total count or complete-dataset e
 
 Basemap tiles come directly from OpenStreetMap with visible attribution. Tiles and ArcGIS calls require publisher availability. No tile prefetching or bulk downloads. See [OpenStreetMap's tile policy](https://operations.osmfoundation.org/policies/tiles/) before scaling traffic; a different public tile provider may become appropriate at higher usage.
 
-**Observed live limitation:** production-origin Chromium checks on November 4, 2026 succeeded for sampled metadata endpoints from five publishers and loaded a 100-record St. Petersburg preview. Sampled City of Tampa requests failed in the browser, including a planning endpoint blocked by CORS. These entries remain searchable with source links and understandable preview errors. No proxy has been added; availability of every endpoint is not guaranteed. Run `node scripts/live-smoke.mjs [site-url]` explicitly to repeat a small live check; it intentionally exits nonzero if any sample fails.
+**Browser access audit:** all 52 datasets were checked from the production origin on November 4, 2026. Metadata and a one-record query succeeded for 31. The 20 City of Tampa layers failed browser metadata requests, and Clearwater critical assets returned ArcGIS 499 (Token Required). Those 21 datasets are explicitly labeled source-only in cards and details, with publisher links and the audit date; the app does not attempt known-failing previews. All 52 remain searchable. This is a dated access check, not a guarantee of future availability or a full validation of every record. No proxy has been added. `npm run access:audit -- [site-url] [output-file]` refreshes the complete report. `node scripts/live-smoke.mjs [site-url]` verifies the published report, source-only behavior, and a real St. Petersburg preview, map, and CSV download.
 
 ## Cloudflare Pages deployment
 

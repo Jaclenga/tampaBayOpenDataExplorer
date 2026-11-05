@@ -29,6 +29,8 @@ The browser server binds to `127.0.0.1:5173`, runs the Vite production build, an
 - `tests/e2e/preview.spec.ts`: sortable nonspatial data, short pages, backward navigation, failed-page recovery, unsupported capabilities, successful/rejected map-area queries, empty responses, and downloaded CSV/GeoJSON contents.
 - `tests/e2e/explorer.spec.ts`: actual map rendering/feature selection and end-to-end discovery through export against the committed catalog.
 - `tests/e2e/mobile.spec.ts`: the discovery/detail path in an emulated 390px touch viewport, including horizontal overflow checking.
+- `tests/services/access.test.ts`: complete access-report coverage, matching endpoints/revisions, and rejection of contradictory or incomplete source-only labels.
+- `tests/e2e/access.spec.ts`: source-only datasets remain discoverable and link to publishers without metadata or record requests.
 
 `tests/fixtures.ts` provides a small synthetic catalog and ArcGIS records; new unit tests should use it instead of relying on current government records. The original catalog smoke test intentionally checks the committed 52-entry/six-publisher snapshot. Review those assertions when accepting a new catalog generation.
 
@@ -53,6 +55,6 @@ The expanded suite first reproduced these application bugs, then verified their 
 
 The latest bug-fix regression cases cover repeated-page rejection across retries and subsequent recovery, equivalent numeric/string record IDs, per-feature projected or malformed CRS declarations, malformed shape structures, and invalid upstream schema-file shapes/keys/fields. Generator failure tests verify that the previous catalog is retained.
 
-Verified locally after these fixes: 111 unit/integration tests and 16 desktop/mobile browser tests passed, with 98.15% core-service/schema line coverage (97.08% branches). Browser checks include the original flows plus retry protection and spatial-export failure handling. These results describe the checked source; they do not replace live publisher compatibility checks.
+Verified locally after the access-status changes: 119 unit/integration tests and 17 desktop/mobile browser tests passed, with 98.32% core-service/schema line coverage (97.41% branches). Browser checks include the original flows plus retry protection, spatial-export failure handling, and source-only behavior. These results describe the checked source; they do not replace live publisher compatibility checks.
 
 ESLint also enforces a maximum cyclomatic complexity of 15 for each source function. This counts independent control-flow paths; it helps prevent request, navigation, and rendering logic from accumulating in one function. Tests are excluded from this complexity limit.

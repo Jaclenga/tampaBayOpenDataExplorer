@@ -1,8 +1,31 @@
 import { test, expect } from "@playwright/test";
+import { readFileSync } from "node:fs";
+import { parseCatalog } from "../../src/services/catalog";
+const catalog = parseCatalog(
+  JSON.parse(readFileSync("public/catalog.json", "utf8")),
+);
 test("search, choose a dataset, preview and export a loaded page", async ({
   page,
 }) => {
   const arcgisRequests: string[] = [];
+  await page.route("**/access.json", (route) =>
+    route.fulfill({
+      json: {
+        schemaVersion: 1,
+        checkedAt: "2026-11-04T12:00:00.000Z",
+        catalogCommit: catalog.upstreamCommit,
+        origin: "https://explorer.example.test",
+        datasets: catalog.datasets.map((d) => ({
+          id: d.id,
+          endpoint: `${d.serviceUrl}/${d.layerId}`,
+          status: "available",
+          stage: "complete",
+          reason: null,
+          recordCount: 1,
+        })),
+      },
+    }),
+  );
   await page.route("**/FeatureServer/**", async (route) => {
     const url = new URL(route.request().url());
     arcgisRequests.push(url.href);

@@ -1,41 +1,39 @@
 import type { Dataset } from "../types";
-import { endpoint } from "../services/arcgis";
+import type { DatasetAccess } from "../services/access";
 import { useDatasetPreview } from "../hooks/useDatasetPreview";
 import DatasetRecords from "./DatasetRecords";
 import DownloadMenu from "./DownloadMenu";
-import { DatasetFields, DatasetProvenance } from "./DatasetProvenance";
+import { DatasetFields } from "./DatasetProvenance";
+import DatasetHeader from "./DatasetHeader";
+import SourceOnlyDataset from "./SourceOnlyDataset";
 
-export default function DatasetDetail({ dataset }: { dataset: Dataset }) {
+export default function DatasetDetail({
+  dataset,
+  access,
+  checkedAt,
+}: {
+  dataset: Dataset;
+  access: DatasetAccess;
+  checkedAt: string;
+}) {
+  if (access.status === "source-only")
+    return (
+      <SourceOnlyDataset
+        dataset={dataset}
+        access={access}
+        checkedAt={checkedAt}
+      />
+    );
+  return <PreviewableDataset dataset={dataset} />;
+}
+
+function PreviewableDataset({ dataset }: { dataset: Dataset }) {
   const preview = useDatasetPreview(dataset);
   const { page, metadata, offset, bounds, busy, error, pageNumber } = preview;
   const fields = metadata?.fields ?? dataset.fields;
   return (
     <main id="main" className="detail shell">
-      <a href="#" className="back">
-        ← All datasets
-      </a>
-      <div className="eyebrow">
-        {dataset.publisher}{" "}
-        <span> / {dataset.category ?? "Uncategorized"}</span>
-      </div>
-      <h1>{dataset.title}</h1>
-      <p className="detail-description">
-        {dataset.description ?? "Description unavailable."}
-      </p>
-      <div className="source-line">
-        <a href={dataset.sourceUrl} target="_blank" rel="noreferrer">
-          Original source ↗
-        </a>
-        <a
-          href={`${endpoint(dataset)}?f=pjson`}
-          target="_blank"
-          rel="noreferrer"
-        >
-          ArcGIS endpoint ↗
-        </a>
-        <span>Structure checked {dataset.verified ?? "unknown"}</span>
-      </div>
-      <DatasetProvenance dataset={dataset} />
+      <DatasetHeader dataset={dataset} />
       <section className="preview" aria-busy={busy}>
         <div className="section-top">
           <div>

@@ -1,5 +1,5 @@
 import type { Page } from "@playwright/test";
-import { catalog, layerResponse, record } from "../fixtures";
+import { catalog, accessReport, layerResponse, record } from "../fixtures";
 
 export interface ApiResponse {
   body: unknown;
@@ -15,6 +15,8 @@ export async function installApi(page: Page, options: ApiOptions = {}) {
     const url = new URL(route.request().url());
     if (url.pathname === "/catalog.json")
       return route.fulfill({ json: catalog });
+    if (url.pathname === "/access.json")
+      return route.fulfill({ json: accessReport });
     if (url.hostname === "data.example.test") {
       if (!url.pathname.endsWith("/query")) {
         const nonspatial = url.pathname.endsWith("/1");

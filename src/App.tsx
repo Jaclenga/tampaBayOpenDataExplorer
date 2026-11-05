@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { parseCatalog, searchCatalog, type Filters } from "./services/catalog";
 import type { Catalog } from "./types";
+import { parseAccessReport, type AccessReport } from "./services/access";
 import DatasetDetail from "./components/DatasetDetail";
 const empty: Filters = { query: "", publisher: "", category: "", spatial: "" };
 function currentId() {
@@ -13,17 +14,30 @@ function currentId() {
 }
 export default function App() {
   const [catalog, setCatalog] = useState<Catalog>();
+  const [access, setAccess] = useState<AccessReport>();
   const [error, setError] = useState("");
   const [filters, setFilters] = useState(empty);
   const [id, setId] = useState(currentId);
   useEffect(() => {
     const c = new AbortController();
-    fetch(`${import.meta.env.BASE_URL}catalog.json`, { signal: c.signal })
-      .then((r) => {
-        if (!r.ok) throw Error("Catalog could not be loaded.");
-        return r.json();
+    Promise.all(
+      ["catalog.json", "access.json"].map(async (path) => {
+        const response = await fetch(`${import.meta.env.BASE_URL}${path}`, {
+          signal: c.signal,
+        });
+        if (!response.ok)
+          throw Error(
+            "Catalog or browser access information could not be loaded.",
+          );
+        return response.json();
+      }),
+    )
+      .then(([catalogValue, accessValue]) => {
+        const parsed = parseCatalog(catalogValue);
+        const report = parseAccessReport(accessValue, parsed);
+        setAccess(report);
+        setCatalog(parsed);
       })
-      .then((v) => setCatalog(parseCatalog(v)))
       .catch((e) => {
         if (!c.signal.aborted) setError(e.message);
       });
@@ -98,7 +112,12 @@ export default function App() {
           <p role="status">Loading the checked dataset catalog…</p>
         </main>
       ) : selected ? (
-        <DatasetDetail key={selected.id} dataset={selected} />
+        <DatasetDetail
+          key={selected.id}
+          dataset={selected}
+          access={access!.datasets.find((entry) => entry.id === selected.id)!}
+          checkedAt={access!.checkedAt}
+        />
       ) : id ? (
         <main id="main" className="shell">
           <h1>Dataset not found</h1>
@@ -279,6 +298,12 @@ export default function App() {
                           {d.geometryType === "none" ? "▤ Table" : "◎ Spatial"}
                         </span>
                       </div>
+                      {access!.datasets.find((entry) => entry.id === d.id)
+                        ?.status === "source-only" && (
+                        <p className="source-only-badge">
+                          Source only · browser preview unavailable
+                        </p>
+                      )}
                       <p className="publisher">{d.publisher}</p>
                       <h3>
                         <a href={`#${encodeURIComponent(d.id)}`}>{d.title}</a>

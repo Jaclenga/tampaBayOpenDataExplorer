@@ -4,6 +4,7 @@ import type {
   LayerMetadata,
   RecordFeature,
 } from "../src/types";
+import type { AccessReport } from "../src/services/access";
 
 export const dataset: Dataset = {
   id: "test/parks",
@@ -92,4 +93,19 @@ export const catalog: Catalog = {
       tags: ["roadway"],
     },
   ],
+};
+
+export const accessReport: AccessReport = {
+  schemaVersion: 1,
+  checkedAt: "2026-11-04T12:00:00.000Z",
+  catalogCommit: catalog.upstreamCommit,
+  origin: "https://explorer.example.test",
+  datasets: catalog.datasets.map((d) => ({
+    id: d.id,
+    endpoint: `${d.serviceUrl}/${d.layerId}`,
+    status: "available",
+    stage: "complete",
+    reason: null,
+    recordCount: 1,
+  })),
 };
