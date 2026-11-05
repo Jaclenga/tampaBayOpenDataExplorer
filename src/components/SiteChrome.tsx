@@ -52,7 +52,7 @@ export function SiteFooter() {
             </a>
           </p>
           <p>
-            Independent and open source. Not an official government website.
+            Independent and open-source. Not an official government website.
           </p>
         </div>
         <div>
