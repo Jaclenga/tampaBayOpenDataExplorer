@@ -1286,3 +1286,18 @@ td {
     gap: 2px;
   }
 }
+
+@media (max-width: 740px) {
+  .nav {
+    flex-wrap: wrap;
+    padding-top: 16px;
+    padding-bottom: 12px;
+    gap: 8px 20px;
+  }
+  .hero h1 span {
+    white-space: normal;
+  }
+}
+.footer-grid p a {
+  color: #ffaaa2;
+}

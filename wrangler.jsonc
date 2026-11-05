@@ -1,7 +1,15 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "tampabay-open-data-explorer",
+  "name": "tbdataexplorer",
   "pages_build_output_dir": "dist",
   "compatibility_date": "2026-11-04",
-  "durable_objects":{"bindings":[{"name":"PROXY_GUARD","class_name":"ProxyGuard","script_name":"tampabay-explorer-proxy-guard"}]},
+  "durable_objects": {
+    "bindings": [
+      {
+        "name": "PROXY_GUARD",
+        "class_name": "ProxyGuard",
+        "script_name": "tampabay-explorer-proxy-guard",
+      },
+    ],
+  },
 }

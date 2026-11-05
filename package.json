@@ -1,5 +1,5 @@
 {
-  "name": "tampabay-open-data-explorer",
+  "name": "tbdataexplorer",
   "version": "0.1.0",
   "private": true,
   "type": "module",
@@ -27,7 +27,7 @@
     "access:validate": "tsx scripts/validate-access.ts",
     "discovery:refresh": "tsx scripts/refresh-discovery.ts",
     "discovery:validate": "tsx scripts/validate-discovery.ts",
-    "deploy": "npm run build && npm run deploy:guard && wrangler pages deploy dist --project-name=tampabay-open-data-explorer"
+    "deploy": "npm run build && npm run deploy:guard && wrangler pages deploy dist --project-name=tbdataexplorer"
   },
   "dependencies": {
     "@terraformer/arcgis": "^2.1.2",

@@ -83,8 +83,8 @@ export default function App() {
   useEffect(() => {
     document.title =
       id && catalog
-        ? `${catalog.datasets.find((d) => d.id === id)?.title ?? "Dataset"} · Tampa Bay Open Data`
-        : "Tampa Bay Open Data";
+        ? `${catalog.datasets.find((d) => d.id === id)?.title ?? "Dataset"} · Tampa Bay Open Data Explorer`
+        : "Tampa Bay Open Data Explorer";
   }, [id, catalog]);
   useEffect(() => {
     if (restoreScroll.current && !id) {

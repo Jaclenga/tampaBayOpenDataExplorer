@@ -2,7 +2,11 @@ export function SiteHeader() {
   return (
     <header>
       <div className="shell nav">
-        <a className="brand" href="#" aria-label="Tampa Bay Open Data home">
+        <a
+          className="brand"
+          href="#"
+          aria-label="Tampa Bay Open Data Explorer home"
+        >
           <svg
             className="brand-icon"
             viewBox="0 0 32 32"
@@ -18,14 +22,12 @@ export function SiteHeader() {
             <path d="M19 19h11v11H19z" fill="#e85a4f" />
           </svg>
           <span>
-            Tampa Bay <strong>Open Data</strong>
+            Tampa Bay <strong>Open Data Explorer</strong>
           </span>
         </a>
         <nav aria-label="Main navigation">
           <a href="#catalog">Browse data</a>
-          <a href="https://github.com/Jaclenga/tampaBayOpenDataExplorer">
-            GitHub
-          </a>
+          <a href="https://github.com/Jaclenga/tbdataexplorer">GitHub</a>
         </nav>
       </div>
     </header>
@@ -38,10 +40,16 @@ export function SiteFooter() {
       <div className="shell footer-grid">
         <div>
           <a className="footer-brand" href="#">
-            Tampa Bay Open Data
+            Tampa Bay Open Data Explorer
           </a>
           <p>
             Catalog of government-published datasets from the Tampa Bay area
+          </p>
+          <p>
+            Powered by{" "}
+            <a href="https://jaclenga.github.io/tampaBayOpenData/">
+              tampaBayOpenData
+            </a>
           </p>
           <p>
             Independent and open source. Not an official government website.
@@ -59,13 +67,11 @@ export function SiteFooter() {
         </div>
         <div>
           <h2>Project</h2>
-          <a href="https://github.com/Jaclenga/tampaBayOpenDataExplorer">
-            Source code ↗
-          </a>
+          <a href="https://github.com/Jaclenga/tbdataexplorer">Source code ↗</a>
           <a href="https://jaclenga.github.io/tampaBayOpenData/">
             R package and documentation ↗
           </a>
-          <a href="https://github.com/Jaclenga/tampaBayOpenDataExplorer/issues">
+          <a href="https://github.com/Jaclenga/tbdataexplorer/issues">
             Report an issue ↗
           </a>
         </div>

@@ -5,7 +5,7 @@ import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { dirname } from "node:path";
 
 const origin = new URL(
-  process.argv[2] || "https://tampabay-open-data-explorer.pages.dev",
+  process.argv[2] || "https://tbdataexplorer.pages.dev",
 ).origin;
 const output = process.argv[3] || "public/access.json";
 const catalog = JSON.parse(await readFile("public/catalog.json", "utf8"));

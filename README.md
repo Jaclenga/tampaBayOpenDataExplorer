@@ -2,7 +2,9 @@
 
 Find public Tampa Bay datasets, preview live records, explore maps, and export the records you load.
 
-**[Open the explorer →](https://tampabay-open-data-explorer.pages.dev)**
+Powered by [tampaBayOpenData](https://jaclenga.github.io/tampaBayOpenData/).
+
+**[Open the explorer →](https://tbdataexplorer.pages.dev)**
 
 ## What it does
 
@@ -53,3 +55,5 @@ This builds the app, deploys the private guard, then publishes the site. The man
 - [Architecture and implementation notes](docs/implementation.md)
 
 Independent project. Government datasets remain subject to their publishers' terms.
+
+The former site address redirects to the new domain. Historical access reports retain the origin where they were recorded.

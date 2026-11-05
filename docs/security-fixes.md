@@ -30,7 +30,7 @@ Deploy the private Worker before Pages:
 
 ```sh
 npm run deploy:guard
-npx wrangler pages deploy dist --project-name=tampabay-open-data-explorer
+npx wrangler pages deploy dist --project-name=tbdataexplorer
 ```
 
 `npm run deploy` builds and deploys both in this order. Automated code deployment needs Pages Edit and Workers Scripts Edit permissions. Daily metadata publication still needs only the GitHub token. To reproduce the Pages-to-guard binding locally, run `npx wrangler dev --config wrangler.guard.jsonc --port 8789` and `npx wrangler pages dev dist --port 8788` in separate terminals.

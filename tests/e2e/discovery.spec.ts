@@ -45,7 +45,7 @@ test("section navigation returns from a dataset without treating section names a
     .getByRole("link", { name: "Browse data", exact: true })
     .click();
   await expect(
-    page.getByRole("heading", { name: "Tampa Bay Open Data", exact: true }),
+    page.getByRole("heading", { name: "Tampa Bay Open Data Explorer", exact: true }),
   ).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Dataset not found" }),

@@ -9,7 +9,7 @@ import { boundedText } from "../services/bounded-response";
 
 // Fixed public metadata artifact. No caller-controlled host or URL is accepted.
 export const indexURL =
-  "https://raw.githubusercontent.com/Jaclenga/tampaBayOpenDataExplorer/main/public/discovery.json";
+  "https://raw.githubusercontent.com/Jaclenga/tbdataexplorer/main/public/discovery.json";
 export function validateIndex(value: unknown): DiscoveryReport {
   const report = discoverySchema.parse(value);
   for (const dataset of report.datasets) {
