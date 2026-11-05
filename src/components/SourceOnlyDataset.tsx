@@ -4,7 +4,7 @@ import type { DatasetAccess } from "../services/access";
 import { accessExplanation } from "../services/access-check";
 import { endpoint } from "../services/arcgis";
 import { useAccessCheck } from "../hooks/useAccessCheck";
-import DatasetHeader from "./DatasetHeader";
+import DatasetWorkspace from "./DatasetWorkspace";
 import { DatasetFields } from "./DatasetProvenance";
 
 interface Props {
@@ -41,8 +41,7 @@ export default function SourceOnlyDataset({
     }
   }
   return (
-    <main id="main" className="detail shell">
-      <DatasetHeader dataset={dataset} />
+    <DatasetWorkspace dataset={dataset}>
       <section
         className="preview access-section"
         aria-labelledby="access-heading"
@@ -165,6 +164,6 @@ export default function SourceOnlyDataset({
         </div>
       </section>
       <DatasetFields fields={dataset.fields} />
-    </main>
+    </DatasetWorkspace>
   );
 }

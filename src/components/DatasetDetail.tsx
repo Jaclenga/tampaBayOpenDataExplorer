@@ -4,7 +4,7 @@ import { useDatasetPreview } from "../hooks/useDatasetPreview";
 import DatasetRecords from "./DatasetRecords";
 import DownloadMenu from "./DownloadMenu";
 import { DatasetFields } from "./DatasetProvenance";
-import DatasetHeader from "./DatasetHeader";
+import DatasetWorkspace from "./DatasetWorkspace";
 import SourceOnlyDataset from "./SourceOnlyDataset";
 import { proxyEligible } from "../services/arcgis-transport";
 import RecordFilters from "./RecordFilters";
@@ -41,8 +41,7 @@ function PreviewableDataset({ dataset }: { dataset: Dataset }) {
   const { page, metadata, offset, bounds, busy, error, pageNumber } = preview;
   const fields = metadata?.fields ?? dataset.fields;
   return (
-    <main id="main" className="detail shell">
-      <DatasetHeader dataset={dataset} />
+    <DatasetWorkspace dataset={dataset}>
       <section className="preview" aria-busy={busy}>
         <div className="section-top">
           <div>
@@ -121,7 +120,7 @@ function PreviewableDataset({ dataset }: { dataset: Dataset }) {
         )}
       </section>
       <DatasetFields fields={fields} />
-    </main>
+    </DatasetWorkspace>
   );
 }
 import { useState } from "react";

@@ -13,6 +13,8 @@ npm run dev
 
 Open the printed local URL. Search and filter the catalog, choose a dataset, then preview live records. Dataset URLs use hash routes, which work on static hosting without a rewrite rule. The interface uses a navy/coral palette inspired by Tampa.dev and a search-first browsing structure inspired by NYC Open Data. It is an independent project and uses its own identity.
 
+Each dataset detail also has a **Use in R** tab. It generates a 100-record preview using a checked package ID or a validated original ArcGIS layer URL, with installation instructions, optional `sf` output, an explicit full-retrieval option and a Copy Code button. Unsupported platforms receive an explanation. Website filters are not included in R examples, and publisher access restrictions still apply. See [the package retrieval reference](https://jaclenga.github.io/tampaBayOpenData/reference/tbod_get_dataset.html) and [direct layer reference](https://jaclenga.github.io/tampaBayOpenData/reference/tbod_get_arcgis_layer.html).
+
 ```sh
 npm run catalog:validate
 npm run typecheck

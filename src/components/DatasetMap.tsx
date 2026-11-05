@@ -50,6 +50,12 @@ export default function DatasetMap({
       return;
     }
     mapRef.current = map;
+    // A map can finish loading while its tab is hidden. Resize when its
+    // container becomes visible again, including after a viewport change.
+    const observer = new ResizeObserver(() => {
+      if (host.current?.clientWidth) map.resize();
+    });
+    observer.observe(host.current);
     map.addControl(new maplibregl.NavigationControl());
     map.on("error", () =>
       setError(
@@ -112,6 +118,7 @@ export default function DatasetMap({
       });
     });
     return () => {
+      observer.disconnect();
       mapRef.current = null;
       map.remove();
     };
