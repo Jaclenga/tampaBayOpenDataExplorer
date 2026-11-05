@@ -212,6 +212,8 @@ async function expandService(
     ...(metadata.layers ?? []).filter((layer) => !layer.subLayerIds?.length),
     ...(metadata.tables ?? []),
   ];
+  if (!layers.length)
+    throw Error("Publisher service returned no discoverable layers or tables.");
   for (const layer of layers) {
     if (state.layers >= options.maxLayers) {
       issue(portal, state, "Layer inspection limit reached.", "truncated", url);
@@ -324,7 +326,10 @@ async function scanPages(
     );
     state.total = page.total;
     state.next = page.nextStart;
-    if (!page.results.length && page.nextStart !== -1)
+    if (
+      !page.results.length &&
+      (page.nextStart !== -1 || page.total > state.items)
+    )
       throw Error("Portal returned an empty page with further results.");
     await inspectItems(portal, page.results, state, options, seen);
     if (budgetReached(state, options)) {

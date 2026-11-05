@@ -11,15 +11,39 @@ export default function DiscoveryStatus({
   );
   return (
     <details className="discovery-status">
-      <summary>Discovery status</summary>
+      <summary>
+        Catalog checked{" "}
+        <time dateTime={report.generatedAt}>
+          {new Date(report.generatedAt).toLocaleDateString(undefined, {
+            month: "short",
+            day: "numeric",
+            year: "numeric",
+          })}
+        </time>
+        {" / "}
+        {report.refresh?.outcome === "failed"
+          ? "publishers unavailable"
+          : report.complete
+            ? "configured portals scanned"
+            : "discovery incomplete"}
+      </summary>
       <p>
-        Metadata refreshed {new Date(report.generatedAt).toLocaleString()}.
+        Published check: {new Date(report.generatedAt).toLocaleString()}.
+        {report.refresh &&
+          ` ${report.refresh.verified} datasets successfully verified in this attempt; ${report.refresh.curatedErrors} curated endpoint checks failed.`}
         Discovered layers are not curator-reviewed. A service check does not
         establish record accuracy or freshness.
       </p>
       <p>
         {issueCount} scan issues or limits recorded. Prior descriptors are
         retained when a source fails or a scan reaches its budget.
+      </p>
+      <p>
+        Last refresh with successful verifications:{" "}
+        {report.lastSuccessfulRunAt
+          ? new Date(report.lastSuccessfulRunAt).toLocaleString()
+          : "Not yet recorded"}
+        . This is not a publisher update time or a complete regional inventory.
       </p>
       <ul>
         {report.runs.map((run) => (

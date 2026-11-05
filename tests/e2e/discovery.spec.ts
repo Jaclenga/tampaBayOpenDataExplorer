@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import { installApi } from "./helpers";
+import { emptyDiscovery } from "../discovery-fixture";
 
 test("search submission, topic links, and publisher filters lead to filtered results", async ({
   page,
@@ -45,7 +46,10 @@ test("section navigation returns from a dataset without treating section names a
     .getByRole("link", { name: "Browse data", exact: true })
     .click();
   await expect(
-    page.getByRole("heading", { name: "Tampa Bay Open Data Explorer", exact: true }),
+    page.getByRole("heading", {
+      name: "Tampa Bay Open Data Explorer",
+      exact: true,
+    }),
   ).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Dataset not found" }),
@@ -122,4 +126,35 @@ test("keyboard skip link focuses the current detail page without changing routes
     page.getByRole("heading", { name: "Budget allocations", exact: true }),
   ).toBeVisible();
   await expect(page).toHaveURL(/#county%2Fbudget$/);
+});
+
+test("freshness distinguishes a published check from incomplete discovery and publisher update times", async ({
+  page,
+}) => {
+  await installApi(page);
+  await page.route("**/api/discovery", (route) =>
+    route.fulfill({
+      json: {
+        ...emptyDiscovery,
+        lastSuccessfulRunAt: "2026-11-04T12:00:00.000Z",
+        refresh: {
+          startedAt: "2026-11-04T11:00:00.000Z",
+          finishedAt: emptyDiscovery.generatedAt,
+          outcome: "partial",
+          verified: 23,
+          curatedErrors: 1,
+          changes: { added: [], updated: [], retained: 0 },
+        },
+      },
+    }),
+  );
+  await page.goto("/");
+  const status = page.locator(".discovery-status");
+  await expect(status.locator("summary")).toContainText("Catalog checked");
+  await expect(status.locator("summary")).toContainText("discovery incomplete");
+  await status.locator("summary").click();
+  await expect(status).toContainText("23 datasets successfully verified");
+  await expect(status).toContainText(
+    "not a publisher update time or a complete regional inventory",
+  );
 });

@@ -51,6 +51,20 @@ export const discoverySchema = z
     datasets: z.array(datasetSchema),
     curatedUpdates: z.array(datasetSchema).optional(),
     runs: z.array(portalRunSchema),
+    refresh: z
+      .object({
+        startedAt: z.iso.datetime(),
+        finishedAt: z.iso.datetime(),
+        outcome: z.enum(["success", "partial", "failed"]),
+        verified: z.number().int().nonnegative(),
+        curatedErrors: z.number().int().nonnegative(),
+        changes: z.object({
+          added: z.array(z.string()),
+          updated: z.array(z.string()),
+          retained: z.number().int().nonnegative(),
+        }),
+      })
+      .optional(),
   })
   .superRefine((report, context) => {
     if (
