@@ -419,24 +419,6 @@ aside select {
   font-size: 13px;
   min-height: 43px;
 }
-.catalog-note {
-  border-top: 1px solid var(--line);
-  padding-top: 19px;
-  margin-top: 6px;
-}
-.catalog-note h4 {
-  font-size: 13px;
-  margin-bottom: 8px;
-}
-.catalog-note p {
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.7;
-  margin-bottom: 10px;
-}
-.catalog-note a {
-  font-size: 12px;
-}
 .results-bar {
   display: flex;
   justify-content: space-between;
@@ -965,9 +947,6 @@ td {
   }
   aside label:first-of-type {
     grid-column: 1/-1;
-  }
-  .catalog-note {
-    display: none;
   }
   .results-bar .muted {
     font-size: 10px;

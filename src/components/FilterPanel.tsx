@@ -104,15 +104,6 @@ export default function FilterPanel({
             ))}
         </select>
       </label>
-      <div className="catalog-note">
-        <h4>About this catalog</h4>
-        <p>
-          Curated datasets and automatically discovered public layers, not a
-          complete regional inventory. “Source only” means you’ll need to visit
-          the publisher to access the data.
-        </p>
-        <a href="#about">More about this project</a>
-      </div>
     </aside>
   );
 }
