@@ -23,7 +23,7 @@ test("desktop rows fit the density target and sticky filters stop before the foo
   await page.setViewportSize({ width: 1440, height: 900 });
   await installDirectory(page);
   await page.goto("/#catalog");
-  await expect(page.locator(".dataset-card")).toHaveCount(63);
+  await expect(page.locator(".dataset-card")).toHaveCount(20);
   const boxes = await page
     .locator(".dataset-card")
     .evaluateAll((rows) =>

@@ -57,7 +57,10 @@ export function sortCatalog(datasets: Dataset[], sort: CatalogSort) {
   const compare = (a: string, b: string) =>
     a.localeCompare(b, "en", { sensitivity: "base", numeric: true });
   return [...datasets].sort((a, b) => {
-    const byName = compare(a.title, b.title) || compare(a.id, b.id);
+    const byName =
+      compare(a.title, b.title) ||
+      compare(a.id, b.id) ||
+      (a.id < b.id ? -1 : a.id > b.id ? 1 : 0);
     if (sort === "name-desc") return -byName;
     if (sort === "publisher")
       return compare(a.publisher, b.publisher) || byName;

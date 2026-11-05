@@ -1,4 +1,4 @@
-import { useMemo } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import type { Catalog } from "../types";
 import type { AccessReport } from "../services/access";
 import {
@@ -13,6 +13,11 @@ import type { DiscoveryReport } from "../services/discovery/types";
 import { proxyEligible } from "../services/arcgis-transport";
 import DiscoveryStatus from "./DiscoveryStatus";
 import type { useCatalogBrowse } from "../hooks/useCatalogBrowse";
+
+import {
+  catalogPageSizes,
+  paginateCatalog,
+} from "../services/catalog-pagination";
 
 const empty: Filters = { query: "", publisher: "", category: "", spatial: "" };
 interface Props extends ReturnType<typeof useCatalogBrowse> {
@@ -29,8 +34,10 @@ export default function CatalogPage({
   discovery,
   sort,
   onSort,
-  visible,
-  onMore,
+  page,
+  pageSize,
+  onPage,
+  onPageSize,
   expanded,
   onExpand,
 }: Props) {
@@ -38,6 +45,21 @@ export default function CatalogPage({
     () => sortCatalog(searchCatalog(catalog.datasets, filters), sort),
     [catalog, filters, sort],
   );
+  const pagination = paginateCatalog(results, page, pageSize);
+  const resultsTop = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (page !== pagination.page) onPage(pagination.page);
+  }, [page, pagination.page, onPage]);
+  const changePage = (next: number) => {
+    onPage(next);
+    requestAnimationFrame(() => {
+      resultsTop.current?.focus({ preventScroll: true });
+      resultsTop.current?.scrollIntoView({
+        block: "start",
+        behavior: "instant",
+      });
+    });
+  };
   const sourceOnly = new Set(
     access.datasets
       .filter(
@@ -124,26 +146,47 @@ export default function CatalogPage({
               )}
               <button type="submit">Search</button>
             </form>
-            <div className="results-bar">
+            <div
+              className="results-bar"
+              ref={resultsTop}
+              tabIndex={-1}
+              aria-label="Dataset results"
+            >
               <p role="status">
-                <strong>{results.length}</strong> datasets
-                {Object.values(filters).some(Boolean) ? " found" : ""}
+                {results.length
+                  ? `Showing ${pagination.start}\u2013${pagination.end} of ${results.length} datasets`
+                  : "No matching datasets"}
               </p>
-              <label className="catalog-sort">
-                Sort by{" "}
-                <select
-                  value={sort}
-                  onChange={(event) =>
-                    onSort(event.target.value as Props["sort"])
-                  }
-                >
-                  {Object.entries(catalogSorts).map(([value, label]) => (
-                    <option key={value} value={value}>
-                      {label}
-                    </option>
-                  ))}
-                </select>
-              </label>
+              <div className="catalog-result-controls">
+                <label className="catalog-sort">
+                  Rows per page:
+                  <select
+                    value={pageSize}
+                    onChange={(event) => onPageSize(Number(event.target.value))}
+                  >
+                    {catalogPageSizes.map((size) => (
+                      <option key={size} value={size}>
+                        {size}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+                <label className="catalog-sort">
+                  Sort by{" "}
+                  <select
+                    value={sort}
+                    onChange={(event) =>
+                      onSort(event.target.value as Props["sort"])
+                    }
+                  >
+                    {Object.entries(catalogSorts).map(([value, label]) => (
+                      <option key={value} value={value}>
+                        {label}
+                      </option>
+                    ))}
+                  </select>
+                </label>
+              </div>
             </div>
             {Object.values(filters).some(Boolean) && (
               <p
@@ -162,7 +205,7 @@ export default function CatalogPage({
               </p>
             )}
             <div className="cards">
-              {results.slice(0, visible).map((dataset) => (
+              {pagination.rows.map((dataset) => (
                 <DatasetCard
                   key={dataset.id}
                   dataset={dataset}
@@ -175,10 +218,28 @@ export default function CatalogPage({
                 />
               ))}
             </div>
-            {results.length > visible && (
-              <button className="button secondary" onClick={onMore}>
-                Show more datasets ({results.length - visible} remaining)
-              </button>
+            {pagination.pages > 1 && (
+              <nav className="catalog-pagination" aria-label="Dataset pages">
+                <button
+                  type="button"
+                  className="button secondary"
+                  disabled={pagination.page === 1}
+                  onClick={() => changePage(pagination.page - 1)}
+                >
+                  Previous
+                </button>
+                <span aria-live="polite">
+                  Page {pagination.page} of {pagination.pages}
+                </span>
+                <button
+                  type="button"
+                  className="button secondary"
+                  disabled={pagination.page === pagination.pages}
+                  onClick={() => changePage(pagination.page + 1)}
+                >
+                  Next
+                </button>
+              </nav>
             )}
             {!results.length && (
               <div className="empty">

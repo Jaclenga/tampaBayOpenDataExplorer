@@ -61,7 +61,7 @@ test("compact rows, combined search/sort, keyboard expansion and persistent URL 
   await expect(page.locator(".dataset-card")).toHaveCount(3);
 });
 
-test("load more and sticky filters survive opening a dataset", async ({
+test("pagination and sticky filters survive opening a dataset", async ({
   page,
 }) => {
   await installApi(page);
@@ -77,11 +77,14 @@ test("load more and sticky filters survive opening a dataset", async ({
     route.fulfill({ json: { ...emptyDiscovery, datasets: rows } }),
   );
   await page.goto("/");
-  await expect(page.locator(".dataset-card")).toHaveCount(100);
-  await page.getByRole("button", { name: /Show more datasets/ }).click();
-  await expect(page.locator(".dataset-card")).toHaveCount(113);
-  await expect(page).toHaveURL(/shown=200/);
-  const row = page.locator(".dataset-card").nth(105);
+  await expect(page.locator(".dataset-card")).toHaveCount(20);
+  await page
+    .getByRole("combobox", { name: "Rows per page:" })
+    .selectOption("100");
+  await page.getByRole("button", { name: "Next", exact: true }).click();
+  await expect(page.locator(".dataset-card")).toHaveCount(13);
+  await expect(page).toHaveURL(/page=2/);
+  const row = page.locator(".dataset-card").nth(5);
   await row.scrollIntoViewIfNeeded();
   const y = await page.evaluate(() => window.scrollY);
   const sidebar = await page
@@ -91,7 +94,7 @@ test("load more and sticky filters survive opening a dataset", async ({
   expect(sidebar!.y).toBeLessThan(30);
   await row.getByRole("link").first().click();
   await page.getByRole("link", { name: /All datasets/ }).click();
-  await expect(page.locator(".dataset-card")).toHaveCount(113);
+  await expect(page.locator(".dataset-card")).toHaveCount(13);
   await expect
     .poll(() => page.evaluate(() => window.scrollY))
     .toBeGreaterThan(y - 100);
@@ -203,7 +206,7 @@ test("real government catalog titles do not overflow on mobile", async ({
     route.fulfill({ json: report }),
   );
   await page.goto("/#catalog");
-  await expect(page.locator(".dataset-card")).toHaveCount(100);
+  await expect(page.locator(".dataset-card")).toHaveCount(20);
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth,

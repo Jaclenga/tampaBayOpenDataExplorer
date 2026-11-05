@@ -6,9 +6,9 @@ Name sorting is alphabetical by default. Publisher and category sorting use name
 
 ## Shared views and navigation
 
-URL query parameters preserve the search (`q`), publisher, category, data type (`type`), platform, sort order (`sort`), and number of visible rows (`shown`). The hash still selects a dataset or page section. Opening a dataset and returning preserves loaded rows, filters, sort order, expanded rows, and scroll position during that visit. Reloading a shared URL restores filters, sort order, and loaded-row count; inline expansions and scroll position are session-only.
+URL query parameters preserve the search (`q`), publisher, category, data type (`type`), platform, sort order (`sort`), page (`page`), and rows per page (`pageSize`). The hash still selects a dataset or page section. Opening a dataset and returning preserves the page and page size, filters, sort order, expanded rows, and scroll position during that visit. Reloading a shared URL restores filters, sort order, and pagination; inline expansions and scroll position are session-only.
 
-The first 100 matches are rendered. **Show more datasets** adds another 100; search and sort changes reset this count. This is catalog navigation, separate from live record pagination inside a dataset.
+Only the current page is rendered, with 20 rows by default and choices of 10, 20, 50 or 100. Previous/Next controls appear only for multiple pages. Search, filters, sort and page-size changes reset to page 1. Invalid pagination parameters use defaults, and pages beyond the results are clamped. Obsolete `shown` parameters are removed. UI changes replace the current history entry; dataset links retain normal Back/Forward navigation. Page changes clear inline expansions and focus/scroll to the results controls using immediate motion; changing page size does not explicitly scroll. This is catalog navigation, separate from live record pagination inside a dataset.
 
 ## Inline details and R examples
 
@@ -16,7 +16,7 @@ Details include full descriptions, identifiers, source links, available schema a
 
 ## Verification
 
-`tests/e2e/catalog-browsing.spec.ts` covers keyboard expansion, combined filters/search, browser Back, shared URL reloads, load-more/scroll restoration, desktop sticky filters, real package R commands and clipboard feedback, mobile details, and real discovery titles. Existing preview/map/export tests remain in the browser suite. Search and sorting regressions are in `tests/services/catalog.test.ts`.
+`tests/e2e/catalog-browsing.spec.ts` covers keyboard expansion, combined filters/search, browser Back, shared URL reloads, pagination/scroll restoration, desktop sticky filters, real package R commands and clipboard feedback, mobile details, and real discovery titles. Existing preview/map/export tests remain in the browser suite. Search and sorting regressions are in `tests/services/catalog.test.ts`.
 
 Rows use a 16 px semibold title, muted publisher/category/actual geometry metadata separated by middle dots, and a description of up to two lines. Long titles wrap naturally. Source-only rows link directly to the publisher; their title still opens the dataset workspace. Known source-check failures remain visible, while ordinary preview limitations are explained neutrally inside expanded details.
 

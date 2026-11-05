@@ -5,6 +5,8 @@ import {
   type Filters,
 } from "../services/catalog";
 
+import { readPagination } from "../services/catalog-pagination";
+
 export const emptyFilters: Filters = {
   query: "",
   publisher: "",
@@ -27,19 +29,21 @@ function readBrowseState() {
   const sort: CatalogSort = Object.hasOwn(catalogSorts, candidate)
     ? (candidate as CatalogSort)
     : "name-asc";
-  const shown = Number(params.get("shown"));
-  const visible =
-    Number.isInteger(shown) && shown >= 100 && shown <= 10000 ? shown : 100;
-  return { filters, sort, visible };
+  return { filters, sort, ...readPagination(params) };
 }
 export function useCatalogBrowse() {
   const [state, setState] = useState(readBrowseState);
   const [expanded, setExpanded] = useState<Set<string>>(() => new Set());
   useEffect(() => {
-    const restore = () => setState(readBrowseState());
+    const restore = () => {
+      const next = readBrowseState();
+      if (next.page !== state.page || next.pageSize !== state.pageSize)
+        setExpanded(new Set());
+      setState(next);
+    };
     window.addEventListener("popstate", restore);
     return () => window.removeEventListener("popstate", restore);
-  }, []);
+  }, [state.page, state.pageSize]);
   useEffect(() => {
     const url = new URL(location.href);
     for (const [key, parameter] of Object.entries(keys)) {
@@ -49,24 +53,34 @@ export function useCatalogBrowse() {
     }
     if (state.sort !== "name-asc") url.searchParams.set("sort", state.sort);
     else url.searchParams.delete("sort");
-    if (state.visible > 100)
-      url.searchParams.set("shown", String(state.visible));
-    else url.searchParams.delete("shown");
+    url.searchParams.delete("shown");
+    if (state.page > 1) url.searchParams.set("page", String(state.page));
+    else url.searchParams.delete("page");
+    if (state.pageSize !== 20)
+      url.searchParams.set("pageSize", String(state.pageSize));
+    else url.searchParams.delete("pageSize");
     if (url.href !== location.href)
       history.replaceState(history.state, "", url);
   }, [state]);
   return {
     ...state,
     expanded,
-    onChange: (filters: Filters) =>
-      setState((previous) => ({ ...previous, filters, visible: 100 })),
-    onSort: (sort: CatalogSort) =>
-      setState((previous) => ({ ...previous, sort, visible: 100 })),
-    onMore: () =>
-      setState((previous) => ({
-        ...previous,
-        visible: previous.visible + 100,
-      })),
+    onChange: (filters: Filters) => {
+      setExpanded(new Set());
+      setState((previous) => ({ ...previous, filters, page: 1 }));
+    },
+    onSort: (sort: CatalogSort) => {
+      setExpanded(new Set());
+      setState((previous) => ({ ...previous, sort, page: 1 }));
+    },
+    onPage: (page: number) => {
+      setExpanded(new Set());
+      setState((previous) => ({ ...previous, page }));
+    },
+    onPageSize: (pageSize: number) => {
+      setExpanded(new Set());
+      setState((previous) => ({ ...previous, pageSize, page: 1 }));
+    },
     onExpand: (id: string) =>
       setExpanded((previous) => {
         const next = new Set(previous);

@@ -1401,3 +1401,35 @@ td {
     grid-row: 5;
   }
 }
+
+/* Catalog pagination shares compact native controls and document scrolling. */
+.catalog-result-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px 20px;
+}
+.catalog-result-controls select {
+  height: 38px;
+  min-height: 38px;
+  padding: 6px 32px 6px 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background-color: white;
+  font-size: 13px;
+  font-weight: 400;
+}
+.results-bar {
+  flex-wrap: wrap;
+  gap: 12px;
+  scroll-margin-top: 24px;
+}
+.catalog-pagination {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 20px;
+}
+.catalog-pagination button { min-height: 40px; }
