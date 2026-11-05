@@ -75,7 +75,7 @@ export default function CatalogPage({
           <h1 id="catalog-title">
             Tampa Bay <span>Open Data</span>
           </h1>
-          <p>search public datasets from the Tampa Bay area</p>
+          <p>Public Datasets From the Tampa Bay Area</p>
 
           <div className="hero-links">
             <a href="#catalog" onClick={() => onChange(empty)}>
