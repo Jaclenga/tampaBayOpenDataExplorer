@@ -149,11 +149,16 @@ test("freshness distinguishes a published check from incomplete discovery and pu
   );
   await page.goto("/");
   const status = page.locator(".discovery-status");
-  await expect(status.locator("summary")).toContainText("Catalog checked");
-  await expect(status.locator("summary")).toContainText("discovery incomplete");
-  await status.locator("summary").click();
-  await expect(status).toContainText("23 datasets successfully verified");
-  await expect(status).toContainText(
-    "not a publisher update time or a complete regional inventory",
-  );
+  await expect(status).toContainText("Catalog checked");
+  await expect(status).toContainText("23 datasets verified in latest attempt");
+  await status
+    .getByRole("link", { name: "Catalog status", exact: true })
+    .click();
+  await expect(
+    page.getByText("23 in the latest recorded attempt", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByText("Discovery coverage unavailable", { exact: true }),
+  ).toBeVisible();
+  await expect(page.getByText(/They are not verification dates/)).toBeVisible();
 });

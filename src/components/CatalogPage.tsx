@@ -24,6 +24,7 @@ interface Props extends ReturnType<typeof useCatalogBrowse> {
   catalog: Catalog;
   access: AccessReport;
   discovery: DiscoveryReport;
+  discoveryWarning: string | null;
 }
 
 export default function CatalogPage({
@@ -32,6 +33,7 @@ export default function CatalogPage({
   filters,
   onChange,
   discovery,
+  discoveryWarning,
   sort,
   onSort,
   page,
@@ -86,11 +88,11 @@ export default function CatalogPage({
         className="shell catalog"
         aria-labelledby="results-heading"
       >
-        <div className="section-top">
+        <div className="section-top catalog-heading">
           <h2 id="results-heading" tabIndex={-1}>
             Browse datasets
           </h2>
-          <DiscoveryStatus report={discovery} />
+          <DiscoveryStatus report={discovery} warning={discoveryWarning} />
         </div>
         <div className="catalog-layout">
           <FilterPanel

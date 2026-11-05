@@ -4,6 +4,7 @@ import type { Catalog } from "./types";
 import { parseAccessReport, type AccessReport } from "./services/access";
 import DatasetDetail from "./components/DatasetDetail";
 import CatalogPage from "./components/CatalogPage";
+import CatalogStatusPage from "./components/CatalogStatusPage";
 import { SiteHeader, SiteFooter } from "./components/SiteChrome";
 import { type DiscoveryReport } from "./services/discovery/types";
 import { loadDiscovery } from "./services/load-discovery";
@@ -82,9 +83,11 @@ export default function App() {
   }, []);
   useEffect(() => {
     document.title =
-      id && catalog
-        ? `${catalog.datasets.find((d) => d.id === id)?.title ?? "Dataset"} · Tampa Bay Open Data Explorer`
-        : "Tampa Bay Open Data Explorer";
+      id === "catalog-status"
+        ? "Catalog status | Tampa Bay Open Data Explorer"
+        : id && catalog
+          ? `${catalog.datasets.find((d) => d.id === id)?.title ?? "Dataset"} · Tampa Bay Open Data Explorer`
+          : "Tampa Bay Open Data Explorer";
   }, [id, catalog]);
   useEffect(() => {
     if (restoreScroll.current && !id) {
@@ -117,11 +120,6 @@ export default function App() {
         Skip to content
       </a>
       <SiteHeader />
-      {discoveryWarning && (
-        <p role="status" className="notice shell">
-          {discoveryWarning}
-        </p>
-      )}
       {error ? (
         <main id="main" className="shell">
           <p role="alert" className="error">
@@ -132,6 +130,8 @@ export default function App() {
         <main id="main" className="shell">
           <p role="status">Loading the checked dataset catalog…</p>
         </main>
+      ) : id === "catalog-status" ? (
+        <CatalogStatusPage report={discovery!} warning={discoveryWarning} />
       ) : selected ? (
         <DatasetDetail
           key={selected.id}
@@ -150,6 +150,7 @@ export default function App() {
           access={access!}
           {...browse}
           discovery={discovery!}
+          discoveryWarning={discoveryWarning}
         />
       )}
       <SiteFooter />

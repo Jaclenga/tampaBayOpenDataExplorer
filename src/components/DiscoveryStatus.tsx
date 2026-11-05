@@ -1,65 +1,35 @@
 import type { DiscoveryReport } from "../services/discovery/types";
-
+import { catalogStatus, displayStatusDate } from "../services/catalog-status";
 export default function DiscoveryStatus({
   report,
+  warning,
 }: {
   report: DiscoveryReport;
+  warning: string | null;
 }) {
-  const issueCount = report.runs.reduce(
-    (sum, run) => sum + run.issues.length,
-    0,
-  );
+  const status = catalogStatus(report, warning);
   return (
-    <details className="discovery-status">
-      <summary>
-        Catalog checked{" "}
-        <time dateTime={report.generatedAt}>
-          {new Date(report.generatedAt).toLocaleDateString(undefined, {
-            month: "short",
-            day: "numeric",
-            year: "numeric",
-          })}
-        </time>
-        {" / "}
-        {report.refresh?.outcome === "failed"
-          ? "publishers unavailable"
-          : report.complete
-            ? "configured portals scanned"
-            : "discovery incomplete"}
-      </summary>
-      <p>
-        Published check: {new Date(report.generatedAt).toLocaleString()}.
-        {report.refresh &&
-          ` ${report.refresh.verified} datasets successfully verified in this attempt; ${report.refresh.curatedErrors} curated endpoint checks failed.`}
-        Discovered layers are not curator-reviewed. A service check does not
-        establish record accuracy or freshness.
-      </p>
-      <p>
-        {issueCount} scan issues or limits recorded. Prior descriptors are
-        retained when a source fails or a scan reaches its budget.
-      </p>
-      <p>
-        Last refresh with successful verifications:{" "}
-        {report.lastSuccessfulRunAt
-          ? new Date(report.lastSuccessfulRunAt).toLocaleString()
-          : "Not yet recorded"}
-        . This is not a publisher update time or a complete regional inventory.
-      </p>
-      <ul>
-        {report.runs.map((run) => (
-          <li key={run.portalId}>
-            {run.portalId}: {run.itemsScanned} services scanned,{" "}
-            {run.datasetsFound} datasets found{run.complete ? "" : "; partial"}.{" "}
-            {run.issues
-              .slice(0, 3)
-              .map((issue) => issue.message)
-              .join(" ")}
-          </li>
-        ))}
-      </ul>
-      <a href="/api/discovery">Latest scheduled discovery report</a>
-      {" · "}
-      <a href="/discovery.json">Bundled fallback report</a>
-    </details>
+    <p className="discovery-status">
+      {status.successfulAt ? (
+        <>
+          Catalog checked{" "}
+          <time dateTime={status.successfulAt}>
+            {displayStatusDate(status.successfulAt, true)}
+          </time>
+        </>
+      ) : (
+        "Verification status unavailable"
+      )}
+      {status.verified !== null && (
+        <>
+          {" "}
+          {"\u00b7"} {status.verified} datasets verified in latest attempt
+        </>
+      )}
+      {" \u00b7 "}
+      {status.state}
+      {" \u00b7 "}
+      <a href="#catalog-status">Catalog status</a>
+    </p>
   );
 }

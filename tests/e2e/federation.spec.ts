@@ -66,10 +66,15 @@ test("curated catalog remains accessible when the discovery index is unavailable
   );
   await page.goto("/");
   await expect(page.locator(".dataset-card")).toHaveCount(3);
+  await expect(page.locator(".discovery-status")).toContainText(
+    "Verification status unavailable",
+  );
+  await page.getByRole("link", { name: "Catalog status", exact: true }).click();
   await expect(
-    page
-      .getByRole("status")
-      .filter({ hasText: "Discovery is temporarily unavailable" }),
+    page.getByText(
+      "Discovery is temporarily unavailable. The curated catalog remains available.",
+      { exact: true },
+    ),
   ).toBeVisible();
 });
 
