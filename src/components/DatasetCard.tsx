@@ -1,7 +1,6 @@
 import { useId } from "react";
 import type { Dataset } from "../types";
 import CatalogDatasetDetails from "./CatalogDatasetDetails";
-import { rExample } from "../services/r-code";
 
 export default function DatasetCard({
   dataset,
@@ -16,13 +15,14 @@ export default function DatasetCard({
 }) {
   const detailsId = useId();
   const url = `#${encodeURIComponent(dataset.id)}`;
-  const example = rExample(dataset);
   return (
-    <article className="dataset-card">
+    <article className={expanded ? "dataset-card is-expanded" : "dataset-card"}>
       <div className="dataset-row">
         <div className="dataset-summary">
           <h3>
-            <a href={url}>{dataset.title}</a>
+            <a href={url} title={dataset.title}>
+              {dataset.title}
+            </a>
           </h3>
           <div className="dataset-meta">
             <span>{dataset.publisher}</span>
@@ -30,27 +30,28 @@ export default function DatasetCard({
             <span>
               {dataset.geometryType === "none" ? "Table" : "Map layer"}
             </span>
-            <span className="dataset-origin">
-              {example.supported && example.checked
-                ? "Package-supported"
-                : dataset.validationStatus === "discovered"
-                  ? "Discovered"
-                  : "Curated"}
-            </span>
           </div>
           <p className="description">
             {dataset.description ?? "Description unavailable."}
           </p>
         </div>
-        <button
-          className="text-button dataset-expand"
-          aria-expanded={expanded}
-          aria-controls={detailsId}
-          aria-label={`${expanded ? "Hide" : "Show"} details for ${dataset.title}`}
-          onClick={onExpand}
-        >
-          {expanded ? "Hide details" : "Details"}
-        </button>
+        <div className="dataset-row-actions">
+          <a href={url} aria-label={`View dataset: ${dataset.title}`}>
+            View dataset
+          </a>
+          <button
+            className="text-button dataset-expand"
+            aria-expanded={expanded}
+            aria-controls={detailsId}
+            aria-label={`${expanded ? "Hide" : "Show"} details for ${dataset.title}`}
+            onClick={onExpand}
+          >
+            <span aria-hidden="true" className="row-chevron">
+              {"\u203a"}
+            </span>{" "}
+            Details
+          </button>
+        </div>
       </div>
       {sourceOnly && (
         <p className="source-only-badge">

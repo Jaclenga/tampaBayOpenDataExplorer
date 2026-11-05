@@ -93,8 +93,8 @@ export default function CatalogPage({
           <h2 id="results-heading" tabIndex={-1}>
             Browse datasets
           </h2>
+          <DiscoveryStatus report={discovery} />
         </div>
-        <DiscoveryStatus report={discovery} />
         <div className="catalog-layout">
           <FilterPanel
             datasets={catalog.datasets}
@@ -109,7 +109,6 @@ export default function CatalogPage({
               className="search catalog-search"
               onSubmit={(event) => {
                 event.preventDefault();
-                focusResults();
               }}
             >
               <label className="sr-only" htmlFor="dataset-search">

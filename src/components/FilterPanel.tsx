@@ -43,12 +43,15 @@ export default function FilterPanel({
         <div className="filter-title">
           <h3>Filter datasets</h3>
           {active && (
-            <button className="text-button" onClick={onReset}>
-              Clear all filters
+            <button
+              className="text-button"
+              aria-label="Clear all filters"
+              onClick={onReset}
+            >
+              Clear filters
             </button>
           )}
         </div>
-        <p className="filter-match-count">{matchCount} matching datasets</p>
         <label>
           Publisher
           <select

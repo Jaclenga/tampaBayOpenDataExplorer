@@ -9,9 +9,7 @@ test("search submission, topic links, and publisher filters lead to filtered res
   await page.goto("/");
   await page.getByRole("searchbox").fill("gardens");
   await page.getByRole("searchbox").press("Enter");
-  await expect(
-    page.getByRole("heading", { name: "Browse datasets", exact: true }),
-  ).toBeFocused();
+  await expect(page.getByRole("searchbox")).toBeFocused();
   await expect(page.locator(".dataset-card")).toHaveCount(1);
   await page
     .getByRole("button", { name: "Transportation", exact: true })
