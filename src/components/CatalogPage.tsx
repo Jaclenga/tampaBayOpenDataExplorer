@@ -67,11 +67,7 @@ export default function CatalogPage({
           <h1 id="catalog-title">
             Tampa Bay <span>Open Data</span>
           </h1>
-          <p>
-            Search public datasets from {publishers.length} Tampa Bay
-            publishers. Preview records, view maps, and download the data you
-            load.
-          </p>
+          <p>search public datasets from the Tampa Bay area</p>
           <form
             role="search"
             className="search"
