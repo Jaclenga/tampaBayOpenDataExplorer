@@ -25,7 +25,7 @@ jobs:
         run: npm run discovery:refresh -- --max-items 40 --max-layers 150 --timeout-ms 900000
       - run: npm run discovery:validate
       - run: npm run catalog:validate && npm run access:validate
-      - run: npm run typecheck && npm run lint && npm run test:coverage && npm run build
+      - run: npm run typecheck && npm run lint && npm run test:coverage && npm run build && npm run build:functions
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e -- --workers=2
       - name: Publish tested metadata only

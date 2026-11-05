@@ -44,13 +44,16 @@ export async function latestIndex(
     if (cached)
       return { report: validateIndex(await cached.json()), fallback: false };
     const response = await upstream(indexURL, {
-      redirect: "error",
+      redirect: "manual",
       credentials: "omit",
       signal: signal
         ? AbortSignal.any([signal, AbortSignal.timeout(5000)])
         : AbortSignal.timeout(5000),
     });
-    if (!response.ok) throw Error(`Index HTTP ${response.status}`);
+    if (!response.ok) {
+      await response.body?.cancel();
+      throw Error(`Index HTTP ${response.status}`);
+    }
     const report = validateIndex(
       JSON.parse(await boundedText(response, 4194304)),
     );
@@ -61,8 +64,14 @@ export async function latestIndex(
       }),
     );
     return { report, fallback: false };
-  } catch {
-    console.warn(JSON.stringify({ event: "discovery_index_fallback" }));
+  } catch (error) {
+    console.warn(
+      JSON.stringify({
+        event: "discovery_index_fallback",
+        reason:
+          error instanceof Error ? error.message : "Unknown index failure",
+      }),
+    );
     return { report: validateIndex(bundled), fallback: true };
   }
 }

@@ -172,7 +172,7 @@ async function expandItem(
     return;
   const url = canonicalEndpoint(item.url);
   if (
-    !/\/(FeatureServer|MapServer)$/.test(url) ||
+    !/\/(FeatureServer|MapServer)(?:\/\d+)?$/.test(url) ||
     !endpointAllowed(url, portal.servicePrefixes)
   )
     return issue(
@@ -182,6 +182,19 @@ async function expandItem(
       "security",
       url,
     );
+  const layerMatch = /^(.*\/(?:FeatureServer|MapServer))\/(\d+)$/.exec(url);
+  if (layerMatch) {
+    state.layers++;
+    const dataset = descriptor(
+      portal,
+      item,
+      layerMatch[1],
+      Number(layerMatch[2]),
+      item.title,
+    );
+    state.datasets.push(await inspectLayer(dataset, options));
+    return;
+  }
   const metadata = serviceSchema.parse(
     await requestJson(`${url}?f=json`, options.signal),
   );

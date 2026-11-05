@@ -20,6 +20,7 @@ jobs:
       - run: npm run lint
       - run: npm test
       - run: npm run build
+      - run: npm run build:functions
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
       - run: npx wrangler pages deploy dist --project-name=tampabay-open-data-explorer

@@ -51,6 +51,18 @@ describe("resilient discovery loading", () => {
   });
 });
 describe("server metadata index trust boundary", () => {
+  it("rejects artifact redirects without making a second request", async () => {
+    const upstream = vi
+      .fn<typeof fetch>()
+      .mockResolvedValue(
+        new Response(null, {
+          status: 302,
+          headers: { Location: "https://127.0.0.1/private" },
+        }),
+      );
+    expect((await latestIndex(undefined, upstream)).fallback).toBe(true);
+    expect(upstream).toHaveBeenCalledTimes(1);
+  });
   it("fetches only the fixed public artifact, with deadline and redirects disabled", async () => {
     const upstream = vi
       .fn<typeof fetch>()
@@ -61,7 +73,7 @@ describe("server metadata index trust boundary", () => {
     });
     expect(upstream).toHaveBeenCalledWith(
       indexURL,
-      expect.objectContaining({ redirect: "error", credentials: "omit" }),
+      expect.objectContaining({ redirect: "manual", credentials: "omit" }),
     );
   });
   it("uses a trusted bundled index on failed or invalid upstream responses", async () => {

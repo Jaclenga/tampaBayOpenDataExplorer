@@ -66,6 +66,24 @@ const page = (results: unknown[], nextStart = -1, total = results.length) => ({
   total,
 });
 describe("registered ArcGIS discovery", () => {
+  it("supports a portal item pointing directly at one layer without expanding unrelated layers", async () => {
+    api([
+      page([
+        item(undefined, {
+          url: "https://data.example.test/services/Parks/MapServer/7",
+          title: "Specific layer",
+        }),
+      ]),
+    ]);
+    const result = await discoverArcGIS(portal, options);
+    expect(result.datasets[0]).toMatchObject({
+      serviceUrl: "https://data.example.test/services/Parks/MapServer",
+      layerId: 7,
+      title: "Specific layer",
+    });
+    expect(fetch).toHaveBeenCalledTimes(2);
+    expect(result.run.complete).toBe(true);
+  });
   it("discovers FeatureServer layers and nonspatial tables using live metadata only", async () => {
     api([page([item()])]);
     const result = await discoverPortal(portal, options);
