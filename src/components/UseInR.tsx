@@ -1,8 +1,10 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useId } from "react";
 import type { Dataset } from "../types";
 import { rExample } from "../services/r-code";
 
 export default function UseInR({ dataset }: { dataset: Dataset }) {
+  const headingId = useId();
+  const codeId = useId();
   const [full, setFull] = useState(false);
   const [spatial, setSpatial] = useState(false);
   const [feedback, setFeedback] = useState("");
@@ -22,8 +24,8 @@ export default function UseInR({ dataset }: { dataset: Dataset }) {
     }
   }
   return (
-    <section className="use-in-r" aria-labelledby="r-heading">
-      <h2 id="r-heading">Use in R</h2>
+    <section className="use-in-r" aria-labelledby={headingId}>
+      <h2 id={headingId}>Use in R</h2>
       {!example.supported ? (
         <p className="notice">{example.reason}</p>
       ) : (
@@ -81,11 +83,11 @@ export default function UseInR({ dataset }: { dataset: Dataset }) {
               coordinate-system metadata.
             </p>
           )}
-          <label className="sr-only" htmlFor="r-code">
+          <label className="sr-only" htmlFor={codeId}>
             R code
           </label>
           <textarea
-            id="r-code"
+            id={codeId}
             className="r-code"
             ref={codeField}
             readOnly

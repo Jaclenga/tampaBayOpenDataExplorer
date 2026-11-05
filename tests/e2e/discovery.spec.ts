@@ -68,7 +68,7 @@ test("search and filters intersect, reset, and never request records", async ({
   await page.getByRole("button", { name: "Clear filters" }).click();
   await page.getByRole("searchbox").fill("gardens");
   await expect(page.locator(".dataset-card")).toHaveCount(1);
-  await page.getByRole("button", { name: "Reset all" }).click();
+  await page.getByRole("button", { name: "Clear all filters" }).click();
   await page
     .getByRole("combobox", { name: "Data type", exact: true })
     .selectOption("nonspatial");

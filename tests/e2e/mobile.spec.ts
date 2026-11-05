@@ -16,6 +16,7 @@ test("mobile discovery and table preview fit the viewport", async ({
     path: "test-results/homepage-mobile.png",
     fullPage: true,
   });
+  await page.getByRole("button", { name: /Show filters/ }).click();
   await page
     .getByRole("combobox", { name: "Data type", exact: true })
     .selectOption("nonspatial");

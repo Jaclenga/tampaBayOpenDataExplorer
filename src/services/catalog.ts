@@ -26,6 +26,8 @@ export function searchCatalog(datasets: Dataset[], filters: Filters) {
     ? new Fuse(candidates, {
         keys: [
           { name: "title", weight: 3 },
+          "id",
+          "packageId",
           "description",
           "tags",
           "publisher",
@@ -37,4 +39,34 @@ export function searchCatalog(datasets: Dataset[], filters: Filters) {
         .search(filters.query.trim())
         .map((r) => r.item)
     : candidates;
+}
+
+export const catalogSorts = {
+  "name-asc": "Name (A-Z)",
+  "name-desc": "Name (Z-A)",
+  publisher: "Publisher",
+  category: "Category",
+  verified: "Most recently verified",
+};
+export type CatalogSort = keyof typeof catalogSorts;
+function verificationTime(dataset: Dataset) {
+  const value = Date.parse(dataset.lastVerifiedAt ?? dataset.verified ?? "");
+  return Number.isFinite(value) ? value : -Infinity;
+}
+export function sortCatalog(datasets: Dataset[], sort: CatalogSort) {
+  const compare = (a: string, b: string) =>
+    a.localeCompare(b, "en", { sensitivity: "base", numeric: true });
+  return [...datasets].sort((a, b) => {
+    const byName = compare(a.title, b.title) || compare(a.id, b.id);
+    if (sort === "name-desc") return -byName;
+    if (sort === "publisher")
+      return compare(a.publisher, b.publisher) || byName;
+    if (sort === "category")
+      return compare(a.category ?? "\uffff", b.category ?? "\uffff") || byName;
+    if (sort === "verified") {
+      const difference = verificationTime(b) - verificationTime(a);
+      if (difference && !Number.isNaN(difference)) return difference;
+    }
+    return byName;
+  });
 }

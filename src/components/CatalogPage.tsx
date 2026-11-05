@@ -1,19 +1,23 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo } from "react";
 import type { Catalog } from "../types";
 import type { AccessReport } from "../services/access";
-import { searchCatalog, type Filters } from "../services/catalog";
+import {
+  searchCatalog,
+  sortCatalog,
+  catalogSorts,
+  type Filters,
+} from "../services/catalog";
 import DatasetCard from "./DatasetCard";
 import FilterPanel from "./FilterPanel";
 import type { DiscoveryReport } from "../services/discovery/types";
 import { proxyEligible } from "../services/arcgis-transport";
 import DiscoveryStatus from "./DiscoveryStatus";
+import type { useCatalogBrowse } from "../hooks/useCatalogBrowse";
 
 const empty: Filters = { query: "", publisher: "", category: "", spatial: "" };
-interface Props {
+interface Props extends ReturnType<typeof useCatalogBrowse> {
   catalog: Catalog;
   access: AccessReport;
-  filters: Filters;
-  onChange: (filters: Filters) => void;
   discovery: DiscoveryReport;
 }
 
@@ -28,12 +32,16 @@ export default function CatalogPage({
   filters,
   onChange,
   discovery,
+  sort,
+  onSort,
+  visible,
+  onMore,
+  expanded,
+  onExpand,
 }: Props) {
-  const [visible, setVisible] = useState(100);
-  useEffect(() => setVisible(100), [filters, catalog]);
   const results = useMemo(
-    () => searchCatalog(catalog.datasets, filters),
-    [catalog, filters],
+    () => sortCatalog(searchCatalog(catalog.datasets, filters), sort),
+    [catalog, filters, sort],
   );
   const publishers = [
     ...new Set(catalog.datasets.map((d) => d.publisher)),
@@ -68,40 +76,7 @@ export default function CatalogPage({
             Tampa Bay <span>Open Data</span>
           </h1>
           <p>search public datasets from the Tampa Bay area</p>
-          <form
-            role="search"
-            className="search"
-            onSubmit={(event) => {
-              event.preventDefault();
-              focusResults();
-            }}
-          >
-            <label className="sr-only" htmlFor="dataset-search">
-              Search datasets
-            </label>
-            <svg
-              viewBox="0 0 24 24"
-              width="24"
-              height="24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              aria-hidden="true"
-            >
-              <circle cx="10.5" cy="10.5" r="6.5" />
-              <path d="m16 16 5 5" />
-            </svg>
-            <input
-              id="dataset-search"
-              type="search"
-              placeholder="Search datasets"
-              value={filters.query}
-              onChange={(event) =>
-                onChange({ ...filters, query: event.target.value })
-              }
-            />
-            <button type="submit">Search</button>
-          </form>
+
           <div className="hero-links">
             <a href="#catalog" onClick={() => onChange(empty)}>
               Browse all datasets <span aria-hidden="true">→</span>
@@ -153,28 +128,105 @@ export default function CatalogPage({
             filters={filters}
             onChange={onChange}
             onReset={() => onChange(empty)}
+            matchCount={results.length}
           />
-          <div>
+          <div className="catalog-results">
+            <form
+              role="search"
+              className="search catalog-search"
+              onSubmit={(event) => {
+                event.preventDefault();
+                focusResults();
+              }}
+            >
+              <label className="sr-only" htmlFor="dataset-search">
+                Search datasets
+              </label>
+              <svg
+                viewBox="0 0 24 24"
+                width="24"
+                height="24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                aria-hidden="true"
+              >
+                <circle cx="10.5" cy="10.5" r="6.5" />
+                <path d="m16 16 5 5" />
+              </svg>
+              <input
+                id="dataset-search"
+                type="search"
+                placeholder="Search datasets"
+                value={filters.query}
+                onChange={(event) =>
+                  onChange({ ...filters, query: event.target.value })
+                }
+              />
+              {filters.query && (
+                <button
+                  type="button"
+                  className="clear-search"
+                  onClick={() => {
+                    onChange({ ...filters, query: "" });
+                    document.getElementById("dataset-search")?.focus();
+                  }}
+                >
+                  Clear search
+                </button>
+              )}
+              <button type="submit">Search</button>
+            </form>
             <div className="results-bar">
               <p role="status">
                 <strong>{results.length}</strong> datasets
                 {Object.values(filters).some(Boolean) ? " found" : ""}
               </p>
+              <label className="catalog-sort">
+                Sort by{" "}
+                <select
+                  value={sort}
+                  onChange={(event) =>
+                    onSort(event.target.value as Props["sort"])
+                  }
+                >
+                  {Object.entries(catalogSorts).map(([value, label]) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
+              </label>
             </div>
+            {Object.values(filters).some(Boolean) && (
+              <p
+                className="active-filters"
+                aria-label="Active search and filters"
+              >
+                {[
+                  filters.query && `Search: ${filters.query}`,
+                  filters.publisher,
+                  filters.category,
+                  filters.spatial,
+                  filters.platform,
+                ]
+                  .filter(Boolean)
+                  .join(" / ")}
+              </p>
+            )}
             <div className="cards">
               {results.slice(0, visible).map((dataset) => (
                 <DatasetCard
                   key={dataset.id}
                   dataset={dataset}
                   sourceOnly={sourceOnly.has(dataset.id)}
+                  expanded={expanded.has(dataset.id)}
+                  onExpand={() => onExpand(dataset.id)}
                 />
               ))}
             </div>
             {results.length > visible && (
-              <button
-                className="button secondary"
-                onClick={() => setVisible((count) => count + 100)}
-              >
+              <button className="button secondary" onClick={onMore}>
                 Show more datasets ({results.length - visible} remaining)
               </button>
             )}

@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { parseCatalog, type Filters } from "./services/catalog";
+import { useEffect, useState, useRef } from "react";
+import { parseCatalog } from "./services/catalog";
 import type { Catalog } from "./types";
 import { parseAccessReport, type AccessReport } from "./services/access";
 import DatasetDetail from "./components/DatasetDetail";
@@ -8,7 +8,7 @@ import { SiteHeader, SiteFooter } from "./components/SiteChrome";
 import { type DiscoveryReport } from "./services/discovery/types";
 import { loadDiscovery } from "./services/load-discovery";
 import { federatedCatalog } from "./services/federated-catalog";
-const empty: Filters = { query: "", publisher: "", category: "", spatial: "" };
+import { useCatalogBrowse } from "./hooks/useCatalogBrowse";
 function currentId() {
   try {
     const value = decodeURIComponent(location.hash.slice(1));
@@ -25,7 +25,10 @@ export default function App() {
   const [discovery, setDiscovery] = useState<DiscoveryReport>();
   const [error, setError] = useState("");
   const [discoveryWarning, setDiscoveryWarning] = useState<string | null>(null);
-  const [filters, setFilters] = useState(empty);
+  const browse = useCatalogBrowse();
+  const browseScroll = useRef(0);
+  const previousId = useRef(currentId());
+  const restoreScroll = useRef(false);
   const [id, setId] = useState(currentId);
   useEffect(() => {
     const c = new AbortController();
@@ -61,7 +64,14 @@ export default function App() {
   }, []);
   useEffect(() => {
     const change = () => {
-      setId(currentId());
+      const nextId = currentId();
+      if (nextId && !previousId.current) browseScroll.current = window.scrollY;
+      restoreScroll.current =
+        !nextId &&
+        !!previousId.current &&
+        ["", "#catalog"].includes(location.hash);
+      previousId.current = nextId;
+      setId(nextId);
       if (
         !["#catalog", "#main", "#publishers", "#about"].includes(location.hash)
       )
@@ -77,6 +87,13 @@ export default function App() {
         : "Tampa Bay Open Data";
   }, [id, catalog]);
   useEffect(() => {
+    if (restoreScroll.current && !id) {
+      restoreScroll.current = false;
+      const frame = requestAnimationFrame(() =>
+        window.scrollTo(0, browseScroll.current),
+      );
+      return () => cancelAnimationFrame(frame);
+    }
     if (["#catalog", "#publishers", "#about"].includes(location.hash)) {
       document
         .getElementById(location.hash.slice(1))
@@ -131,8 +148,7 @@ export default function App() {
         <CatalogPage
           catalog={catalog}
           access={access!}
-          filters={filters}
-          onChange={setFilters}
+          {...browse}
           discovery={discovery!}
         />
       )}

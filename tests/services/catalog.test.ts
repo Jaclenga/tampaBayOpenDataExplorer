@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest";
 import {
   parseCatalog,
   searchCatalog,
+  sortCatalog,
   type Filters,
 } from "../../src/services/catalog";
 import { catalog, dataset } from "../fixtures";
@@ -84,5 +85,53 @@ describe("local dataset search", () => {
     searchCatalog(catalog.datasets, { ...filters, query: "parks" });
     expect(catalog.datasets).toEqual(original);
     expect(fetch).not.toHaveBeenCalled();
+  });
+});
+
+describe("catalog browsing order", () => {
+  it("searches identifiers and package identifiers case-insensitively", () => {
+    const d = {
+      ...dataset,
+      id: "city/unique-lookup",
+      packageId: "only-package-key",
+    };
+    for (const query of ["CITY/UNIQUE", "only-package"])
+      expect(searchCatalog([d], { ...filters, query })).toEqual([d]);
+  });
+  it("sorts names, publishers and categories without mutating inputs", () => {
+    const source = structuredClone(catalog.datasets);
+    expect(sortCatalog(source, "name-asc").map((d) => d.title)).toEqual([
+      "Budget allocations",
+      "Neighborhood parks",
+      "Street centerlines",
+    ]);
+    expect(sortCatalog(source, "name-desc").map((d) => d.title)).toEqual([
+      "Street centerlines",
+      "Neighborhood parks",
+      "Budget allocations",
+    ]);
+    expect(sortCatalog(source, "publisher")[0].publisher).toBe("Test City");
+    expect(sortCatalog(source, "category")[0].category).toBe("Finance");
+    expect(source).toEqual(catalog.datasets);
+  });
+  it("places valid newest verification dates first, missing or invalid dates last, and breaks ties by name", () => {
+    const rows = [
+      { ...dataset, id: "unknown", title: "Z unknown", verified: null },
+      {
+        ...dataset,
+        id: "bad",
+        title: "A invalid",
+        verified: null,
+        lastVerifiedAt: "invalid",
+      },
+      { ...dataset, id: "old", verified: "2020-01-01" },
+      { ...dataset, id: "new", lastVerifiedAt: "2026-11-04T12:00:00Z" },
+    ];
+    expect(sortCatalog(rows, "verified").map((d) => d.id)).toEqual([
+      "new",
+      "old",
+      "bad",
+      "unknown",
+    ]);
   });
 });

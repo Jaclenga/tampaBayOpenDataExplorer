@@ -1,50 +1,65 @@
+import { useId } from "react";
 import type { Dataset } from "../types";
+import CatalogDatasetDetails from "./CatalogDatasetDetails";
+import { rExample } from "../services/r-code";
 
 export default function DatasetCard({
   dataset,
   sourceOnly,
+  expanded,
+  onExpand,
 }: {
   dataset: Dataset;
   sourceOnly: boolean;
+  expanded: boolean;
+  onExpand: () => void;
 }) {
+  const detailsId = useId();
   const url = `#${encodeURIComponent(dataset.id)}`;
+  const example = rExample(dataset);
   return (
     <article className="dataset-card">
-      <p className="dataset-verification">
-        {dataset.validationStatus === "discovered"
-          ? "Automatically discovered · unreviewed"
-          : "Curated R-package subset"}
-      </p>
-      <p className="publisher">{dataset.publisher}</p>
-      <h3>
-        <a href={url}>{dataset.title}</a>
-      </h3>
-      <p className="description">
-        {dataset.description ?? "Description unavailable."}
-      </p>
-      <div className="card-bottom">
-        <div className="dataset-meta">
-          <span className="category">
-            {dataset.category ?? "Uncategorized"}
-          </span>
-          <span>{dataset.geometryType === "none" ? "Table" : "Map layer"}</span>
-          <span>
-            {dataset.verified
-              ? `Package check ${dataset.verified}`
-              : dataset.lastVerifiedAt
-                ? `Endpoint checked ${new Date(dataset.lastVerifiedAt).toLocaleDateString()}`
-                : "Endpoint not yet verified"}
-          </span>
+      <div className="dataset-row">
+        <div className="dataset-summary">
+          <h3>
+            <a href={url}>{dataset.title}</a>
+          </h3>
+          <div className="dataset-meta">
+            <span>{dataset.publisher}</span>
+            <span>{dataset.category ?? "Uncategorized"}</span>
+            <span>
+              {dataset.geometryType === "none" ? "Table" : "Map layer"}
+            </span>
+            <span className="dataset-origin">
+              {example.supported && example.checked
+                ? "Package-supported"
+                : dataset.validationStatus === "discovered"
+                  ? "Discovered"
+                  : "Curated"}
+            </span>
+          </div>
+          <p className="description">
+            {dataset.description ?? "Description unavailable."}
+          </p>
         </div>
-        <a href={url} aria-label={`View ${dataset.title}`}>
-          View dataset <span aria-hidden="true">→</span>
-        </a>
+        <button
+          className="text-button dataset-expand"
+          aria-expanded={expanded}
+          aria-controls={detailsId}
+          aria-label={`${expanded ? "Hide" : "Show"} details for ${dataset.title}`}
+          onClick={onExpand}
+        >
+          {expanded ? "Hide details" : "Details"}
+        </button>
       </div>
       {sourceOnly && (
         <p className="source-only-badge">
-          Source only · browser preview unavailable
+          {"Source only \u00b7 browser preview unavailable"}
         </p>
       )}
+      <div id={detailsId} hidden={!expanded} className="dataset-expanded">
+        {expanded && <CatalogDatasetDetails dataset={dataset} />}
+      </div>
     </article>
   );
 }

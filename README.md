@@ -47,6 +47,7 @@ This builds the app, deploys the private guard, then publishes the site. The man
 
 ## Technical guides
 
+- [Catalog browsing and shared views](docs/catalog-browsing.md)
 - [Discovery, adapters, catalog maintenance, and freshness](docs/federation.md)
 - [Security, request limits, and local proxy setup](docs/security-fixes.md)
 - [Architecture and implementation notes](docs/implementation.md)
