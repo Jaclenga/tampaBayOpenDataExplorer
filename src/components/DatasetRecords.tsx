@@ -36,6 +36,12 @@ export default function DatasetRecords({
         {count} records loaded
         {count > 0 && ` · rows ${offset + 1}–${offset + count}`} · preview only
       </div>
+      {page.retrievedAt && (
+        <p className="muted">
+          Records retrieved {new Date(page.retrievedAt).toLocaleString()} ·
+          loaded page only
+        </p>
+      )}
       <DatasetTable records={page.records} fields={fields} />
     </>
   );

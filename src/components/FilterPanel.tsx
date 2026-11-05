@@ -73,11 +73,43 @@ export default function FilterPanel({
           <option value="nonspatial">Nonspatial tables</option>
         </select>
       </label>
+      <label>
+        Catalog group
+        <select
+          value={filters.verification ?? ""}
+          onChange={(event) =>
+            onChange({ ...filters, verification: event.target.value })
+          }
+        >
+          <option value="">Curated and discovered</option>
+          <option value="curated">Curated R-package subset</option>
+          <option value="discovered">Automatically discovered</option>
+        </select>
+      </label>
+      <label>
+        Source platform
+        <select
+          value={filters.platform ?? ""}
+          onChange={(event) =>
+            onChange({ ...filters, platform: event.target.value })
+          }
+        >
+          <option value="">All platforms</option>
+          {[...new Set(datasets.map((d) => d.platform ?? "arcgis"))]
+            .sort()
+            .map((platform) => (
+              <option key={platform} value={platform}>
+                {platform.toUpperCase()}
+              </option>
+            ))}
+        </select>
+      </label>
       <div className="catalog-note">
         <h4>About this catalog</h4>
         <p>
-          A selected collection, not every dataset in the region. “Source only”
-          means you’ll need to visit the publisher to access the data.
+          Curated datasets and automatically discovered public layers, not a
+          complete regional inventory. “Source only” means you’ll need to visit
+          the publisher to access the data.
         </p>
         <a href="#about">More about this project</a>
       </div>

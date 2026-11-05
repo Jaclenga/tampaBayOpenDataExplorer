@@ -6,12 +6,17 @@ export interface Filters {
   publisher: string;
   category: string;
   spatial: string;
+  verification?: string;
+  platform?: string;
 }
 export function searchCatalog(datasets: Dataset[], filters: Filters) {
   const candidates = datasets.filter(
     (d) =>
       (!filters.publisher || d.publisher === filters.publisher) &&
       (!filters.category || d.category === filters.category) &&
+      (!filters.verification ||
+        (d.validationStatus ?? "curated") === filters.verification) &&
+      (!filters.platform || (d.platform ?? "arcgis") === filters.platform) &&
       (!filters.spatial ||
         (filters.spatial === "spatial"
           ? d.geometryType !== "none"

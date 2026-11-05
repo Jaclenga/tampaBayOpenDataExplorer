@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 import type { Dataset, LayerMetadata, Page } from "../types";
-import { getMetadata, getPage, type Bounds } from "../services/arcgis";
+import { type Bounds } from "../services/arcgis";
+import { getAdapter } from "../services/adapters";
+import type { RecordFilter } from "../services/record-filter";
 
 const firstPage = { offsets: [0], index: 0 };
 const previewLimit = 10000;
@@ -10,6 +12,7 @@ export function useDatasetPreview(dataset: Dataset) {
   const [page, setPage] = useState<Page | null>(null);
   const [navigation, setNavigation] = useState(firstPage);
   const [bounds, setBounds] = useState<Bounds>();
+  const [filter, setFilter] = useState<RecordFilter>();
   const [retryCount, setRetryCount] = useState(0);
   const [busy, setBusy] = useState(true);
   const [error, setError] = useState("");
@@ -27,7 +30,7 @@ export function useDatasetPreview(dataset: Dataset) {
     setMetadata(null);
     async function inspect() {
       try {
-        const result = await getMetadata(dataset, signal);
+        const result = await getAdapter(dataset).inspect(dataset, signal);
         if (!signal.aborted) setMetadata(result);
       } catch (error) {
         if (signal.aborted) return;
@@ -54,14 +57,13 @@ export function useDatasetPreview(dataset: Dataset) {
     const layer = metadata;
     async function load() {
       try {
-        const result = await getPage(
-          dataset,
-          layer,
+        const result = await getAdapter(dataset).page(dataset, layer, {
           offset,
           signal,
           bounds,
           previousIds,
-        );
+          filter,
+        });
         if (signal.aborted) return;
         const ids = result.records.map((record) =>
           String(record.attributes[layer.objectIdField ?? ""]),
@@ -76,7 +78,7 @@ export function useDatasetPreview(dataset: Dataset) {
     }
     void load();
     return () => controller.abort();
-  }, [dataset, metadata, offset, bounds]);
+  }, [dataset, metadata, offset, bounds, filter]);
 
   function filterArea(area?: Bounds) {
     seen.current.clear();
@@ -99,6 +101,12 @@ export function useDatasetPreview(dataset: Dataset) {
     page,
     offset,
     bounds,
+    filter,
+    filterRecords: (value?: RecordFilter) => {
+      seen.current.clear();
+      setNavigation(firstPage);
+      setFilter(value);
+    },
     busy,
     error,
     pageNumber: navigation.index + 1,

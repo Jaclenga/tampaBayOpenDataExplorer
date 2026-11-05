@@ -1,0 +1,82 @@
+[
+  {
+    "id": "city",
+    "platform": "arcgis",
+    "root": "https://tampa.maps.arcgis.com/sharing/rest",
+    "organizationId": "IbNXlmt2RVVRCZ6M",
+    "publisher": "City of Tampa",
+    "jurisdiction": "tampa",
+    "website": "https://www.tampa.gov/departments/geographic-information-systems",
+    "evidenceUrl": "https://tampa.maps.arcgis.com/home/index.html",
+    "servicePrefixes": [
+      "https://arcgis.tampagov.net/arcgis/rest/services/",
+      "https://services1.arcgis.com/IbNXlmt2RVVRCZ6M/arcgis/rest/services/"
+    ]
+  },
+  {
+    "id": "tbrpc",
+    "platform": "arcgis",
+    "root": "https://www.arcgis.com/sharing/rest",
+    "organizationId": "RgIBbQIF0Y6T3AX6",
+    "publisher": "Tampa Bay Regional Planning Council",
+    "jurisdiction": "tampa-bay",
+    "website": "https://tbrpc.org/",
+    "evidenceUrl": "https://tbrpc.org/",
+    "servicePrefixes": [
+      "https://services3.arcgis.com/RgIBbQIF0Y6T3AX6/arcgis/rest/services/"
+    ]
+  },
+  {
+    "id": "stpete",
+    "platform": "arcgis",
+    "root": "https://csp.maps.arcgis.com/sharing/rest",
+    "organizationId": "9qPLjNtocjo438CJ",
+    "publisher": "City of St. Petersburg",
+    "jurisdiction": "stpete",
+    "website": "https://www.stpete.org/",
+    "evidenceUrl": "https://csp.maps.arcgis.com/home/index.html",
+    "servicePrefixes": [
+      "https://services2.arcgis.com/9qPLjNtocjo438CJ/arcgis/rest/services/"
+    ]
+  },
+  {
+    "id": "clearwater",
+    "platform": "arcgis",
+    "root": "https://cityofclearwater.maps.arcgis.com/sharing/rest",
+    "organizationId": "3GsNorcb0Mn5rMt8",
+    "publisher": "City of Clearwater",
+    "jurisdiction": "clearwater",
+    "website": "https://www.myclearwater.com/My-Government/About-Clearwater/Maps-GIS",
+    "evidenceUrl": "https://cityofclearwater.maps.arcgis.com/home/index.html",
+    "servicePrefixes": [
+      "https://gis.myclearwater.com/arcgis/rest/services/",
+      "https://services1.arcgis.com/3GsNorcb0Mn5rMt8/arcgis/rest/services/"
+    ]
+  },
+  {
+    "id": "hillsborough",
+    "platform": "arcgis",
+    "root": "https://hillsborough.maps.arcgis.com/sharing/rest",
+    "organizationId": "apTfC6SUmnNfnxuF",
+    "publisher": "Hillsborough County",
+    "jurisdiction": "hillsborough",
+    "website": "https://hcfl.gov/about-hillsborough/open-data-and-gis",
+    "evidenceUrl": "https://hcfl.gov/about-hillsborough/open-data-and-gis",
+    "servicePrefixes": [
+      "https://services.arcgis.com/apTfC6SUmnNfnxuF/arcgis/rest/services/"
+    ]
+  },
+  {
+    "id": "pinellas",
+    "platform": "arcgis",
+    "root": "https://pinellas-egis.maps.arcgis.com/sharing/rest",
+    "organizationId": "f5HgUpxURgEzTccH",
+    "publisher": "Pinellas County",
+    "jurisdiction": "pinellas",
+    "website": "https://pinellas.gov/services/maps-gis/",
+    "evidenceUrl": "https://pinellas.gov/services/maps-gis/",
+    "servicePrefixes": [
+      "https://services.arcgis.com/f5HgUpxURgEzTccH/arcgis/rest/services/"
+    ]
+  }
+]

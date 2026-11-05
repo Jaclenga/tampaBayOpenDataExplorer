@@ -1,4 +1,5 @@
-import { ArcGISError, getMetadata, getPage } from "./arcgis";
+import { ArcGISError } from "./arcgis";
+import { getAdapter } from "./adapters";
 import type { Dataset } from "../types";
 
 export function accessExplanation(reason: string) {
@@ -71,6 +72,7 @@ export async function checkPreviewAccess(
     throw new ArcGISError(
       "Your browser is offline. Reconnect and check again.",
     );
-  const metadata = await getMetadata(dataset, signal);
-  await getPage(dataset, { ...metadata, maxRecordCount: 1 }, 0, signal);
+  const adapter = getAdapter(dataset);
+  const metadata = await adapter.inspect(dataset, signal);
+  await adapter.page(dataset, metadata, { offset: 0, limit: 1, signal });
 }

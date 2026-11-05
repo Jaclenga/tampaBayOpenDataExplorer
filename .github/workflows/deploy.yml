@@ -16,6 +16,7 @@ jobs:
       - run: npm ci
       - run: npm run catalog:validate
       - run: npm run access:validate
+      - run: npm run discovery:validate
       - run: npm run lint
       - run: npm test
       - run: npm run build

@@ -1096,6 +1096,76 @@ td {
   color: var(--muted);
   margin-bottom: 0;
 }
+.record-filters {
+  border: 1px solid var(--line);
+  padding: 16px;
+  margin: 20px 0;
+  background: var(--paper);
+  font-size: 13px;
+}
+.record-filters summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.record-filters form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: end;
+  margin: 18px 0;
+}
+.record-filters label {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  flex: 1;
+  min-width: 150px;
+}
+.record-filters input,
+.record-filters select {
+  border: 1px solid #aeb8c7;
+  background: #fff;
+  min-height: 42px;
+  padding: 8px;
+  width: 100%;
+}
+.provenance-label {
+  display: block;
+  font-weight: 650;
+  margin-bottom: 8px;
+}
+.freshness-details {
+  color: var(--muted);
+  font-size: 12px;
+  margin: 20px 0;
+}
+.freshness-details p {
+  margin-bottom: 6px;
+}
+.dataset-verification {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 650;
+  margin-bottom: 6px;
+}
+.discovery-status {
+  border: 1px solid var(--line);
+  padding: 14px 16px;
+  margin-bottom: 22px;
+  background: var(--paper);
+  font-size: 12px;
+}
+.discovery-status summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.discovery-status p {
+  margin: 12px 0;
+}
+.discovery-status ul {
+  padding-left: 20px;
+  list-style: disc;
+}
 @media (max-width: 600px) {
   .access-summary {
     padding: 19px 16px 8px;

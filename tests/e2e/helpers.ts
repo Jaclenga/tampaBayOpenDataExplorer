@@ -1,4 +1,5 @@
 import type { Page } from "@playwright/test";
+import { emptyDiscovery } from "../discovery-fixture";
 import { catalog, accessReport, layerResponse, record } from "../fixtures";
 
 export interface ApiResponse {
@@ -13,6 +14,8 @@ export async function installApi(page: Page, options: ApiOptions = {}) {
   const queries: URL[] = [];
   await page.route("**/*", async (route) => {
     const url = new URL(route.request().url());
+    if (url.pathname === "/discovery.json" || url.pathname === "/api/discovery")
+      return route.fulfill({ json: emptyDiscovery });
     if (url.pathname === "/catalog.json")
       return route.fulfill({ json: catalog });
     if (url.pathname === "/access.json")

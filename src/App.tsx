@@ -5,6 +5,9 @@ import { parseAccessReport, type AccessReport } from "./services/access";
 import DatasetDetail from "./components/DatasetDetail";
 import CatalogPage from "./components/CatalogPage";
 import { SiteHeader, SiteFooter } from "./components/SiteChrome";
+import { type DiscoveryReport } from "./services/discovery/types";
+import { loadDiscovery } from "./services/load-discovery";
+import { federatedCatalog } from "./services/federated-catalog";
 const empty: Filters = { query: "", publisher: "", category: "", spatial: "" };
 function currentId() {
   try {
@@ -19,7 +22,9 @@ function currentId() {
 export default function App() {
   const [catalog, setCatalog] = useState<Catalog>();
   const [access, setAccess] = useState<AccessReport>();
+  const [discovery, setDiscovery] = useState<DiscoveryReport>();
   const [error, setError] = useState("");
+  const [discoveryWarning, setDiscoveryWarning] = useState<string | null>(null);
   const [filters, setFilters] = useState(empty);
   const [id, setId] = useState(currentId);
   useEffect(() => {
@@ -36,11 +41,18 @@ export default function App() {
         return response.json();
       }),
     )
-      .then(([catalogValue, accessValue]) => {
+      .then(async ([catalogValue, accessValue]) => {
         const parsed = parseCatalog(catalogValue);
         const report = parseAccessReport(accessValue, parsed);
+        const { report: discovered, warning } = await loadDiscovery(
+          import.meta.env.BASE_URL,
+          c.signal,
+        );
+        if (c.signal.aborted) return;
+        setDiscoveryWarning(warning);
         setAccess(report);
-        setCatalog(parsed);
+        setDiscovery(discovered);
+        setCatalog(federatedCatalog(parsed, discovered));
       })
       .catch((e) => {
         if (!c.signal.aborted) setError(e.message);
@@ -88,6 +100,11 @@ export default function App() {
         Skip to content
       </a>
       <SiteHeader />
+      {discoveryWarning && (
+        <p role="status" className="notice shell">
+          {discoveryWarning}
+        </p>
+      )}
       {error ? (
         <main id="main" className="shell">
           <p role="alert" className="error">
@@ -102,7 +119,7 @@ export default function App() {
         <DatasetDetail
           key={selected.id}
           dataset={selected}
-          access={access!.datasets.find((entry) => entry.id === selected.id)!}
+          access={access!.datasets.find((entry) => entry.id === selected.id)}
           checkedAt={access!.checkedAt}
         />
       ) : id ? (
@@ -116,6 +133,7 @@ export default function App() {
           access={access!}
           filters={filters}
           onChange={setFilters}
+          discovery={discovery!}
         />
       )}
       <SiteFooter />

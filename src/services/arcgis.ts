@@ -1,4 +1,6 @@
-import { ArcGISError, requestJson } from "./http";
+import { ArcGISError } from "./http";
+import { requestArcGIS } from "./arcgis-transport";
+import { compileFilter, type RecordFilter } from "./record-filter";
 export { ArcGISError, requestJson } from "./http";
 import { z } from "zod";
 import { arcgisToGeoJSON } from "@terraformer/arcgis";
@@ -17,6 +19,9 @@ const metadataSchema = z.object({
   maxRecordCount: z.number().int().positive().optional(),
   capabilities: z.string().optional(),
   supportedQueryFormats: z.string().optional(),
+  editingInfo: z
+    .object({ lastEditDate: z.number().nullable().optional() })
+    .optional(),
   advancedQueryCapabilities: z
     .object({
       supportsPagination: z.boolean().optional(),
@@ -80,7 +85,7 @@ export async function getMetadata(
   signal?: AbortSignal,
 ): Promise<LayerMetadata> {
   const parsed = metadataSchema.safeParse(
-    await requestJson(`${endpoint(d)}?f=json`, signal),
+    await requestArcGIS(d, "metadata", {}, signal),
   );
   if (!parsed.success)
     throw new ArcGISError(
@@ -89,6 +94,9 @@ export async function getMetadata(
   const m = parsed.data;
   return {
     fields: m.fields,
+    sourceUpdatedAt: sourceTimestamp(m.editingInfo?.lastEditDate),
+    sourceUpdatedKind: m.editingInfo?.lastEditDate != null ? "records" : null,
+    inspectedAt: new Date().toISOString(),
     objectIdField:
       m.objectIdField ??
       m.objectIdFieldName ??
@@ -160,10 +168,15 @@ function supportsOrderedPages(metadata: LayerMetadata) {
   return metadata.pagination && metadata.orderBy && !!metadata.objectIdField;
 }
 
-function pageQuery(m: LayerMetadata, offset: number, bounds?: Bounds) {
-  const limit = Math.min(100, m.maxRecordCount);
+function pageQuery(
+  m: LayerMetadata,
+  offset: number,
+  bounds?: Bounds,
+  filter?: RecordFilter,
+) {
+  const limit = Math.min(100, m.maxRecordCount, 10000 - offset);
   const params: Record<string, string | number | boolean> = {
-    where: "1=1",
+    where: compileFilter(filter, m.fields),
     outFields: "*",
     returnGeometry: !!m.geometryType,
     outSR: 4326,
@@ -253,12 +266,13 @@ export async function getPage(
   signal?: AbortSignal,
   bounds?: Bounds,
   previousIds?: Set<string>,
+  filter?: RecordFilter,
 ): Promise<Page> {
   if (!metadata.query)
     throw new ArcGISError(
       "This endpoint does not advertise Query capability. Open the source for other access options.",
     );
-  if (!Number.isSafeInteger(offset) || offset < 0)
+  if (!Number.isSafeInteger(offset) || offset < 0 || offset >= 10000)
     throw new ArcGISError("Invalid page offset.");
   const paginates = supportsOrderedPages(metadata);
   if (offset > 0 && !paginates)
@@ -266,14 +280,14 @@ export async function getPage(
       "This endpoint cannot provide reliable ordered pagination. Only its initial preview is available.",
     );
 
-  const params = pageQuery(metadata, offset, bounds);
+  const params = pageQuery(metadata, offset, bounds, filter);
   const parsed = responseSchema.safeParse(
-    await requestJson(queryUrl(dataset, params), signal),
+    await requestArcGIS(dataset, "query", params, signal),
   );
   if (!parsed.success)
     throw new ArcGISError("The publisher returned malformed records.");
   const body = parsed.data;
-  const limit = Math.min(100, metadata.maxRecordCount);
+  const limit = Math.min(100, metadata.maxRecordCount, 10000 - offset);
   validatePage(body, limit, metadata.objectIdField, previousIds);
   const { geojson, warning } = pageGeometry(body, !!metadata.geometryType);
   const warnings = [warning];
@@ -283,6 +297,7 @@ export async function getPage(
     );
   return {
     records: body.features,
+    retrievedAt: new Date().toISOString(),
     geojson,
     hasMore:
       paginates &&
@@ -291,4 +306,14 @@ export async function getPage(
     limit,
     warning: warnings.filter(Boolean).join(" ") || null,
   };
+}
+
+export function sourceTimestamp(value: unknown): string | null {
+  if (
+    typeof value !== "number" ||
+    !Number.isFinite(value) ||
+    !Number.isFinite(new Date(value).getTime())
+  )
+    return null;
+  return new Date(value).toISOString();
 }

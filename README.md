@@ -1,6 +1,6 @@
 # Tampa Bay Open Data Explorer
 
-A free, static civic data portal for discovering, previewing, mapping, and exporting the checked datasets in [tampaBayOpenData](https://github.com/Jaclenga/tampaBayOpenData). React, TypeScript, Vite, Tailwind CSS, Fuse.js, MapLibre GL JS, and Zod. No accounts, database, backend, paid APIs, or replicated record store.
+A federated civic data portal for discovering public Tampa Bay datasets and exploring live publisher records. The 52 checked datasets in [tampaBayOpenData](https://github.com/Jaclenga/tampaBayOpenData) remain a curated subset alongside automatically discovered layers from six registered government portals. React, TypeScript, Vite, Tailwind CSS, Fuse.js, MapLibre GL JS, and Zod run on Cloudflare Pages, with two small Pages Functions for metadata-index delivery and an allowlisted CORS fallback. No accounts, database, paid APIs, or replicated record store.
 
 ## Run locally
 
@@ -64,7 +64,7 @@ The weekly/manual catalog workflow generates against upstream main and fails if 
 
 ## Reliability and limits
 
-Each metadata or query attempt has a 15-second timeout. Only HTTP 408/429/selected 5xx, transient ArcGIS errors, and timeouts retry, at most twice with 400/800 ms backoff. Navigation cancels outstanding requests. Browser network failures explicitly explain possible CORS restrictions; they cannot reliably be distinguished from network outages by browser JavaScript. No proxy is introduced.
+Each ArcGIS metadata or query attempt has a 15-second timeout. Only HTTP 408/429/selected 5xx, transient ArcGIS errors, and timeouts retry, at most twice with 400/800 ms backoff. `Retry-After` takes precedence; waits over five seconds surface the error instead of retrying early. Navigation cancels outstanding requests. Browser network failures cannot reliably be distinguished from CORS restrictions. Only registered Tampa layers at the demonstrated CORS-blocked host can fall back to the same-origin Worker; authentication failures never trigger a proxy bypass.
 
 Live metadata controls query support, object ID, record limit, and pagination. Pages contain at most `min(100, maxRecordCount)` records. Reliable pagination requires explicit pagination and order-by support plus an object ID. Unsupported endpoints get an initial bounded preview and explanation; further pages are disabled. Missing/duplicate/repeated IDs, oversized pages, and contradictory empty pages stop retrieval. Preview navigation stops at 10,000 records. The publisher can still change records between page requests; previews are not transactionally consistent snapshots.
 
@@ -74,7 +74,7 @@ Exports always contain only loaded records. No total count or complete-dataset e
 
 Basemap tiles come directly from OpenStreetMap with visible attribution. Tiles and ArcGIS calls require publisher availability. No tile prefetching or bulk downloads. See [OpenStreetMap's tile policy](https://operations.osmfoundation.org/policies/tiles/) before scaling traffic; a different public tile provider may become appropriate at higher usage.
 
-**Browser access audit:** all 52 datasets were checked from the production origin on November 4, 2026. Metadata and a one-record query succeeded for 31. The 20 City of Tampa layers failed browser metadata requests, and Clearwater critical assets returned ArcGIS 499 (Token Required). Those 21 datasets are explicitly labeled source-only in cards and details, with publisher links and the audit date; the app does not attempt known-failing previews. All 52 remain searchable. This is a dated access check, not a guarantee of future availability or a full validation of every record. No proxy has been added. `npm run access:audit -- [site-url] [output-file]` refreshes the complete report. `node scripts/live-smoke.mjs [site-url]` verifies the published report, source-only behavior, and a real St. Petersburg preview, map, and CSV download.
+**Historical direct-browser access audit:** all 52 curated datasets were checked from the production origin on November 4, 2026. Metadata and a one-record query succeeded for 31; 20 Tampa layers failed browser metadata requests, and Clearwater critical assets returned ArcGIS 499 (Token Required). The saved audit remains unchanged as historical evidence. Tampa now attempts live direct access with an allowlisted proxy fallback. Restricted sources retain the source-only panel. Newly discovered layers have their own endpoint-verification timestamps and do not inherit an audit result. `npm run access:audit -- [site-url] [output-file]` refreshes the curated audit; `node scripts/live-smoke.mjs [site-url]` checks the deployed index and real previews.
 
 Source-only details distinguish restricted access, timeouts, server errors, and ambiguous browser/network failures. A user can explicitly recheck metadata and at most one record, with a 30-second total deadline and cancellation on navigation. No automatic publisher request occurs just from opening the page. A successful check offers the regular preview for that visit; it does not change the shared audit. The endpoint can be copied, with selectable text as a fallback if clipboard access is denied.
 
@@ -98,4 +98,4 @@ Static hosting fits Cloudflare Pages' free tier at low traffic; no paid service 
 
 ## Scope
 
-This MVP excludes live portal-wide discovery, complete exports, server-side search, user accounts, historical storage, joins, analytics dashboards, and AI features. Keep government records on demand and catalog generation reviewable. See `docs/implementation.md` for phase verification and live-check evidence.
+Discovery and live record queries are separate: search uses catalog metadata; opening a dataset queries its publisher. Complete exports, user accounts, historical record storage, joins, analytics dashboards, and AI features remain outside scope. See [federation operations](docs/federation.md), [the architectural audit](docs/federation-plan.md), and `docs/implementation.md` for earlier verification evidence.

@@ -1,0 +1,52 @@
+name: Refresh discovery metadata
+on:
+  schedule:
+    - cron: '23 8 * * *'
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: discovery-refresh
+  cancel-in-progress: false
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Refresh bounded public metadata
+        run: npm run discovery:refresh -- --max-items 40 --max-layers 150 --timeout-ms 900000
+      - run: npm run discovery:validate
+      - run: npm run catalog:validate && npm run access:validate
+      - run: npm run typecheck && npm run lint && npm run test:coverage && npm run build
+      - run: npx playwright install --with-deps chromium
+      - run: npm run test:e2e -- --workers=2
+      - name: Publish tested metadata only
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add public/discovery.json
+          if ! git diff --cached --quiet; then
+            git commit -m 'Refresh government portal discovery metadata'
+            git push origin HEAD:main
+          fi
+      - name: Discovery summary
+        if: always()
+        run: node scripts/discovery-summary.mjs >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: discovery-report
+          path: |
+            public/discovery.json
+            test-results/
+            playwright-report/
+            coverage/
+          retention-days: 14

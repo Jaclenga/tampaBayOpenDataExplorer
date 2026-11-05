@@ -1,9 +1,12 @@
-import { useMemo } from "react";
+import { useMemo, useState, useEffect } from "react";
 import type { Catalog } from "../types";
 import type { AccessReport } from "../services/access";
 import { searchCatalog, type Filters } from "../services/catalog";
 import DatasetCard from "./DatasetCard";
 import FilterPanel from "./FilterPanel";
+import type { DiscoveryReport } from "../services/discovery/types";
+import { proxyEligible } from "../services/arcgis-transport";
+import DiscoveryStatus from "./DiscoveryStatus";
 
 const empty: Filters = { query: "", publisher: "", category: "", spatial: "" };
 interface Props {
@@ -11,6 +14,7 @@ interface Props {
   access: AccessReport;
   filters: Filters;
   onChange: (filters: Filters) => void;
+  discovery: DiscoveryReport;
 }
 
 function focusResults() {
@@ -23,7 +27,10 @@ export default function CatalogPage({
   access,
   filters,
   onChange,
+  discovery,
 }: Props) {
+  const [visible, setVisible] = useState(100);
+  useEffect(() => setVisible(100), [filters, catalog]);
   const results = useMemo(
     () => searchCatalog(catalog.datasets, filters),
     [catalog, filters],
@@ -33,7 +40,13 @@ export default function CatalogPage({
   ].sort();
   const sourceOnly = new Set(
     access.datasets
-      .filter((entry) => entry.status === "source-only")
+      .filter(
+        (entry) =>
+          entry.status === "source-only" &&
+          !proxyEligible(
+            catalog.datasets.find((dataset) => dataset.id === entry.id)!,
+          ),
+      )
       .map((entry) => entry.id),
   );
   const categories = new Set(catalog.datasets.map((d) => d.category));
@@ -140,6 +153,7 @@ export default function CatalogPage({
             {catalog.datasets.length} datasets · {publishers.length} publishers
           </p>
         </div>
+        <DiscoveryStatus report={discovery} />
         <div className="catalog-layout">
           <FilterPanel
             datasets={catalog.datasets}
@@ -156,7 +170,7 @@ export default function CatalogPage({
               <span className="muted">CSV · GeoJSON where available</span>
             </div>
             <div className="cards">
-              {results.map((dataset) => (
+              {results.slice(0, visible).map((dataset) => (
                 <DatasetCard
                   key={dataset.id}
                   dataset={dataset}
@@ -164,6 +178,14 @@ export default function CatalogPage({
                 />
               ))}
             </div>
+            {results.length > visible && (
+              <button
+                className="button secondary"
+                onClick={() => setVisible((count) => count + 100)}
+              >
+                Show more datasets ({results.length - visible} remaining)
+              </button>
+            )}
             {!results.length && (
               <div className="empty">
                 <h3>No datasets match these filters.</h3>

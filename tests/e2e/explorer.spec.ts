@@ -1,4 +1,5 @@
 import { test, expect } from "@playwright/test";
+import { emptyDiscovery } from "../discovery-fixture";
 import { readFileSync } from "node:fs";
 import { parseCatalog } from "../../src/services/catalog";
 const catalog = parseCatalog(
@@ -8,6 +9,12 @@ test("search, choose a dataset, preview and export a loaded page", async ({
   page,
 }) => {
   const arcgisRequests: string[] = [];
+  await page.route("**/discovery.json", (route) =>
+    route.fulfill({ json: emptyDiscovery }),
+  );
+  await page.route("**/api/discovery", (route) =>
+    route.fulfill({ json: emptyDiscovery }),
+  );
   await page.route("**/access.json", (route) =>
     route.fulfill({
       json: {

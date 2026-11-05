@@ -6,6 +6,7 @@ export default ts.config(
       "dist/**",
       "node_modules/**",
       ".upstream/**",
+      ".wrangler/**",
       "playwright-report/**",
       "test-results/**",
       "coverage/**",

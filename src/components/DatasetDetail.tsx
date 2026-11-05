@@ -6,6 +6,9 @@ import DownloadMenu from "./DownloadMenu";
 import { DatasetFields } from "./DatasetProvenance";
 import DatasetHeader from "./DatasetHeader";
 import SourceOnlyDataset from "./SourceOnlyDataset";
+import { proxyEligible } from "../services/arcgis-transport";
+import RecordFilters from "./RecordFilters";
+import LiveFreshness from "./LiveFreshness";
 
 export default function DatasetDetail({
   dataset,
@@ -13,11 +16,15 @@ export default function DatasetDetail({
   checkedAt,
 }: {
   dataset: Dataset;
-  access: DatasetAccess;
+  access?: DatasetAccess;
   checkedAt: string;
 }) {
   const [previewRequested, setPreviewRequested] = useState(false);
-  if (access.status === "source-only" && !previewRequested)
+  if (
+    access?.status === "source-only" &&
+    !previewRequested &&
+    !proxyEligible(dataset)
+  )
     return (
       <SourceOnlyDataset
         dataset={dataset}
@@ -52,6 +59,16 @@ function PreviewableDataset({ dataset }: { dataset: Dataset }) {
           Exports contain only this loaded page, including any map-area filter.
           They are not complete dataset downloads.
         </p>
+        {metadata && (
+          <RecordFilters
+            fields={metadata.fields}
+            operators={metadata.filterOperators}
+            busy={busy}
+            filter={preview.filter}
+            onApply={preview.filterRecords}
+          />
+        )}
+        <LiveFreshness metadata={metadata} />
         {busy && (
           <p role="status" className="notice">
             Loading records from the publisher…
