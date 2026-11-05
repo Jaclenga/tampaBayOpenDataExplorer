@@ -55,6 +55,8 @@ The expanded suite first reproduced these application bugs, then verified their 
 
 The latest bug-fix regression cases cover repeated-page rejection across retries and subsequent recovery, equivalent numeric/string record IDs, per-feature projected or malformed CRS declarations, malformed shape structures, and invalid upstream schema-file shapes/keys/fields. Generator failure tests verify that the previous catalog is retained.
 
-Verified locally after the interface redesign: 119 unit/integration tests and 19 desktop/mobile browser tests passed. Core-service/schema coverage remains enforced by CI. Browser checks include keyboard search submission, topic/publisher shortcuts, section navigation from dataset details, retry protection, spatial exports, source-only behavior, and mobile overflow. These results describe the checked source; they do not replace live publisher compatibility checks.
+The source-only panel tests also cover recovered sources, denied access, a one-record recheck limit, empty datasets, cancellation on navigation, clipboard-permission fallback, and non-overlapping controls at mobile widths. Unit tests distinguish restricted services, local offline status, server errors, timeouts, and ambiguous browser failures. Core-service/schema coverage remains enforced by CI. These results describe the checked source; they do not replace live publisher compatibility checks.
+
+The current suite contains 140 unit/integration tests and 23 desktop/mobile browser tests. The latest local service/schema coverage run measured 98.45% lines and 97.63% branches.
 
 ESLint also enforces a maximum cyclomatic complexity of 15 for each source function. This counts independent control-flow paths; it helps prevent request, navigation, and rendering logic from accumulating in one function. Tests are excluded from this complexity limit.

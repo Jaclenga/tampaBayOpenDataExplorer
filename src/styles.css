@@ -521,6 +521,8 @@ footer {
   margin-bottom: 11px;
 }
 .skip {
+  opacity: 0;
+  pointer-events: none;
   position: fixed;
   top: -80px;
   left: 15px;
@@ -530,6 +532,8 @@ footer {
   z-index: 100;
 }
 .skip:focus {
+  opacity: 1;
+  pointer-events: auto;
   top: 15px;
 }
 .detail {
@@ -974,5 +978,153 @@ td {
   *::before,
   *::after {
     scroll-behavior: auto !important;
+  }
+}
+
+.access-panel {
+  border: 1px solid var(--line);
+  border-top: 3px solid var(--navy);
+  border-radius: 3px;
+  overflow: hidden;
+  background: #fff;
+}
+.access-summary {
+  background: var(--paper);
+  padding: 24px 24px 14px;
+}
+.access-summary h3 {
+  font-size: 21px;
+  margin: 12px 0;
+  line-height: 1.35;
+}
+.access-summary p {
+  max-width: 85ch;
+  margin-bottom: 12px;
+  font-size: 14px;
+  line-height: 1.75;
+}
+.access-label {
+  display: inline-block;
+  font-size: 12px;
+  font-weight: 650;
+  color: #774114;
+  background: #fff0dd;
+  padding: 4px 9px;
+  border-radius: 2px;
+}
+.access-label.available {
+  background: #e5f4ec;
+  color: #215b39;
+}
+.access-summary .access-date {
+  color: var(--muted);
+  font-size: 12px;
+}
+.access-progress {
+  font-weight: 600;
+}
+.access-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding: 8px 24px 24px;
+  background: var(--paper);
+}
+.access-rest-link {
+  font-size: 13px;
+  margin-left: 4px;
+}
+.access-endpoint {
+  border-top: 1px solid var(--line);
+  padding: 20px 24px;
+}
+.access-endpoint label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.endpoint-control {
+  display: flex;
+  align-items: stretch;
+  gap: 10px;
+}
+.endpoint-control input {
+  flex: 1;
+  min-width: 0;
+  border: 1px solid #aeb8c7;
+  border-radius: 2px;
+  padding: 10px 12px;
+  font-family: monospace;
+  font-size: 13px;
+  color: var(--navy);
+  background: #fff;
+}
+.endpoint-control button {
+  flex-shrink: 0;
+}
+.access-endpoint .muted {
+  margin: 10px 0 0;
+}
+.access-diagnostics {
+  border-top: 1px solid var(--line);
+  padding: 17px 24px;
+  font-size: 13px;
+}
+.access-diagnostics summary {
+  cursor: pointer;
+  font-weight: 600;
+}
+.access-diagnostics dl {
+  margin: 16px 0;
+}
+.access-diagnostics dl > div {
+  display: grid;
+  grid-template-columns: 150px minmax(0, 1fr);
+  gap: 15px;
+  padding: 7px 0;
+}
+.access-diagnostics dt {
+  font-weight: 600;
+}
+.access-diagnostics dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+.access-diagnostics p {
+  color: var(--muted);
+  margin-bottom: 0;
+}
+@media (max-width: 600px) {
+  .access-summary {
+    padding: 19px 16px 8px;
+  }
+  .access-actions {
+    padding: 8px 16px 20px;
+    align-items: stretch;
+    flex-direction: column;
+  }
+  .access-actions .button {
+    text-align: center;
+  }
+  .access-rest-link {
+    padding: 8px 0;
+    margin: 0;
+  }
+  .access-endpoint,
+  .access-diagnostics {
+    padding: 18px 16px;
+  }
+  .endpoint-control {
+    flex-direction: column;
+  }
+  .endpoint-control input {
+    width: 100%;
+    min-height: 44px;
+  }
+  .access-diagnostics dl > div {
+    grid-template-columns: 1fr;
+    gap: 4px;
   }
 }

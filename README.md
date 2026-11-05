@@ -76,6 +76,8 @@ Basemap tiles come directly from OpenStreetMap with visible attribution. Tiles a
 
 **Browser access audit:** all 52 datasets were checked from the production origin on November 4, 2026. Metadata and a one-record query succeeded for 31. The 20 City of Tampa layers failed browser metadata requests, and Clearwater critical assets returned ArcGIS 499 (Token Required). Those 21 datasets are explicitly labeled source-only in cards and details, with publisher links and the audit date; the app does not attempt known-failing previews. All 52 remain searchable. This is a dated access check, not a guarantee of future availability or a full validation of every record. No proxy has been added. `npm run access:audit -- [site-url] [output-file]` refreshes the complete report. `node scripts/live-smoke.mjs [site-url]` verifies the published report, source-only behavior, and a real St. Petersburg preview, map, and CSV download.
 
+Source-only details distinguish restricted access, timeouts, server errors, and ambiguous browser/network failures. A user can explicitly recheck metadata and at most one record, with a 30-second total deadline and cancellation on navigation. No automatic publisher request occurs just from opening the page. A successful check offers the regular preview for that visit; it does not change the shared audit. The endpoint can be copied, with selectable text as a fallback if clipboard access is denied.
+
 ## Cloudflare Pages deployment
 
 Build command: `npm run build`. Output directory: `dist`. Node version: 24. `wrangler.jsonc` defines the Pages project. Static security headers are in `public/_headers`; HTTPS connections are allowed for diverse government endpoints. No secrets enter the browser bundle.

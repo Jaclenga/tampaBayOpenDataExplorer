@@ -16,12 +16,14 @@ export default function DatasetDetail({
   access: DatasetAccess;
   checkedAt: string;
 }) {
-  if (access.status === "source-only")
+  const [previewRequested, setPreviewRequested] = useState(false);
+  if (access.status === "source-only" && !previewRequested)
     return (
       <SourceOnlyDataset
         dataset={dataset}
         access={access}
         checkedAt={checkedAt}
+        onPreview={() => setPreviewRequested(true)}
       />
     );
   return <PreviewableDataset dataset={dataset} />;
@@ -105,3 +107,4 @@ function PreviewableDataset({ dataset }: { dataset: Dataset }) {
     </main>
   );
 }
+import { useState } from "react";

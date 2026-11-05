@@ -42,6 +42,12 @@ The interface now uses Tampa.dev's public navy/coral color palette as a referenc
 
 Reference pages: https://tampa.dev/ and https://www.nyc.gov/opendata. No reference logos or imagery were copied. Local verification passed 119 unit/integration tests, 19 desktop/mobile browser tests, lint, type checking, and the production build.
 
+## Source-only access recovery
+
+The access panel now separates the explanation, timestamps, actions, endpoint, and diagnostics so controls cannot overlap message text. It explains restricted publisher access, local offline status, server failures, timeouts, and ambiguous browser/network failures without claiming every connection error is CORS. Users can open the source or REST service, copy a selectable endpoint, and manually recheck availability. Clipboard denial falls back to focused, selected text.
+
+Rechecks use the normal ArcGIS metadata and record validators, cap the query at one record, stop after a 30-second overall deadline, and abort on navigation. Concurrent rechecks are prevented. An empty but accessible query is accepted. Successful checks offer the ordinary preview for the current visit, without altering the saved audit or claiming a complete export. Publisher calls remain opt-in for source-only entries.
+
 ## Complexity refactor
 
 Preview state and request cancellation now live in `useDatasetPreview`; the detail component assembles focused provenance/fields, records/map, and download components. HTTP handling is separate from ArcGIS schema/query logic. Query construction, page validation, record-ID validation, and geometry normalization use named helpers with early returns. Public ArcGIS exports and the existing behavior tests remain intact.
