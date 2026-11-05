@@ -48,8 +48,7 @@ export function SiteFooter() {
             Tampa Bay Open Data
           </a>
           <p>
-            A catalog of selected public datasets from local governments and the
-            Tampa Bay Regional Planning Council.
+            Catalog of government-published datasets from the Tampa Bay area
           </p>
           <p>
             Independent and open source. Not an official government website.
