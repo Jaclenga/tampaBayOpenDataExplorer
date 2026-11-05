@@ -53,8 +53,6 @@ test("search and filters intersect, reset, and never request records", async ({
   const api = await installApi(page);
   await page.goto("/");
   await expect(page.locator(".dataset-card")).toHaveCount(3);
-  await page.getByRole("link", { name: "Browse all datasets" }).click();
-  await expect(page.locator(".dataset-card")).toHaveCount(3);
   await page
     .getByRole("combobox", { name: "Publisher", exact: true })
     .selectOption("Test City");

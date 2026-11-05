@@ -255,21 +255,6 @@ header {
 .search button:hover {
   background: #f07167;
 }
-.hero-links {
-  display: flex;
-  gap: 30px;
-  flex-wrap: wrap;
-  margin: 20px 0 22px;
-}
-.hero-links a {
-  color: #fff;
-  font-size: 14px;
-  font-weight: 600;
-}
-.hero-links span {
-  margin-left: 8px;
-  color: #ff9f96;
-}
 .topics {
   display: flex;
   flex-wrap: wrap;
@@ -970,14 +955,6 @@ td {
   .search button {
     padding: 8px 16px;
     font-size: 14px;
-  }
-  .hero-links {
-    font-size: 12px;
-    gap: 12px 24px;
-    margin: 17px 0;
-  }
-  .hero-links a {
-    font-size: 12px;
   }
   .topics {
     gap: 8px 15px;

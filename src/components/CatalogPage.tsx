@@ -77,14 +77,6 @@ export default function CatalogPage({
           </h1>
           <p>Public Datasets From the Tampa Bay Area</p>
 
-          <div className="hero-links">
-            <a href="#catalog" onClick={() => onChange(empty)}>
-              Browse all datasets <span aria-hidden="true">→</span>
-            </a>
-            <a href="#publishers">
-              Browse by publisher <span aria-hidden="true">→</span>
-            </a>
-          </div>
           <div className="topics" aria-label="Browse by topic">
             <span>Topics</span>
             {topics.map((topic) => (
