@@ -139,12 +139,6 @@ h4 {
   margin: 0 auto;
   padding: 0 40px;
 }
-.utility-bar {
-  background: #141b2b;
-  color: #d0d6e2;
-  font-size: 12px;
-  padding: 9px 0;
-}
 header {
   background: var(--navy);
   color: #fff;
@@ -837,9 +831,6 @@ td {
   .shell {
     padding-left: 20px;
     padding-right: 20px;
-  }
-  .utility-bar {
-    font-size: 11px;
   }
   .nav {
     min-height: 79px;

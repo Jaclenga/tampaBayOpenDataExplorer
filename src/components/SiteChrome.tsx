@@ -1,11 +1,6 @@
 export function SiteHeader() {
   return (
     <header>
-      <div className="utility-bar">
-        <div className="shell">
-          An independent project using public government data.
-        </div>
-      </div>
       <div className="shell nav">
         <a className="brand" href="#" aria-label="Tampa Bay Open Data home">
           <svg
