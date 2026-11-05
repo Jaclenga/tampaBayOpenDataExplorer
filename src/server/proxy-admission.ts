@@ -28,18 +28,14 @@ export async function admitProxy(request: Request, env: PagesEnv) {
         admission.retryAfter,
       );
     const token = admission.token;
-    return async () => {
-      try {
-        const released = await gate.fetch("https://guard/release", {
+    return () =>
+      releaseProxyLease(() =>
+        gate.fetch("https://guard/release", {
           method: "POST",
           body: JSON.stringify({ token }),
           signal: AbortSignal.timeout(2000),
-        });
-        await released.body?.cancel();
-      } catch {
-        console.warn(JSON.stringify({ event: "proxy_lease_release_failed" }));
-      }
-    };
+        }),
+      );
   } catch (error) {
     if (error instanceof ProxyError) throw error;
     throw new ProxyError(
@@ -47,5 +43,31 @@ export async function admitProxy(request: Request, env: PagesEnv) {
       503,
       5,
     );
+  }
+}
+
+// Releases are idempotent. Bound retries so cleanup cannot hold requests open.
+export async function releaseProxyLease(send: () => Promise<Response>) {
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    let status: number | undefined;
+    try {
+      const response = await send();
+      status = response.status;
+      await response.body?.cancel();
+      if (response.ok) return;
+    } catch {
+      /* Retry transport failures as well as transient HTTP failures. */
+    }
+    console.warn(
+      JSON.stringify({ event: "proxy_lease_release_failed", attempt, status }),
+    );
+    if (
+      status !== undefined &&
+      status < 500 &&
+      status !== 408 &&
+      status !== 429
+    )
+      return;
+    if (attempt < 2) await new Promise((resolve) => setTimeout(resolve, 100));
   }
 }

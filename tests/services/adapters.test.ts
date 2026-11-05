@@ -57,7 +57,7 @@ describe("live CKAN adapter", () => {
     const url = new URL(String(vi.mocked(fetch).mock.calls[1][0]));
     expect(url.searchParams.get("offset")).toBe("100");
     expect(url.searchParams.get("limit")).toBe("100");
-    expect(url.searchParams.get("filters")).toBe('{"_id":101}');
+    expect(url.searchParams.get("filters")).toBe('{"_id":"101"}');
     expect(page.records[0].attributes.Name).toBe("Park");
     expect(page.hasMore).toBe(true);
     expect(csv(page.records, m.fields)).toContain("Park");
@@ -128,7 +128,9 @@ describe("live Socrata adapter", () => {
         }),
       )
       .mockResolvedValueOnce(
-        Response.json([{ name: "O'Brien", location: { latitude: 27 } }]),
+        Response.json([
+          { ":id": "row-1", name: "O'Brien", location: { latitude: 27 } },
+        ]),
       );
     const m = await a.inspect(d);
     expect(m.fields).toHaveLength(1);

@@ -6,28 +6,34 @@ import { resource, plainMetadata, plainPage, pageLimits } from "./common";
 
 // A bounded preview of small files, never a whole-database ingestion path.
 export function parseCsv(text: string) {
+  text = text.replace(/^\uFEFF/, "");
   const rows: string[][] = [];
   let row: string[] = [];
   let cell = "";
   let quoted = false;
   let rowStarted = false;
+  let closed = false;
   for (let i = 0; i < text.length; i++) {
     const char = text[i];
     if (!isRowEnd(char)) rowStarted = true;
+    validateCsvCharacter(char, closed, quoted, cell);
     if (char === '"') {
       const quote = readQuote(text, i, quoted);
       cell += quote.value;
+      closed = quoted && !quote.quoted;
       quoted = quote.quoted;
       i = quote.index;
     } else if (!quoted && char === ",") {
       row.push(cell);
       cell = "";
+      closed = false;
     } else if (!quoted && isRowEnd(char)) {
       if (char === "\r" && text[i + 1] === "\n") i++;
       row.push(cell);
       if (rowStarted) rows.push(row);
       row = [];
       cell = "";
+      closed = false;
       rowStarted = false;
     } else cell += char;
   }
@@ -37,6 +43,17 @@ export function parseCsv(text: string) {
     rows.push(row);
   }
   return csvObjects(rows);
+}
+function validateCsvCharacter(
+  char: string,
+  closed: boolean,
+  quoted: boolean,
+  cell: string,
+) {
+  if (closed && char !== "," && !isRowEnd(char))
+    throw Error("CSV contains characters after a closing quote.");
+  if (char === '"' && !quoted && cell.length)
+    throw Error("CSV contains a quote inside an unquoted field.");
 }
 function readQuote(text: string, index: number, quoted: boolean) {
   if (quoted && text[index + 1] === '"')
@@ -94,7 +111,9 @@ export const fileAdapter: SourceAdapter = {
   async inspect(dataset, signal) {
     const { rows, updated } = await load(dataset, signal);
     return plainMetadata(
-      Object.keys(rows[0] ?? {}).map((name) => ({ name, type: "string" })),
+      Array.from(new Set(rows.flatMap((row) => Object.keys(row)))).map(
+        (name) => ({ name, type: "string" }),
+      ),
       {
         sourceUpdatedAt:
           updated && Number.isFinite(Date.parse(updated))

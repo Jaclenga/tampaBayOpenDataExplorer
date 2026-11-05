@@ -38,6 +38,7 @@ export const socrataAdapter: SourceAdapter = {
           alias: c.name,
         })),
       {
+        objectIdField: ":id",
         orderBy: true,
         sourceUpdatedAt: metadata.rowsUpdatedAt
           ? new Date(metadata.rowsUpdatedAt * 1000).toISOString()
@@ -53,6 +54,7 @@ export const socrataAdapter: SourceAdapter = {
       $limit: String(limit),
       $offset: String(offset),
       $order: ":id",
+      $select: ":id,*",
     }).toString();
     if (request.filter)
       url.searchParams.set(
@@ -69,6 +71,7 @@ export const socrataAdapter: SourceAdapter = {
       limit,
       rows.length === limit,
       "Live source results may change between pages. Map previews are unavailable for this adapter.",
+      { field: ":id", previousIds: request.previousIds },
     );
   },
 };

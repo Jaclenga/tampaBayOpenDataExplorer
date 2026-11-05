@@ -36,7 +36,7 @@ export function compileFilter(
       !Number.isFinite(Number(filter.value))
     )
       throw Error("Enter a finite numeric filter value.");
-    return `${field.name} ${operator} ${Number(filter.value)}`;
+    return `${field.name} ${operator} ${filter.value}`;
   }
   return `${field.name} ${operator} '${filter.value.replace(/'/g, "''")}'`;
 }

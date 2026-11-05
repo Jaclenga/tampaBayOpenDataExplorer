@@ -12,12 +12,12 @@ const responseSchema = z.object({
     total: z.number().int().nonnegative(),
   }),
 });
-async function query(dataset: Dataset, request: PageRequest) {
+function queryUrl(dataset: Dataset, request: PageRequest) {
   const source = resource(dataset);
   if (!source.apiRoot || !source.id)
     throw Error("CKAN DataStore resource configuration is missing.");
   const url = new URL(
-    `${source.apiRoot.replace(/\/$/, "")}/api/3/action/datastore_search`,
+    `${source.apiRoot.replace(/\/+$/, "")}/api/3/action/datastore_search`,
   );
   const { offset, limit } = pageLimits(request);
   url.search = new URLSearchParams({
@@ -26,8 +26,12 @@ async function query(dataset: Dataset, request: PageRequest) {
     limit: String(limit),
     sort: "_id asc",
   }).toString();
-  return responseSchema.parse(await requestJson(url.href, request.signal))
-    .result;
+  return url;
+}
+async function query(dataset: Dataset, request: PageRequest) {
+  return responseSchema.parse(
+    await requestJson(queryUrl(dataset, request).href, request.signal),
+  ).result;
 }
 export const ckanAdapter: SourceAdapter = {
   id: "ckan",
@@ -49,26 +53,12 @@ export const ckanAdapter: SourceAdapter = {
       if (request.filter.operator !== "eq")
         throw Error("CKAN supports equality filters in this preview.");
     }
-    const source = resource(dataset);
-    const url = new URL(`${source.apiRoot}/api/3/action/datastore_search`);
-    url.search = new URLSearchParams({
-      resource_id: source.id!,
-      offset: String(offset),
-      limit: String(limit),
-      sort: "_id asc",
-    }).toString();
+    const url = queryUrl(dataset, request);
+    // DataStore coerces string parameters to the column type without JS rounding.
     if (request.filter)
       url.searchParams.set(
         "filters",
-        JSON.stringify({
-          [request.filter.field]: /int|numeric|number|float|double/i.test(
-            metadata.fields.find(
-              (field) => field.name === request.filter!.field,
-            )!.type,
-          )
-            ? Number(request.filter.value)
-            : request.filter.value,
-        }),
+        JSON.stringify({ [request.filter.field]: request.filter.value }),
       );
     const result = responseSchema.parse(
       await requestJson(url.href, request.signal),
