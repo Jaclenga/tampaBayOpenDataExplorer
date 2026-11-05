@@ -1,0 +1,33 @@
+import js from "@eslint/js";
+import ts from "typescript-eslint";
+export default ts.config(
+  {
+    ignores: [
+      "dist/**",
+      "node_modules/**",
+      ".upstream/**",
+      "playwright-report/**",
+      "test-results/**",
+      "coverage/**",
+    ],
+  },
+  js.configs.recommended,
+  ...ts.configs.recommended,
+  {
+    files: ["src/**/*.{ts,tsx}"],
+    rules: { complexity: ["error", 15] },
+  },
+  {
+    languageOptions: {
+      globals: {
+        console: "readonly",
+        process: "readonly",
+        URL: "readonly",
+        fetch: "readonly",
+        AbortSignal: "readonly",
+        setTimeout: "readonly",
+      },
+    },
+    rules: { "@typescript-eslint/no-explicit-any": "error" },
+  },
+);

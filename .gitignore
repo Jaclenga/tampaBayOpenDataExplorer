@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.upstream/
+test-results/
+playwright-report/
+coverage/
+.wrangler/
+.env*
+!.env.example
