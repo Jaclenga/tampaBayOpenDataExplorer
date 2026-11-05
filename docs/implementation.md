@@ -53,3 +53,17 @@ Rechecks use the normal ArcGIS metadata and record validators, cap the query at 
 Preview state and request cancellation now live in `useDatasetPreview`; the detail component assembles focused provenance/fields, records/map, and download components. HTTP handling is separate from ArcGIS schema/query logic. Query construction, page validation, record-ID validation, and geometry normalization use named helpers with early returns. Public ArcGIS exports and the existing behavior tests remain intact.
 
 ESLint's measured function complexity dropped from 36 to 15 for `DatasetDetail`, 24 to 12 for `getPage`, and 21 to 12 for `requestJson`. All source functions now satisfy an enforced maximum of 15. Type checking, lint, the production build, all 87 unit/integration tests, and all 14 desktop/mobile browser tests passed after the refactor. This refactor added no dependencies or deployment changes.
+
+## Federated application complexity refactor
+
+Measured hotspots in the federated application were split by responsibility: source-access status rendering, metadata object-ID/capability parsing, discovery service expansion, CSV quote handling, and R code formatting. Public service exports, validation rules, UI text, and styles are preserved. No dependencies were added.
+
+| Function | Before | After |
+| --- | ---: | ---: |
+| `SourceOnlyDataset` | 15 | 7 |
+| `getMetadata` | 15 | 10 |
+| `expandItem` | 15 | 9 |
+| `parseCsv` | 15 | 12 |
+| `rExample` | 14 | 8 |
+
+Values are ESLint cyclomatic complexity per function. The highest source-function score is now 14; the existing limit remains 15. Type checking, lint, the production build, 256 unit/integration tests, and 30 desktop/mobile browser tests passed. Service/schema line coverage is 98.56%.

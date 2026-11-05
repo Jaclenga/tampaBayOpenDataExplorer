@@ -195,6 +195,16 @@ async function expandItem(
     state.datasets.push(await inspectLayer(dataset, options));
     return;
   }
+  await expandService(portal, item, url, state, options);
+}
+
+async function expandService(
+  portal: Portal,
+  item: Item,
+  url: string,
+  state: State,
+  options: DiscoveryOptions,
+) {
   const metadata = serviceSchema.parse(
     await requestJson(`${url}?f=json`, options.signal),
   );

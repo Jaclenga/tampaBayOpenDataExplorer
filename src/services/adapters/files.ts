@@ -13,14 +13,14 @@ export function parseCsv(text: string) {
   for (let i = 0; i < text.length; i++) {
     const char = text[i];
     if (char === '"') {
-      if (quoted && text[i + 1] === '"') {
-        cell += '"';
-        i++;
-      } else quoted = !quoted;
+      const quote = readQuote(text, i, quoted);
+      cell += quote.value;
+      quoted = quote.quoted;
+      i = quote.index;
     } else if (!quoted && char === ",") {
       row.push(cell);
       cell = "";
-    } else if (!quoted && (char === "\n" || char === "\r")) {
+    } else if (!quoted && isRowEnd(char)) {
       if (char === "\r" && text[i + 1] === "\n") i++;
       row.push(cell);
       rows.push(row);
@@ -34,6 +34,14 @@ export function parseCsv(text: string) {
     rows.push(row);
   }
   return csvObjects(rows);
+}
+function readQuote(text: string, index: number, quoted: boolean) {
+  if (quoted && text[index + 1] === '"')
+    return { value: '"', quoted: true, index: index + 1 };
+  return { value: "", quoted: !quoted, index };
+}
+function isRowEnd(char: string) {
+  return char === "\n" || char === "\r";
 }
 function csvObjects(rows: string[][]) {
   const headers = rows.shift()?.map((h) => h.replace(/^\uFEFF/, ""));

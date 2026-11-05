@@ -97,20 +97,30 @@ export async function getMetadata(
     sourceUpdatedAt: sourceTimestamp(m.editingInfo?.lastEditDate),
     sourceUpdatedKind: m.editingInfo?.lastEditDate != null ? "records" : null,
     inspectedAt: new Date().toISOString(),
-    objectIdField:
-      m.objectIdField ??
-      m.objectIdFieldName ??
-      m.fields.find((f) => f.type === "esriFieldTypeOID")?.name ??
-      null,
+    objectIdField: metadataObjectId(m),
     geometryType: m.geometryType ?? null,
     maxRecordCount: m.maxRecordCount ?? 100,
     pagination: m.advancedQueryCapabilities?.supportsPagination === true,
     orderBy: m.advancedQueryCapabilities?.supportsOrderBy === true,
     geojson: /geojson/i.test(m.supportedQueryFormats ?? ""),
-    query:
-      m.capabilities === undefined ||
-      m.capabilities.split(",").some((x) => x.trim().toLowerCase() === "query"),
+    query: hasQueryCapability(m.capabilities),
   };
+}
+function metadataObjectId(metadata: z.infer<typeof metadataSchema>) {
+  return (
+    metadata.objectIdField ??
+    metadata.objectIdFieldName ??
+    metadata.fields.find((field) => field.type === "esriFieldTypeOID")?.name ??
+    null
+  );
+}
+function hasQueryCapability(capabilities: string | undefined) {
+  return (
+    capabilities === undefined ||
+    capabilities
+      .split(",")
+      .some((capability) => capability.trim().toLowerCase() === "query")
+  );
 }
 export type Bounds = [number, number, number, number];
 

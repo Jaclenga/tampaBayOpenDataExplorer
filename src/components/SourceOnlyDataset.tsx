@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import type { Dataset } from "../types";
 import type { DatasetAccess } from "../services/access";
-import { accessExplanation } from "../services/access-check";
+import SourceAccessSummary from "./SourceAccessSummary";
 import { endpoint } from "../services/arcgis";
 import { useAccessCheck } from "../hooks/useAccessCheck";
 import DatasetWorkspace from "./DatasetWorkspace";
@@ -23,11 +23,9 @@ export default function SourceOnlyDataset({
     dataset,
     access.reason ?? "Preview unavailable.",
   );
-  const explanation = accessExplanation(check.reason);
   const available = check.status === "available";
   const busy = check.status === "checking";
   const address = endpoint(dataset);
-  const lastCheckedAt = check.checkedAt ?? checkedAt;
   const input = useRef<HTMLInputElement>(null);
   const [copyMessage, setCopyMessage] = useState("");
   async function copyEndpoint() {
@@ -48,43 +46,7 @@ export default function SourceOnlyDataset({
       >
         <h2 id="access-heading">Source-only dataset</h2>
         <div className="access-panel" aria-busy={busy}>
-          <div
-            className="access-summary"
-            role="status"
-            aria-live="polite"
-            aria-atomic="true"
-          >
-            <span className={`access-label ${available ? "available" : ""}`}>
-              {available ? "Preview available" : "Publisher access"}
-            </span>
-            <h3>
-              {available ? "The source is responding now" : explanation.title}
-            </h3>
-            <p>
-              {available
-                ? "The source responded to a live preview request. You can now open a preview."
-                : explanation.description}
-            </p>
-            {!available && <p>{explanation.nextStep}</p>}
-            {busy && (
-              <p className="access-progress">
-                Checking metadata and one record. This can take up to 30
-                seconds; leaving this page cancels the check.
-              </p>
-            )}
-            <p className="access-date">
-              {check.checkedAt
-                ? "Checked in this browser: "
-                : "Last catalog check: "}
-              <time dateTime={lastCheckedAt}>
-                {new Date(lastCheckedAt).toLocaleString(undefined, {
-                  dateStyle: "medium",
-                  timeStyle: "short",
-                })}
-              </time>
-              . Availability can change.
-            </p>
-          </div>
+          <SourceAccessSummary check={check} checkedAt={checkedAt} />
           <div className="access-actions">
             {available ? (
               <button className="button" onClick={onPreview}>

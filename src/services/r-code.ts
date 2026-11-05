@@ -106,6 +106,20 @@ export function rExample(dataset: Dataset, options: ROptions = {}): RExample {
   const spatialAvailable = dataset.geometryType !== "none";
   const spatial = options.spatial === true && spatialAvailable;
   const target = checked ? entry!.packageId : url;
+  return {
+    supported: true,
+    code: renderRCode(target, checked, spatial, options.full === true),
+    spatialAvailable,
+    checked,
+  };
+}
+
+function renderRCode(
+  target: string,
+  checked: boolean,
+  spatial: boolean,
+  full: boolean,
+) {
   const fn = checked ? "tbod_get_dataset" : "tbod_get_arcgis_layer";
   const lines = [
     "# Install once from CRAN:",
@@ -123,19 +137,14 @@ export function rExample(dataset: Dataset, options: ROptions = {}): RExample {
     );
   lines.push(
     "",
-    options.full
+    full
       ? "# Full retrieval: may take a long time and use substantial memory."
       : "# Preview: retrieve up to 100 records, not the complete dataset.",
-    `data <- ${fn}(${rString(target)}, limit = ${options.full ? "Inf" : "100"}${spatial ? ", spatial = TRUE" : ""})`,
+    `data <- ${fn}(${rString(target)}, limit = ${full ? "Inf" : "100"}${spatial ? ", spatial = TRUE" : ""})`,
     "",
     "head(data)",
     "str(data)",
   );
   if (spatial) lines.push("sf::st_geometry(data)");
-  return {
-    supported: true,
-    code: lines.join("\n") + "\n",
-    spatialAvailable,
-    checked,
-  };
+  return lines.join("\n") + "\n";
 }
