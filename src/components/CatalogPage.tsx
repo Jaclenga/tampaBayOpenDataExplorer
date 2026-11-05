@@ -21,11 +21,6 @@ interface Props extends ReturnType<typeof useCatalogBrowse> {
   discovery: DiscoveryReport;
 }
 
-function focusResults() {
-  document.getElementById("catalog")?.scrollIntoView({ block: "start" });
-  document.getElementById("results-heading")?.focus({ preventScroll: true });
-}
-
 export default function CatalogPage({
   catalog,
   access,
@@ -54,17 +49,6 @@ export default function CatalogPage({
       )
       .map((entry) => entry.id),
   );
-  const categories = new Set(catalog.datasets.map((d) => d.category));
-  const topics = [
-    "Transportation",
-    "Recreation",
-    "Housing",
-    "Environment",
-  ].filter((topic) => categories.has(topic));
-  function browse(selection: Partial<Filters>) {
-    onChange({ ...empty, ...selection });
-    focusResults();
-  }
   return (
     <main id="main">
       <section className="hero" aria-labelledby="catalog-title">
@@ -73,15 +57,6 @@ export default function CatalogPage({
             Tampa Bay <span>Open Data Explorer</span>
           </h1>
           <p>Public Datasets From the Tampa Bay Area</p>
-
-          <div className="topics" aria-label="Browse by topic">
-            <span>Topics</span>
-            {topics.map((topic) => (
-              <button key={topic} onClick={() => browse({ category: topic })}>
-                {topic}
-              </button>
-            ))}
-          </div>
         </div>
       </section>
       <section

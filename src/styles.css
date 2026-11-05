@@ -255,28 +255,6 @@ header {
 .search button:hover {
   background: #f07167;
 }
-.topics {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px 22px;
-  align-items: center;
-  font-size: 13px;
-}
-.topics > span {
-  color: #b9c2d4;
-}
-.topics button {
-  min-height: 28px;
-  color: #fff;
-  background: none;
-  border: 0;
-  border-bottom: 1px solid #818b9f;
-  padding: 0 0 1px;
-  font-size: 13px;
-}
-.topics button:hover {
-  border-color: var(--coral);
-}
 .catalog {
   padding-top: 24px;
   padding-bottom: 48px;
@@ -896,13 +874,6 @@ td {
   .search button {
     padding: 8px 16px;
     font-size: 14px;
-  }
-  .topics {
-    gap: 8px 15px;
-  }
-  .topics button,
-  .topics > span {
-    font-size: 12px;
   }
   .catalog {
     padding-top: 27px;

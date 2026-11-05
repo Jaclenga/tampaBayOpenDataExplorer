@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 import { installApi } from "./helpers";
 import { emptyDiscovery } from "../discovery-fixture";
 
-test("search submission, topic links, and publisher filters lead to filtered results", async ({
+test("search submission and category/publisher filters lead to filtered results", async ({
   page,
 }) => {
   const api = await installApi(page);
@@ -11,9 +11,10 @@ test("search submission, topic links, and publisher filters lead to filtered res
   await page.getByRole("searchbox").press("Enter");
   await expect(page.getByRole("searchbox")).toBeFocused();
   await expect(page.locator(".dataset-card")).toHaveCount(1);
+  await page.getByRole("button", { name: "Clear search", exact: true }).click();
   await page
-    .getByRole("button", { name: "Transportation", exact: true })
-    .click();
+    .getByRole("combobox", { name: "Category", exact: true })
+    .selectOption("Transportation");
   await expect(
     page.getByRole("link", { name: "Street centerlines", exact: true }),
   ).toBeVisible();
