@@ -78,9 +78,12 @@ export default function CatalogPage({
       <section className="hero" aria-labelledby="catalog-title">
         <div className="shell">
           <h1 id="catalog-title">
-            Tampa Bay <span>Open Data Explorer</span>
+            Explore public data across <span>Tampa Bay.</span>
           </h1>
-          <p>Public Datasets From the Tampa Bay Area</p>
+          <p>
+            Discover and access public datasets from local governments across
+            the Tampa Bay region.
+          </p>
         </div>
       </section>
       <section

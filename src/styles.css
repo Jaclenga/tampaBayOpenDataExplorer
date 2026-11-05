@@ -172,11 +172,11 @@ header {
 .nav nav {
   display: flex;
   align-items: center;
-  gap: 28px;
+  gap: 24px;
 }
 .nav nav a {
   color: #e8ebf2;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 550;
   text-decoration: none;
   padding: 12px 0;
@@ -186,28 +186,35 @@ header {
   border-color: var(--coral);
   color: #fff;
 }
+.nav nav a:focus-visible {
+  outline: 2px solid var(--coral);
+  outline-offset: 4px;
+}
 .hero {
   background: var(--navy);
   color: #e3e7ef;
   border-bottom: 5px solid var(--coral);
-  padding: 0 0 30px;
+  padding: 12px 0 28px;
 }
 .hero h1 {
+  max-width: 800px;
   color: #fff;
-  font-size: clamp(36px, 4.8vw, 56px);
-  font-weight: 750;
-  letter-spacing: -1.6px;
-  margin-bottom: 15px;
+  font-size: 42px;
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -1px;
+  margin: 0 0 12px;
 }
 .hero h1 span {
   color: var(--coral);
-  white-space: nowrap;
+  white-space: normal;
 }
 .hero p {
-  max-width: 740px;
-  font-size: 17px;
-  line-height: 1.65;
-  margin-bottom: 23px;
+  max-width: 800px;
+  color: #cbd5e1;
+  font-size: 16px;
+  line-height: 1.5;
+  margin: 0;
 }
 .search {
   display: flex;
@@ -863,19 +870,19 @@ td {
     gap: 15px;
   }
   .nav nav a {
-    font-size: 12px;
+    font-size: 13px;
   }
   .hero {
-    padding: 0 0 24px;
+    padding: 8px 0 24px;
   }
   .hero h1 {
-    font-size: 37px;
-    line-height: 1.13;
+    font-size: 32px;
+    line-height: 1.15;
     letter-spacing: -0.9px;
   }
   .hero p {
-    font-size: 14px;
-    line-height: 1.7;
+    font-size: 16px;
+    line-height: 1.5;
   }
   .search {
     min-height: 57px;
