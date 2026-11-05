@@ -15,9 +15,19 @@ for (const width of [1440, 768, 390, 320]) {
     await expect(heading.locator("span")).toHaveText("Tampa Bay.");
     await expect(heading).toHaveCSS(
       "font-size",
-      width <= 740 ? "32px" : "42px",
+      width <= 740 ? "30px" : "40px",
     );
     await expect(heading).toHaveCSS("font-weight", "700");
+    await expect(heading).toHaveCSS("margin-bottom", "14px");
+    await expect(hero.locator("p")).toHaveCSS("max-width", "750px");
+    const catalogHeading = page.getByRole("heading", {
+      name: "Browse datasets",
+      exact: true,
+    });
+    expect((await heading.boundingBox())!.x).toBeCloseTo(
+      (await catalogHeading.boundingBox())!.x,
+      0,
+    );
     await expect(
       hero.locator("img,svg,canvas,video,iframe,form,input"),
     ).toHaveCount(0);

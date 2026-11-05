@@ -187,6 +187,7 @@ header {
   color: #fff;
 }
 .nav nav a:focus-visible {
+  border-color: var(--coral);
   outline: 2px solid var(--coral);
   outline-offset: 4px;
 }
@@ -194,23 +195,23 @@ header {
   background: var(--navy);
   color: #e3e7ef;
   border-bottom: 5px solid var(--coral);
-  padding: 12px 0 28px;
+  padding: 8px 0 24px;
 }
 .hero h1 {
   max-width: 800px;
   color: #fff;
-  font-size: 42px;
+  font-size: 40px;
   font-weight: 700;
   line-height: 1.15;
   letter-spacing: -1px;
-  margin: 0 0 12px;
+  margin: 0 0 14px;
 }
 .hero h1 span {
   color: var(--coral);
   white-space: normal;
 }
 .hero p {
-  max-width: 800px;
+  max-width: 750px;
   color: #cbd5e1;
   font-size: 16px;
   line-height: 1.5;
@@ -873,10 +874,10 @@ td {
     font-size: 13px;
   }
   .hero {
-    padding: 8px 0 24px;
+    padding: 6px 0 20px;
   }
   .hero h1 {
-    font-size: 32px;
+    font-size: 30px;
     line-height: 1.15;
     letter-spacing: -0.9px;
   }
