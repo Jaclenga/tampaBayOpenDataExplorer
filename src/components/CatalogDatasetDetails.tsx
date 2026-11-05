@@ -1,10 +1,18 @@
 import type { Dataset } from "../types";
+import {
+  geometryLabel,
+  type catalogAccessStatus,
+} from "../services/catalog-presentation";
 import UseInR from "./UseInR";
 import { DatasetFields, DatasetProvenance } from "./DatasetProvenance";
 export default function CatalogDatasetDetails({
   dataset,
+  sourceOnly,
+  status,
 }: {
   dataset: Dataset;
+  sourceOnly: boolean;
+  status: ReturnType<typeof catalogAccessStatus>;
 }) {
   const url = `#${encodeURIComponent(dataset.id)}`;
   const layer =
@@ -13,6 +21,7 @@ export default function CatalogDatasetDetails({
       : null;
   return (
     <>
+      <CatalogPreviewNote sourceOnly={sourceOnly} status={status} />
       <p>{dataset.description ?? "Description unavailable."}</p>
       <dl className="catalog-metadata">
         <div>
@@ -25,11 +34,7 @@ export default function CatalogDatasetDetails({
         </div>
         <div>
           <dt>Data type</dt>
-          <dd>
-            {dataset.geometryType === "none"
-              ? "Nonspatial table"
-              : dataset.geometryType}
-          </dd>
+          <dd>{geometryLabel(dataset.geometryType)}</dd>
         </div>
         <div>
           <dt>Dataset identifier</dt>
@@ -76,9 +81,7 @@ export default function CatalogDatasetDetails({
         </div>
       </dl>
       <div className="catalog-actions">
-        <a className="button secondary" href={url}>
-          View dataset
-        </a>
+        <a href={url}>View dataset</a>
         {layer && dataset.geometryType !== "none" && (
           <a href={layer}>Map layer at publisher</a>
         )}
@@ -87,5 +90,28 @@ export default function CatalogDatasetDetails({
       <DatasetFields fields={dataset.fields} />
       <UseInR dataset={dataset} />
     </>
+  );
+}
+
+function CatalogPreviewNote({
+  sourceOnly,
+  status,
+}: {
+  sourceOnly: boolean;
+  status: ReturnType<typeof catalogAccessStatus>;
+}) {
+  if (!sourceOnly && !status) return null;
+  return (
+    <div className="catalog-preview-status" role="note">
+      <p>{status?.failed ? status.label : "Preview not available"}</p>
+      {status && (
+        <>
+          <p>
+            {status.explanation.title}. {status.explanation.description}
+          </p>
+          <p>Last check: {status.reason}</p>
+        </>
+      )}
+    </div>
   );
 }

@@ -37,7 +37,7 @@ try {
       !policy.servicePrefixes.some((prefix) => d.endpoint.startsWith(prefix)),
   );
   assert.equal(
-    await page.locator(".source-only-badge").count(),
+    await page.getByRole("link", { name: /^View source:/ }).count(),
     sourceOnly.length,
   );
   const remote = await page.evaluate(async () => {

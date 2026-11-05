@@ -179,9 +179,28 @@ test("source-only datasets remain discoverable and link to the publisher without
   );
   await page.goto("/");
   await expect(page.locator(".dataset-card")).toHaveCount(3);
+  const row = page
+    .locator(".dataset-card")
+    .filter({
+      has: page.getByRole("heading", {
+        name: "Neighborhood parks",
+        exact: true,
+      }),
+    });
   await expect(
-    page.getByText("Source only · browser preview unavailable"),
+    row.getByRole("link", {
+      name: "View source: Neighborhood parks",
+      exact: true,
+    }),
+  ).toHaveAttribute("href", "https://data.example.test/parks");
+  await expect(
+    row.getByText("Preview not available", { exact: true }),
+  ).toHaveCount(0);
+  await row.getByRole("button", { name: /Show details/ }).click();
+  await expect(
+    row.getByText("Preview not available", { exact: true }),
   ).toBeVisible();
+  await expect(page.locator(".source-only-badge")).toHaveCount(0);
   await page
     .getByRole("link", { name: "Neighborhood parks", exact: true })
     .click();

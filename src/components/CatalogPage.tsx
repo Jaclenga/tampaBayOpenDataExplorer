@@ -167,6 +167,9 @@ export default function CatalogPage({
                   key={dataset.id}
                   dataset={dataset}
                   sourceOnly={sourceOnly.has(dataset.id)}
+                  access={access.datasets.find(
+                    (entry) => entry.id === dataset.id,
+                  )}
                   expanded={expanded.has(dataset.id)}
                   onExpand={() => onExpand(dataset.id)}
                 />
