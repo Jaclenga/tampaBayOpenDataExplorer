@@ -1207,7 +1207,7 @@ td {
   .filter-options.is-open {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 12px;
+    gap: 14px;
     padding-top: 12px;
   }
   .filter-match-count {
@@ -1289,20 +1289,40 @@ td {
   margin-left: 0;
 }
 .catalog-filters {
-  padding: 14px;
+  padding: 12px;
 }
 .catalog-filters .filter-title {
   margin-bottom: 12px;
   align-items: center;
 }
 .catalog-filters label {
-  margin-bottom: 12px;
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.4;
+  margin-bottom: 14px;
 }
 .catalog-filters label:last-child {
   margin-bottom: 0;
 }
 .catalog-filters select {
-  margin-top: 4px;
+  width: 100%;
+  min-width: 0;
+  height: 38px;
+  min-height: 38px;
+  margin-top: 6px;
+  padding: 8px 32px 8px 12px;
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  background-color: #fff;
+  color: var(--navy);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+  text-overflow: ellipsis;
+}
+.catalog-filters select:focus-visible {
+  outline: 2px solid var(--coral-dark);
+  outline-offset: 2px;
 }
 .catalog-results {
   overflow-anchor: none;
@@ -1357,6 +1377,9 @@ td {
   }
   .filter-options.is-open {
     padding-bottom: 12px;
+  }
+  .filter-options.is-open .filter-title {
+    margin-bottom: 0;
   }
   .section-top .discovery-status {
     margin-left: 0;
