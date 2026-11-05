@@ -18,7 +18,10 @@ for (const width of [1440, 768, 390, 320]) {
       width <= 740 ? "30px" : "40px",
     );
     await expect(heading).toHaveCSS("font-weight", "700");
-    await expect(heading).toHaveCSS("margin-bottom", "14px");
+    await expect(page.locator(".hero-heading-row")).toHaveCSS(
+      "margin-bottom",
+      "14px",
+    );
     await expect(hero.locator("p")).toHaveCSS("max-width", "750px");
     const catalogHeading = page.getByRole("heading", {
       name: "Browse datasets",
@@ -39,11 +42,19 @@ for (const width of [1440, 768, 390, 320]) {
       ),
     ).toBe(true);
     if (width === 1440) {
-      const height =
-        (await page.locator("header").boundingBox())!.height +
-        (await hero.boundingBox())!.height;
-      expect(height).toBeGreaterThanOrEqual(160);
-      expect(height).toBeLessThanOrEqual(190);
+      const height = (await hero.boundingBox())!.height;
+      expect(height).toBeGreaterThanOrEqual(120);
+      expect(height).toBeLessThanOrEqual(160);
+      const titleBox = (await heading.boundingBox())!;
+      const navBox = (await page
+        .getByRole("navigation", { name: "Main navigation" })
+        .boundingBox())!;
+      expect(
+        Math.abs(
+          titleBox.y + titleBox.height / 2 - navBox.y - navBox.height / 2,
+        ),
+      ).toBeLessThanOrEqual(1);
+      expect(navBox.x).toBeGreaterThan(titleBox.x + titleBox.width);
     }
     if (width === 1440 || width === 390)
       await page.screenshot({ path: `test-results/hero-after-${width}.png` });

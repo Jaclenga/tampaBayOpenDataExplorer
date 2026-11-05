@@ -119,7 +119,7 @@ export default function App() {
       >
         Skip to content
       </a>
-      <SiteHeader />
+      <SiteHeader catalog={!id && !!catalog && !error} />
       {error ? (
         <main id="main" className="shell">
           <p role="alert" className="error">

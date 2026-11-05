@@ -169,12 +169,14 @@ header {
   color: #fff;
   flex-shrink: 0;
 }
-.nav nav {
+.nav nav,
+.hero nav {
   display: flex;
   align-items: center;
   gap: 24px;
 }
-.nav nav a {
+.nav nav a,
+.hero nav a {
   color: #e8ebf2;
   font-size: 13px;
   font-weight: 550;
@@ -182,11 +184,13 @@ header {
   padding: 12px 0;
   border-bottom: 2px solid transparent;
 }
-.nav nav a:hover {
+.nav nav a:hover,
+.hero nav a:hover {
   border-color: var(--coral);
   color: #fff;
 }
-.nav nav a:focus-visible {
+.nav nav a:focus-visible,
+.hero nav a:focus-visible {
   border-color: var(--coral);
   outline: 2px solid var(--coral);
   outline-offset: 4px;
@@ -195,8 +199,16 @@ header {
   background: var(--navy);
   color: #e3e7ef;
   border-bottom: 5px solid var(--coral);
-  padding: 8px 0 24px;
+  padding: 24px 0;
 }
+.hero-heading-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 14px;
+}
+.hero-heading-row nav { flex-shrink: 0; }
 .hero h1 {
   max-width: 800px;
   color: #fff;
@@ -204,7 +216,7 @@ header {
   font-weight: 700;
   line-height: 1.15;
   letter-spacing: -1px;
-  margin: 0 0 14px;
+  margin: 0;
 }
 .hero h1 span {
   color: var(--coral);
@@ -1475,4 +1487,16 @@ td {
 .catalog-status-page a {
   color: var(--navy);
   text-decoration: underline;
+}
+
+@media (max-width: 1000px) {
+  .hero-heading-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .hero-heading-row nav {
+    order: -1;
+    align-self: flex-end;
+  }
 }

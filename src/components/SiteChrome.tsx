@@ -1,11 +1,34 @@
-export function SiteHeader() {
+function MainNavigation() {
+  return (
+    <nav aria-label="Main navigation">
+      <a href="#catalog">Browse data</a>
+      <a href="https://github.com/Jaclenga/tbdataexplorer">GitHub</a>
+    </nav>
+  );
+}
+
+export function SiteHeader({ catalog = false }: { catalog?: boolean }) {
+  if (catalog)
+    return (
+      <header className="hero" aria-labelledby="catalog-title">
+        <div className="shell">
+          <div className="hero-heading-row">
+            <h1 id="catalog-title">
+              Explore public data across <span>Tampa Bay.</span>
+            </h1>
+            <MainNavigation />
+          </div>
+          <p>
+            Discover and access public datasets from local governments across
+            the Tampa Bay region.
+          </p>
+        </div>
+      </header>
+    );
   return (
     <header>
       <div className="shell nav">
-        <nav aria-label="Main navigation">
-          <a href="#catalog">Browse data</a>
-          <a href="https://github.com/Jaclenga/tbdataexplorer">GitHub</a>
-        </nav>
+        <MainNavigation />
       </div>
     </header>
   );

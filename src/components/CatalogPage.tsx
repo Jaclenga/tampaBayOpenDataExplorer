@@ -75,17 +75,6 @@ export default function CatalogPage({
   );
   return (
     <main id="main">
-      <section className="hero" aria-labelledby="catalog-title">
-        <div className="shell">
-          <h1 id="catalog-title">
-            Explore public data across <span>Tampa Bay.</span>
-          </h1>
-          <p>
-            Discover and access public datasets from local governments across
-            the Tampa Bay region.
-          </p>
-        </div>
-      </section>
       <section
         id="catalog"
         className="shell catalog"
