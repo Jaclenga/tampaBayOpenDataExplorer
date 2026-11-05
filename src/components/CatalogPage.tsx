@@ -145,9 +145,6 @@ export default function CatalogPage({
           <h2 id="results-heading" tabIndex={-1}>
             Browse datasets
           </h2>
-          <p className="muted">
-            {catalog.datasets.length} datasets · {publishers.length} publishers
-          </p>
         </div>
         <DiscoveryStatus report={discovery} />
         <div className="catalog-layout">
