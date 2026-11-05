@@ -11,12 +11,7 @@ export default function DiscoveryStatus({
   );
   return (
     <details className="discovery-status">
-      <summary>
-        Discovery status ·{" "}
-        {report.complete
-          ? "complete portal scan"
-          : "bounded or partial portal scan"}
-      </summary>
+      <summary>Discovery status</summary>
       <p>
         Metadata refreshed {new Date(report.generatedAt).toLocaleString()}.
         Discovered layers are not curator-reviewed. A service check does not
