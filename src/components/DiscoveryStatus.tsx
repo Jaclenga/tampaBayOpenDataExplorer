@@ -10,27 +10,25 @@ export default function DiscoveryStatus({
   const status = catalogStatus(report, warning);
   return (
     <p className="discovery-status">
-      {status.successfulAt ? (
-        <>
-          Last checked{" "}
-          <time dateTime={status.successfulAt}>
-            {new Date(status.successfulAt).toLocaleDateString("en-US", {
-              month: "long",
-              day: "numeric",
-              year: "numeric",
-            })}
-          </time>
-        </>
-      ) : (
-        "Verification status unavailable"
-      )}
+      <span>
+        {status.successfulAt ? (
+          <>
+            Last checked{" "}
+            <time dateTime={status.successfulAt}>
+              {new Date(status.successfulAt).toLocaleDateString("en-US", {
+                month: "long",
+                day: "numeric",
+                year: "numeric",
+              })}
+            </time>
+          </>
+        ) : (
+          "Verification status unavailable"
+        )}
+      </span>
       {status.verified !== null && (
-        <>
-          {" "}
-          {"\u00b7"} {status.verified} datasets verified
-        </>
+        <span>{status.verified} datasets verified</span>
       )}
-      {" \u00b7 "}
       <a href="#catalog-status">Coverage details</a>
     </p>
   );

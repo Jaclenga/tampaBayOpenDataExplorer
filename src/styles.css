@@ -1431,6 +1431,9 @@ td {
   margin-bottom: 4px;
 }
 .catalog-heading .discovery-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 20px;
   text-align: left;
   margin: 0;
   color: var(--muted);

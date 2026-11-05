@@ -193,7 +193,7 @@ test("mobile summary stays within two lines and long publisher diagnostics wrap"
   const lineHeight = await status.evaluate((e) =>
     parseFloat(getComputedStyle(e).lineHeight),
   );
-  expect(height).toBeLessThanOrEqual(lineHeight * 2 + 1);
+  expect(height).toBeLessThanOrEqual(lineHeight * 2 + 6 + 1);
   await page.screenshot({
     path: "test-results/catalog-status-after-mobile.png",
   });
