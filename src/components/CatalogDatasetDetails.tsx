@@ -46,7 +46,7 @@ export default function CatalogDatasetDetails({
           <dt>Catalog</dt>
           <dd>
             {dataset.validationStatus === "discovered"
-              ? "Automatically discovered; not curator-reviewed"
+              ? "Publisher portal"
               : "Curated R-package subset"}
           </dd>
         </div>

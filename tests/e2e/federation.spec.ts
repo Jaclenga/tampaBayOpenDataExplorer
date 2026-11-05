@@ -12,6 +12,8 @@ test("new discoveries join the catalog, retain provenance, and query filtered li
     id: "arcgis:aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa:90",
     layerId: 90,
     title: "Newly published parks",
+    scopeNote:
+      "Automatically discovered public portal layer. Not reviewed by the curated R-package catalog.",
     validationStatus: "discovered",
     platform: "arcgis",
     lastVerifiedAt: "2026-11-04T12:00:00.000Z",
@@ -24,6 +26,25 @@ test("new discoveries join the catalog, retain provenance, and query filtered li
   await page.goto("/");
   await expect(page.locator(".dataset-card")).toHaveCount(4);
   expect(queries).toHaveLength(0);
+  const row = page
+    .locator(".dataset-card")
+    .filter({
+      has: page.getByRole("heading", {
+        name: "Newly published parks",
+        exact: true,
+      }),
+    });
+  await row.getByRole("button", { name: /Show details/ }).click();
+  await expect(
+    row.getByText("Publisher portal", { exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByText(
+      "Automatically discovered public portal layer. Not reviewed by the curated R-package catalog.",
+      { exact: true },
+    ),
+  ).toHaveCount(0);
+
   await expect(
     page.getByRole("combobox", { name: "Catalog group" }),
   ).toHaveCount(0);
@@ -32,7 +53,7 @@ test("new discoveries join the catalog, retain provenance, and query filtered li
     .click();
   await expect(
     page.getByText("Automatically discovered · not curator-reviewed"),
-  ).toBeVisible();
+  ).toHaveCount(0);
   await expect(
     page.getByRole("cell", { name: "Oak Park", exact: true }),
   ).toBeVisible();

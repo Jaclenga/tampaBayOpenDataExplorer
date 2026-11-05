@@ -9,11 +9,6 @@ export default function DatasetHeader({ dataset }: { dataset: Dataset }) {
         ← All datasets
       </a>
       <div className="eyebrow">
-        <span className="provenance-label">
-          {dataset.validationStatus === "discovered"
-            ? "Automatically discovered · not curator-reviewed"
-            : "Curated R-package dataset"}
-        </span>
         {dataset.publisher}{" "}
         <span> / {dataset.category ?? "Uncategorized"}</span>
       </div>

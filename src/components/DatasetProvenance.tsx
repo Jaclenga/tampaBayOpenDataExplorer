@@ -1,5 +1,10 @@
 import type { Dataset, Field } from "../types";
 
+const discoveryNotices = new Set([
+  "Automatically discovered public portal layer. Not reviewed by the curated R-package catalog.",
+  "Automatically discovered; not curator-reviewed.",
+]);
+
 export function DatasetProvenance({ dataset }: { dataset: Dataset }) {
   const coverage =
     dataset.coverage ??
@@ -7,7 +12,9 @@ export function DatasetProvenance({ dataset }: { dataset: Dataset }) {
   return (
     <details className="provenance">
       <summary>About this dataset & source terms</summary>
-      <p>{dataset.scopeNote ?? "Scope information unavailable."}</p>
+      {!discoveryNotices.has(dataset.scopeNote ?? "") && (
+        <p>{dataset.scopeNote ?? "Scope information unavailable."}</p>
+      )}
       <p>
         <strong>Geographic coverage:</strong> {coverage}
       </p>
