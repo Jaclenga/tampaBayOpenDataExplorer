@@ -46,7 +46,7 @@ test("section navigation returns from a dataset without treating section names a
     .click();
   await expect(
     page.getByRole("heading", {
-      name: "Tampa Bay Open Data Explorer",
+      name: "Explore public data across Tampa Bay.",
       exact: true,
     }),
   ).toBeVisible();
