@@ -49,6 +49,7 @@ This builds the app, deploys the private guard, then publishes the site. The man
 
 ## Technical guides
 
+- [Metadata categorization, overrides, and evaluation](docs/categorization.md)
 - [Catalog browsing and shared views](docs/catalog-browsing.md)
 - [Scheduled refreshes and troubleshooting](docs/scheduled-refresh.md)
 - [Discovery, adapters, catalog maintenance, and freshness](docs/federation.md)

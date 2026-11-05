@@ -1,0 +1,102 @@
+{
+  "version": "1.0",
+  "methodology": "Development evaluation: 52 existing curated labels plus 19 manually reviewed real discovered records. Title, description, tags and fields only; category withheld to prevent label leakage. This small development set is not an independent holdout or a population accuracy estimate. Confidence tiers are not probabilities.",
+  "total": 71,
+  "correct": 69,
+  "accuracy": 0.971830985915493,
+  "byCategory": [
+    {
+      "category": "Boundaries",
+      "total": 6,
+      "correct": 6
+    },
+    {
+      "category": "Demographics",
+      "total": 1,
+      "correct": 1
+    },
+    {
+      "category": "Development",
+      "total": 3,
+      "correct": 3
+    },
+    {
+      "category": "Environment",
+      "total": 4,
+      "correct": 4
+    },
+    {
+      "category": "Hazards",
+      "total": 7,
+      "correct": 6
+    },
+    {
+      "category": "Housing",
+      "total": 2,
+      "correct": 1
+    },
+    {
+      "category": "Infrastructure",
+      "total": 4,
+      "correct": 4
+    },
+    {
+      "category": "Planning",
+      "total": 10,
+      "correct": 10
+    },
+    {
+      "category": "Public facilities",
+      "total": 2,
+      "correct": 2
+    },
+    {
+      "category": "Public safety",
+      "total": 4,
+      "correct": 4
+    },
+    {
+      "category": "Recreation",
+      "total": 8,
+      "correct": 8
+    },
+    {
+      "category": "Solid waste",
+      "total": 1,
+      "correct": 1
+    },
+    {
+      "category": "Transportation",
+      "total": 13,
+      "correct": 13
+    },
+    {
+      "category": "Uncategorized",
+      "total": 4,
+      "correct": 4
+    },
+    {
+      "category": "Utilities",
+      "total": 2,
+      "correct": 2
+    }
+  ],
+  "confusionCases": [
+    {
+      "id": "arcgis:249f2426dc1e47729de81559d6273c6c:0",
+      "title": "Median_Age_of_Housing_(Years)",
+      "expected": "Housing",
+      "predicted": "Demographics",
+      "tier": "high",
+      "correct": false
+    },
+    {
+      "id": "arcgis:9d996c5999044e8f89e2b2c9fe97271f:0",
+      "title": "ParcelEvacuation",
+      "expected": "Hazards",
+      "predicted": "Uncategorized",
+      "tier": "low",
+      "correct": false
+    }
+  ]
+}

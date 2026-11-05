@@ -1,0 +1,262 @@
+{
+  "version": "1.0",
+  "minimumScore": 6,
+  "minimumMargin": 2,
+  "highScore": 12,
+  "highMargin": 4,
+  "titleCap": 24,
+  "contextCap": 6,
+  "weights": {
+    "titleKeyword": 8,
+    "titlePhrase": 12,
+    "tags": 3,
+    "description": 1,
+    "source_category": 2,
+    "fields": 1
+  },
+  "fieldCaps": {
+    "tags": 6,
+    "description": 2,
+    "source_category": 4,
+    "fields": 2
+  },
+  "stopwords": [
+    "the",
+    "and",
+    "of",
+    "for",
+    "in",
+    "to",
+    "a",
+    "an",
+    "is",
+    "this",
+    "city",
+    "county",
+    "public",
+    "area",
+    "map",
+    "data",
+    "dataset",
+    "layer",
+    "service",
+    "florida",
+    "existing",
+    "condition",
+    "gis",
+    "view"
+  ],
+  "aliases": {
+    "Public Safety": "Public safety",
+    "Parks & Recreation": "Recreation",
+    "Parks and Recreation": "Recreation",
+    "Parks": "Recreation",
+    "Hazards & Resilience": "Hazards",
+    "resiliency": "Hazards",
+    "Government boundaries": "Boundaries"
+  },
+  "categories": {
+    "Transportation": {
+      "keywords": [
+        "road",
+        "street",
+        "sidewalk",
+        "bicycle",
+        "bike",
+        "transit",
+        "traffic",
+        "roadway",
+        "transportation",
+        "route"
+      ],
+      "phrases": [
+        "bike lane",
+        "bicycle network",
+        "bus route",
+        "speed limit",
+        "high injury network",
+        "road centerline",
+        "truck route"
+      ]
+    },
+    "Development": {
+      "keywords": [
+        "permit",
+        "construction",
+        "parcel",
+        "development",
+        "building"
+      ],
+      "phrases": [
+        "building permit",
+        "development coordination",
+        "regional impact",
+        "property information",
+        "capital construction"
+      ]
+    },
+    "Planning": {
+      "keywords": ["zoning", "redevelopment", "planning", "landmark"],
+      "phrases": [
+        "land use",
+        "historic district",
+        "countywide plan",
+        "historic landmark"
+      ],
+      "requiresTitle": true
+    },
+    "Housing": {
+      "keywords": [
+        "housing",
+        "household",
+        "residential",
+        "multifamily",
+        "affordable"
+      ],
+      "phrases": [
+        "cost burdened",
+        "housing unit",
+        "housing affordability",
+        "mobile home",
+        "residential rehab"
+      ]
+    },
+    "Environment": {
+      "keywords": [
+        "wetland",
+        "habitat",
+        "conservation",
+        "river",
+        "environment",
+        "ecology"
+      ],
+      "phrases": [
+        "water quality",
+        "land cover",
+        "conservation easement",
+        "natural resource",
+        "lake water",
+        "lake habitat"
+      ]
+    },
+    "Infrastructure": {
+      "keywords": [
+        "stormwater",
+        "drainage",
+        "culvert",
+        "infrastructure",
+        "bridge",
+        "riverwalk",
+        "weir"
+      ],
+      "phrases": [
+        "public works",
+        "capital improvement",
+        "data center",
+        "storm water",
+        "drop structure",
+        "open channel"
+      ]
+    },
+    "Utilities": {
+      "keywords": [
+        "sewer",
+        "wastewater",
+        "hydrant",
+        "utility",
+        "main",
+        "valve"
+      ],
+      "phrases": [
+        "water service",
+        "water main",
+        "pump station",
+        "water distribution",
+        "sewer system"
+      ]
+    },
+    "Public safety": {
+      "keywords": ["police", "fire", "crime", "crash", "safety"],
+      "phrases": [
+        "emergency response",
+        "fire station",
+        "fire district",
+        "police district",
+        "law enforcement"
+      ]
+    },
+    "Recreation": {
+      "keywords": [
+        "park",
+        "trail",
+        "playground",
+        "recreation",
+        "sports",
+        "greenway"
+      ],
+      "phrases": ["park trail", "recreation facility", "bicycle trail"]
+    },
+    "Hazards": {
+      "keywords": [
+        "flood",
+        "evacuation",
+        "surge",
+        "vulnerability",
+        "resilience",
+        "resiliency",
+        "hurricane",
+        "evac"
+      ],
+      "phrases": [
+        "storm surge",
+        "evacuation route",
+        "evacuation zone",
+        "flood zone",
+        "flood plain",
+        "flood extent",
+        "critical asset",
+        "evac route"
+      ]
+    },
+    "Boundaries": {
+      "keywords": ["boundary", "annexation"],
+      "phrases": [
+        "council district",
+        "city limit",
+        "administrative boundary",
+        "neighborhood association",
+        "regional boundary"
+      ]
+    },
+    "Solid waste": {
+      "keywords": ["recycling", "garbage", "trash", "refuse"],
+      "phrases": ["solid waste", "waste collection", "recycling pickup"]
+    },
+    "Public facilities": {
+      "keywords": ["library", "school", "cemetery"],
+      "phrases": ["public facility", "community center", "civic center"]
+    },
+    "Health": {
+      "keywords": ["hospital", "clinic", "health", "epidemiology"],
+      "phrases": [
+        "public health",
+        "health care",
+        "food inspection",
+        "health department"
+      ]
+    },
+    "Demographics": {
+      "keywords": ["census", "population", "demographic", "ethnicity"],
+      "phrases": [
+        "census tract",
+        "census block",
+        "median age",
+        "population density"
+      ]
+    },
+    "Government": {
+      "keywords": ["election", "budget", "ballot", "precinct", "voter"],
+      "phrases": ["voting precinct", "government spending", "public finance"]
+    }
+  }
+}

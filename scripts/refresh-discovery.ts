@@ -7,6 +7,7 @@ import {
   refreshCatalog,
   catalogChanged,
 } from "../src/services/discovery/refresh";
+import { categorizeReport } from "../src/services/discovery/classify-catalog";
 import { validateIndex } from "../src/server/discovery-index";
 function option(name: string, fallback: number) {
   const index = process.argv.indexOf(name);
@@ -26,25 +27,29 @@ async function atomicWrite(path: string, value: unknown) {
   await rename(`${path}.pending`, path);
 }
 const previous = discoverySchema.parse(await read("public/discovery.json"));
-const report = validateIndex(
-  await refreshCatalog({
-    portals: z.array(portalSchema).parse(await read("config/portals.json")),
-    curated: parseCatalog(await read("public/catalog.json")).datasets,
-    previous,
-    options: {
-      maxItems: option("--max-items", 25),
-      maxLayers: option("--max-layers", 100),
-      signal: AbortSignal.timeout(option("--timeout-ms", 600000)),
-    },
-  }),
-);
+const curated = parseCatalog(await read("public/catalog.json")).datasets;
+const candidate = await refreshCatalog({
+  portals: z.array(portalSchema).parse(await read("config/portals.json")),
+  curated,
+  previous,
+  options: {
+    maxItems: option("--max-items", 25),
+    maxLayers: option("--max-layers", 100),
+    signal: AbortSignal.timeout(option("--timeout-ms", 600000)),
+  },
+});
+const classified = categorizeReport(candidate, curated, previous);
+const report = validateIndex(classified.report);
+await atomicWrite(resolve(".wrangler/category-review.json"), classified.review);
 const changed = catalogChanged(previous, report);
 await atomicWrite(resolve(".wrangler/discovery-refresh.json"), report);
-if (changed || process.env.DISCOVERY_OUTPUT)
+if (changed || process.env.DISCOVERY_OUTPUT) {
+  await atomicWrite(resolve("reports/category-review.json"), classified.review);
   await atomicWrite(
     resolve(process.env.DISCOVERY_OUTPUT ?? "public/discovery.json"),
     report,
   );
+}
 console.log(
   JSON.stringify({
     changed,

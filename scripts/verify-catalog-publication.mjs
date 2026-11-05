@@ -1,6 +1,12 @@
 // Verify the existing secretless Pages runtime-index delivery path after a push.
 import { readFile } from "node:fs/promises";
 const expected = JSON.parse(await readFile("public/discovery.json", "utf8"));
+const categories = (report) =>
+  JSON.stringify(
+    [...(report.curatedUpdates ?? []), ...report.datasets]
+      .map((d) => [d.id, d.category, d.category_source, d.category_version])
+      .sort((a, b) => a[0].localeCompare(b[0])),
+  );
 const origin =
   process.env.CATALOG_SITE_URL || "https://tbdataexplorer.pages.dev";
 const deadline = Date.now() + 12 * 60 * 1000;
@@ -20,7 +26,8 @@ for (let attempt = 1; attempt <= 25 && Date.now() < deadline; attempt++) {
     if (
       response.headers.get("X-Catalog-Index") !== "scheduled-index" ||
       actual.generatedAt !== expected.generatedAt ||
-      actual.datasets.length !== expected.datasets.length
+      actual.datasets.length !== expected.datasets.length ||
+      categories(actual) !== categories(expected)
     )
       throw Error("Pages is still serving a cached or fallback index.");
     console.log(

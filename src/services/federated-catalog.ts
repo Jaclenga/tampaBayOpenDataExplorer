@@ -14,6 +14,17 @@ export function federatedCatalog(
     if (!update || datasetKey(update) !== datasetKey(dataset)) return dataset;
     return {
       ...dataset,
+      ...(update.category_source
+        ? {
+            category: update.category,
+            source_category: update.source_category,
+            category_source: update.category_source,
+            category_confidence: update.category_confidence,
+            category_version: update.category_version,
+            category_signals: update.category_signals,
+            category_review: update.category_review,
+          }
+        : {}),
       fields: update.fields,
       lastVerifiedAt: update.lastVerifiedAt,
       lastAttemptedAt: update.lastAttemptedAt,

@@ -14,6 +14,17 @@ export const datasetSchema = z
     jurisdiction: z.string(),
     coverage: z.string().nullable(),
     category: z.string().nullable(),
+    source_category: z.string().nullable().optional(),
+    category_source: z
+      .enum(["override", "curated", "publisher", "nlp", "uncategorized"])
+      .optional(),
+    category_confidence: z.enum(["high", "medium", "low"]).optional(),
+    category_version: z.string().optional(),
+    category_signals: z.array(z.string()).optional(),
+    category_review: z
+      .enum(["ambiguous", "insufficient"])
+      .nullable()
+      .optional(),
     serviceUrl: z
       .url()
       .regex(/^https:\/\/[^?#]+\/(FeatureServer|MapServer)$/)

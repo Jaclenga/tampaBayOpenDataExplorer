@@ -193,7 +193,7 @@ function substantive(dataset: Dataset) {
   void _verified;
   return stableJSON(rest);
 }
-function catalogChanges(previous: Dataset[], next: Dataset[]) {
+export function catalogChanges(previous: Dataset[], next: Dataset[]) {
   const old = new Map(previous.map((d) => [d.id, d]));
   const added: string[] = [],
     updated: string[] = [];

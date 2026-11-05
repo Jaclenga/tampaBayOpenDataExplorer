@@ -86,6 +86,7 @@ export default function CatalogDatasetDetails({
           <a href={layer}>Map layer at publisher</a>
         )}
       </div>
+      <CategoryAssignment dataset={dataset} />
       <DatasetProvenance dataset={dataset} />
       <DatasetFields fields={dataset.fields} />
       <UseInR dataset={dataset} />
@@ -113,5 +114,34 @@ function CatalogPreviewNote({
         </>
       )}
     </div>
+  );
+}
+
+function CategoryAssignment({ dataset }: { dataset: Dataset }) {
+  return (
+    dataset.category_source && (
+      <details>
+        <summary>Category assignment</summary>
+        <p>
+          {dataset.category ?? "Uncategorized"}; {dataset.category_source};
+          rules {dataset.category_version}.
+        </p>
+        <p>
+          Evidence tier: {dataset.category_confidence}. Tiers describe rule
+          strength, not probabilities.
+        </p>
+        {dataset.source_category && (
+          <p>Publisher category: {dataset.source_category}</p>
+        )}
+        <ul>
+          {dataset.category_signals?.map((signal) => (
+            <li key={signal}>{signal}</li>
+          ))}
+        </ul>
+        {dataset.category_review && (
+          <p>Review reason: {dataset.category_review} evidence.</p>
+        )}
+      </details>
+    )
   );
 }

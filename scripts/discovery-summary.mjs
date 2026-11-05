@@ -20,3 +20,12 @@ if (!existsSync(path)) {
         `\n- ${run.portalId}: ${issue.kind}: ${issue.message.replaceAll("\n", " ")}`,
       );
 }
+
+if (existsSync(".wrangler/category-review.json")) {
+  const categories = JSON.parse(
+    readFileSync(".wrangler/category-review.json", "utf8"),
+  );
+  console.log(
+    `\nCategory rules ${categories.version}: ${categories.total} datasets; ${categories.sources.override} overrides, ${categories.sources.curated} curated, ${categories.sources.publisher} trusted publisher, ${categories.sources.nlp} automatic, ${categories.sources.uncategorized} uncategorized. ${categories.review.filter((d) => d.reason === "ambiguous").length} ambiguous; ${categories.changes.length} changed assignments. See the category-review artifact for signals, candidates and distribution warnings.`,
+  );
+}
