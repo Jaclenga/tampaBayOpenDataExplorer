@@ -69,14 +69,14 @@ export default function DatasetMap({
         type: "fill",
         source: "records",
         filter: ["==", "$type", "Polygon"],
-        paint: { "fill-color": "#d28941", "fill-opacity": 0.35 },
+        paint: { "fill-color": "#e85a4f", "fill-opacity": 0.25 },
       });
       map.addLayer({
         id: "lines",
         type: "line",
         source: "records",
         filter: ["!=", "$type", "Point"],
-        paint: { "line-color": "#a9652c", "line-width": 2 },
+        paint: { "line-color": "#b43e35", "line-width": 2 },
       });
       map.addLayer({
         id: "points",
@@ -84,7 +84,7 @@ export default function DatasetMap({
         source: "records",
         filter: ["==", "$type", "Point"],
         paint: {
-          "circle-color": "#c47734",
+          "circle-color": "#e85a4f",
           "circle-radius": 6,
           "circle-stroke-color": "#fff",
           "circle-stroke-width": 2,

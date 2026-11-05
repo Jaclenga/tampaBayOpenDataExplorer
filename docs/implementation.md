@@ -36,6 +36,12 @@ An explicit Chromium audit from `https://tampabay-open-data-explorer.pages.dev` 
 
 Source-only cards and detail pages clearly explain the limitation and link to the publisher. Their detail view does not mount the record-preview hook, preventing known-failing record requests and misleading export controls. Available entries keep normal previews. CI validates the static report and tests source-only behavior without live government calls. Refresh the audit after catalog changes or when investigating a publisher's restored browser access.
 
+## Interface redesign
+
+The interface now uses Tampa.dev's public navy/coral color palette as a reference (`#1c2438`, `#e85a4f`), with a search-first structure informed by NYC Open Data. Search, publisher shortcuts, topics, and list results replace the decorative regional illustration, slogan, and promotional statistics. Typography is sans serif throughout. Search submission moves keyboard focus to results; section links work from detail pages; mobile layouts retain filters and exports. Normal text contrast for the primary search button, links, muted text, and navigation was checked at 4.5:1 or higher. The project retains its own name and clearly states its independent status.
+
+Reference pages: https://tampa.dev/ and https://www.nyc.gov/opendata. No reference logos or imagery were copied. Local verification passed 119 unit/integration tests, 19 desktop/mobile browser tests, lint, type checking, and the production build.
+
 ## Complexity refactor
 
 Preview state and request cancellation now live in `useDatasetPreview`; the detail component assembles focused provenance/fields, records/map, and download components. HTTP handling is separate from ArcGIS schema/query logic. Query construction, page validation, record-ID validation, and geometry normalization use named helpers with early returns. Public ArcGIS exports and the existing behavior tests remain intact.

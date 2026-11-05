@@ -1,13 +1,59 @@
 import { test, expect } from "@playwright/test";
 import { installApi } from "./helpers";
 
+test("search submission, topic links, and publisher links lead to filtered results", async ({
+  page,
+}) => {
+  const api = await installApi(page);
+  await page.goto("/");
+  await page.getByRole("searchbox").fill("gardens");
+  await page.getByRole("searchbox").press("Enter");
+  await expect(
+    page.getByRole("heading", { name: "Browse datasets", exact: true }),
+  ).toBeFocused();
+  await expect(page.locator(".dataset-card")).toHaveCount(1);
+  await page
+    .getByRole("button", { name: "Transportation", exact: true })
+    .click();
+  await expect(
+    page.getByRole("link", { name: "Street centerlines", exact: true }),
+  ).toBeVisible();
+  await expect(page.getByRole("searchbox")).toHaveValue("");
+  await page.getByRole("button", { name: "Test County", exact: false }).click();
+  await expect(page.locator(".dataset-card")).toHaveCount(1);
+  await expect(
+    page.getByRole("link", { name: "Budget allocations", exact: true }),
+  ).toBeVisible();
+  expect(api.queries).toHaveLength(0);
+});
+
+test("section navigation returns from a dataset without treating section names as dataset IDs", async ({
+  page,
+}) => {
+  await installApi(page);
+  await page.goto("/#county%2Fbudget");
+  await expect(
+    page.getByRole("heading", { name: "Budget allocations", exact: true }),
+  ).toBeVisible();
+  await page
+    .getByRole("navigation", { name: "Main navigation" })
+    .getByRole("link", { name: "Publishers", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Tampa Bay Open Data", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Dataset not found" }),
+  ).toHaveCount(0);
+});
+
 test("search and filters intersect, reset, and never request records", async ({
   page,
 }) => {
   const api = await installApi(page);
   await page.goto("/");
   await expect(page.locator(".dataset-card")).toHaveCount(3);
-  await page.getByRole("link", { name: "Explore the collection" }).click();
+  await page.getByRole("link", { name: "Browse all datasets" }).click();
   await expect(page.locator(".dataset-card")).toHaveCount(3);
   await page
     .getByRole("combobox", { name: "Publisher", exact: true })

@@ -11,7 +11,7 @@ npm ci
 npm run dev
 ```
 
-Open the printed local URL. Search and filter the catalog, choose a dataset, then preview live records. Dataset URLs use hash routes, which work on static hosting without a rewrite rule. The homepage's regional illustration is decorative, not an authoritative map.
+Open the printed local URL. Search and filter the catalog, choose a dataset, then preview live records. Dataset URLs use hash routes, which work on static hosting without a rewrite rule. The interface uses a navy/coral palette inspired by Tampa.dev and a search-first browsing structure inspired by NYC Open Data. It is an independent project and uses its own identity.
 
 ```sh
 npm run catalog:validate

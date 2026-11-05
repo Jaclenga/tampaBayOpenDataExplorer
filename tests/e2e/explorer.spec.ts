@@ -97,7 +97,7 @@ test("search, choose a dataset, preview and export a loaded page", async ({
   await expect(page.getByRole("button", { name: "Next →" })).toBeDisabled();
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(
-    page.getByRole("heading", { name: "Explore the data" }),
+    page.getByRole("heading", { name: "Data preview" }),
   ).toBeVisible();
   expect(
     await page.evaluate(

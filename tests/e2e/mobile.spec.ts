@@ -6,6 +6,16 @@ test("mobile discovery and table preview fit the viewport", async ({
 }) => {
   await installApi(page);
   await page.goto("/");
+  await expect(page.getByRole("searchbox")).toBeVisible();
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: "test-results/homepage-mobile.png",
+    fullPage: true,
+  });
   await page
     .getByRole("combobox", { name: "Data type", exact: true })
     .selectOption("nonspatial");

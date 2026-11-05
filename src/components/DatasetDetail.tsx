@@ -37,8 +37,7 @@ function PreviewableDataset({ dataset }: { dataset: Dataset }) {
       <section className="preview" aria-busy={busy}>
         <div className="section-top">
           <div>
-            <div className="eyebrow">LIVE FROM THE PUBLISHER</div>
-            <h2>Explore the data</h2>
+            <h2>Data preview</h2>
           </div>
           <DownloadMenu
             page={page}
@@ -53,7 +52,7 @@ function PreviewableDataset({ dataset }: { dataset: Dataset }) {
         </p>
         {busy && (
           <p role="status" className="notice">
-            Connecting to the publisher and loading a bounded preview…
+            Loading records from the publisher…
           </p>
         )}
         {error && (

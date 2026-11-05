@@ -1,0 +1,181 @@
+import { useMemo } from "react";
+import type { Catalog } from "../types";
+import type { AccessReport } from "../services/access";
+import { searchCatalog, type Filters } from "../services/catalog";
+import DatasetCard from "./DatasetCard";
+import FilterPanel from "./FilterPanel";
+
+const empty: Filters = { query: "", publisher: "", category: "", spatial: "" };
+interface Props {
+  catalog: Catalog;
+  access: AccessReport;
+  filters: Filters;
+  onChange: (filters: Filters) => void;
+}
+
+function focusResults() {
+  document.getElementById("catalog")?.scrollIntoView({ block: "start" });
+  document.getElementById("results-heading")?.focus({ preventScroll: true });
+}
+
+export default function CatalogPage({
+  catalog,
+  access,
+  filters,
+  onChange,
+}: Props) {
+  const results = useMemo(
+    () => searchCatalog(catalog.datasets, filters),
+    [catalog, filters],
+  );
+  const publishers = [
+    ...new Set(catalog.datasets.map((d) => d.publisher)),
+  ].sort();
+  const sourceOnly = new Set(
+    access.datasets
+      .filter((entry) => entry.status === "source-only")
+      .map((entry) => entry.id),
+  );
+  const categories = new Set(catalog.datasets.map((d) => d.category));
+  const topics = [
+    "Transportation",
+    "Recreation",
+    "Housing",
+    "Environment",
+  ].filter((topic) => categories.has(topic));
+  function browse(selection: Partial<Filters>) {
+    onChange({ ...empty, ...selection });
+    focusResults();
+  }
+  return (
+    <main id="main">
+      <section className="hero" aria-labelledby="catalog-title">
+        <div className="shell">
+          <h1 id="catalog-title">
+            Tampa Bay <span>Open Data</span>
+          </h1>
+          <p>
+            Search public datasets from {publishers.length} Tampa Bay
+            publishers. Preview records, view maps, and download the data you
+            load.
+          </p>
+          <form
+            role="search"
+            className="search"
+            onSubmit={(event) => {
+              event.preventDefault();
+              focusResults();
+            }}
+          >
+            <label className="sr-only" htmlFor="dataset-search">
+              Search datasets
+            </label>
+            <svg
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              aria-hidden="true"
+            >
+              <circle cx="10.5" cy="10.5" r="6.5" />
+              <path d="m16 16 5 5" />
+            </svg>
+            <input
+              id="dataset-search"
+              type="search"
+              placeholder="Search datasets"
+              value={filters.query}
+              onChange={(event) =>
+                onChange({ ...filters, query: event.target.value })
+              }
+            />
+            <button type="submit">Search</button>
+          </form>
+          <div className="hero-links">
+            <a href="#catalog" onClick={() => onChange(empty)}>
+              Browse all datasets <span aria-hidden="true">→</span>
+            </a>
+            <a href="#publishers">
+              Browse by publisher <span aria-hidden="true">→</span>
+            </a>
+          </div>
+          <div className="topics" aria-label="Browse by topic">
+            <span>Topics</span>
+            {topics.map((topic) => (
+              <button key={topic} onClick={() => browse({ category: topic })}>
+                {topic}
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+      <section
+        id="publishers"
+        className="publisher-section"
+        aria-label="Browse by publisher"
+      >
+        <div className="shell">
+          <h2>Publishers</h2>
+          <div className="publisher-links">
+            {publishers.map((publisher) => (
+              <button key={publisher} onClick={() => browse({ publisher })}>
+                {publisher} <span aria-hidden="true">→</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      </section>
+      <section
+        id="catalog"
+        className="shell catalog"
+        aria-labelledby="results-heading"
+      >
+        <div className="section-top">
+          <h2 id="results-heading" tabIndex={-1}>
+            Browse datasets
+          </h2>
+          <p className="muted">
+            {catalog.datasets.length} datasets · {publishers.length} publishers
+          </p>
+        </div>
+        <div className="catalog-layout">
+          <FilterPanel
+            datasets={catalog.datasets}
+            filters={filters}
+            onChange={onChange}
+            onReset={() => onChange(empty)}
+          />
+          <div>
+            <div className="results-bar">
+              <p role="status">
+                <strong>{results.length}</strong> datasets
+                {Object.values(filters).some(Boolean) ? " found" : ""}
+              </p>
+              <span className="muted">CSV · GeoJSON where available</span>
+            </div>
+            <div className="cards">
+              {results.map((dataset) => (
+                <DatasetCard
+                  key={dataset.id}
+                  dataset={dataset}
+                  sourceOnly={sourceOnly.has(dataset.id)}
+                />
+              ))}
+            </div>
+            {!results.length && (
+              <div className="empty">
+                <h3>No datasets match these filters.</h3>
+                <p>Try another search or clear the filters.</p>
+                <button className="button" onClick={() => onChange(empty)}>
+                  Clear filters
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
