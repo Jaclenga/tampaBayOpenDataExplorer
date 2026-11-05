@@ -1,7 +1,13 @@
 import { describe, expect, it } from "vitest";
+import routes from "../../public/_routes.json";
 import { legacySiteRedirect } from "../../src/server/site-redirect";
 
 describe("site rename redirects", () => {
+  it("routes homepage requests through the redirect middleware", () => {
+    expect(routes.include).toContain("/");
+    expect(routes.include).toContain("/api/*");
+    expect(routes.exclude).not.toContain("/");
+  });
   it("moves legacy paths and shared browsing queries to the fixed new origin", () => {
     const response = legacySiteRedirect(
       new Request(
