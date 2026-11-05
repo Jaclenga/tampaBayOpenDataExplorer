@@ -144,7 +144,7 @@ header {
   color: #fff;
 }
 .nav {
-  min-height: 92px;
+  min-height: 48px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -190,7 +190,7 @@ header {
   background: var(--navy);
   color: #e3e7ef;
   border-bottom: 5px solid var(--coral);
-  padding: 32px 0 30px;
+  padding: 0 0 30px;
 }
 .hero h1 {
   color: #fff;
@@ -845,7 +845,7 @@ td {
     padding-right: 20px;
   }
   .nav {
-    min-height: 79px;
+    min-height: 48px;
     gap: 18px;
   }
   .brand {
@@ -866,7 +866,7 @@ td {
     font-size: 12px;
   }
   .hero {
-    padding: 24px 0;
+    padding: 0 0 24px;
   }
   .hero h1 {
     font-size: 37px;
@@ -1240,8 +1240,8 @@ td {
 @media (max-width: 740px) {
   .nav {
     flex-wrap: wrap;
-    padding-top: 16px;
-    padding-bottom: 12px;
+    padding-top: 0;
+    padding-bottom: 0;
     gap: 8px 20px;
   }
   .hero h1 span {
