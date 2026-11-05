@@ -160,7 +160,6 @@ export default function CatalogPage({
                 <strong>{results.length}</strong> datasets
                 {Object.values(filters).some(Boolean) ? " found" : ""}
               </p>
-              <span className="muted">CSV · GeoJSON where available</span>
             </div>
             <div className="cards">
               {results.slice(0, visible).map((dataset) => (
