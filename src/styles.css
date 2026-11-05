@@ -1403,15 +1403,12 @@ td {
 }
 .catalog-pagination button { min-height: 40px; }
 
-/* Quiet catalog summary;
-  diagnostics live on the secondary status view. */
+/* Quiet catalog summary; diagnostics live on the secondary status view. */
 .catalog-heading {
   display: block;
- 
 }
 .catalog-heading h2 {
   margin-bottom: 4px;
- 
 }
 .catalog-heading .discovery-status {
   text-align: left;
@@ -1420,57 +1417,46 @@ td {
   font-size: 12px;
   line-height: 1.6;
   overflow-wrap: anywhere;
- 
 }
 .discovery-status a {
   color: inherit;
   text-decoration: underline;
- 
 }
 .catalog-status-page {
   padding-top: 28px;
   padding-bottom: 32px;
   overflow-wrap: anywhere;
- 
 }
 .catalog-status-page h1 {
   margin: 16px 0 24px;
- 
 }
 .catalog-status-page section {
   margin-top: 24px;
- 
 }
 .catalog-status-page h2 {
   font-size: 20px;
   margin-bottom: 12px;
- 
 }
-.catalog-status-page p, .catalog-status-page li {
+.catalog-status-page p,
+.catalog-status-page li {
   font-size: 14px;
- 
 }
 .catalog-status-page ul {
   list-style: disc;
   padding-left: 20px;
- 
 }
 .publisher-scan {
   padding: 12px 0;
   border-bottom: 1px solid var(--line);
   font-size: 14px;
- 
 }
 .publisher-scan summary {
   cursor: pointer;
- 
 }
 .publisher-scan details {
   margin: 8px 0;
- 
 }
 .publisher-scan code {
   white-space: normal;
   overflow-wrap: anywhere;
- 
 }
