@@ -14,13 +14,13 @@ export function SiteHeader({ catalog = false }: { catalog?: boolean }) {
         <div className="shell">
           <div className="hero-heading-row">
             <h1 id="catalog-title">
-              Explore public data across <span>Tampa Bay.</span>
+              Explore public data across <span>Tampa Bay</span>
             </h1>
             <MainNavigation />
           </div>
           <p>
             Discover and access public datasets from local governments across
-            the Tampa Bay region.
+            the Tampa Bay region
           </p>
         </div>
       </header>

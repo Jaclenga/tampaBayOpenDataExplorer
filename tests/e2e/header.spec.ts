@@ -1,8 +1,8 @@
 import { test, expect } from "@playwright/test";
 import { installApi } from "./helpers";
-const title = "Explore public data across Tampa Bay.";
+const title = "Explore public data across Tampa Bay";
 const subtitle =
-  "Discover and access public datasets from local governments across the Tampa Bay region.";
+  "Discover and access public datasets from local governments across the Tampa Bay region";
 for (const width of [1440, 768, 390, 320]) {
   test(`text-only civic header fits ${width}px`, async ({ page }) => {
     await page.setViewportSize({ width, height: 900 });
@@ -12,7 +12,7 @@ for (const width of [1440, 768, 390, 320]) {
     const heading = hero.getByRole("heading", { level: 1 });
     await expect(heading).toHaveText(title);
     await expect(hero.locator("p")).toHaveText(subtitle);
-    await expect(heading.locator("span")).toHaveText("Tampa Bay.");
+    await expect(heading.locator("span")).toHaveText("Tampa Bay");
     await expect(heading).toHaveCSS(
       "font-size",
       width <= 740 ? "30px" : "40px",
