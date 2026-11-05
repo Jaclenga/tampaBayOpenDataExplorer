@@ -146,7 +146,7 @@ header {
 .nav {
   min-height: 92px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
   align-items: center;
   gap: 32px;
 }

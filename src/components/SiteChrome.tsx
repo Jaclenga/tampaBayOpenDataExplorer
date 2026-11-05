@@ -2,29 +2,6 @@ export function SiteHeader() {
   return (
     <header>
       <div className="shell nav">
-        <a
-          className="brand"
-          href="#"
-          aria-label="Tampa Bay Open Data Explorer home"
-        >
-          <svg
-            className="brand-icon"
-            viewBox="0 0 32 32"
-            width="34"
-            height="34"
-            fill="none"
-            aria-hidden="true"
-          >
-            <path
-              d="M2 2h11v11H2zM19 2h11v11H19zM2 19h11v11H2z"
-              fill="currentColor"
-            />
-            <path d="M19 19h11v11H19z" fill="#e85a4f" />
-          </svg>
-          <span>
-            Tampa Bay <strong>Open Data Explorer</strong>
-          </span>
-        </a>
         <nav aria-label="Main navigation">
           <a href="#catalog">Browse data</a>
           <a href="https://github.com/Jaclenga/tbdataexplorer">GitHub</a>
