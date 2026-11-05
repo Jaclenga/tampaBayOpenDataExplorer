@@ -68,8 +68,10 @@ test("quiet summary links to focused status view with collapsed publisher diagno
   await installStatus(page);
   await page.goto("/?pageSize=10&q=parks");
   const summary = page.locator(".discovery-status");
-  await expect(summary).toContainText("23 datasets verified in latest attempt");
-  await expect(summary).toContainText("Partial");
+  await expect(summary).toContainText("23 datasets verified");
+  await expect(summary).not.toContainText("Partial");
+  await expect(summary).not.toContainText("latest attempt");
+  await expect(summary.locator("time")).toHaveText("November 5, 2026");
   await expect(summary.locator("time")).toHaveAttribute("datetime", successful);
   await expect(summary).toHaveCSS("background-color", "rgba(0, 0, 0, 0)");
   await expect(summary).toHaveCSS("border-top-width", "0px");
@@ -78,7 +80,10 @@ test("quiet summary links to focused status view with collapsed publisher diagno
     page.getByText("Discovery budget reached", { exact: true }),
   ).toHaveCount(0);
   await page.screenshot({ path: "test-results/catalog-status-after.png" });
-  const link = page.getByRole("link", { name: "Catalog status", exact: true });
+  const link = page.getByRole("link", {
+    name: "Coverage details",
+    exact: true,
+  });
   await link.focus();
   await page.keyboard.press("Enter");
   await expect(
@@ -192,7 +197,9 @@ test("mobile summary stays within two lines and long publisher diagnostics wrap"
   await page.screenshot({
     path: "test-results/catalog-status-after-mobile.png",
   });
-  await page.getByRole("link", { name: "Catalog status", exact: true }).click();
+  await page
+    .getByRole("link", { name: "Coverage details", exact: true })
+    .click();
   await page.locator(".publisher-scan > summary").click();
   await page.getByText("Technical explanation", { exact: true }).last().click();
   expect(

@@ -149,10 +149,10 @@ test("freshness distinguishes a published check from incomplete discovery and pu
   );
   await page.goto("/");
   const status = page.locator(".discovery-status");
-  await expect(status).toContainText("Catalog checked");
-  await expect(status).toContainText("23 datasets verified in latest attempt");
+  await expect(status).toContainText("Last checked");
+  await expect(status).toContainText("23 datasets verified");
   await status
-    .getByRole("link", { name: "Catalog status", exact: true })
+    .getByRole("link", { name: "Coverage details", exact: true })
     .click();
   await expect(
     page.getByText("23 in the latest recorded attempt", { exact: true }),

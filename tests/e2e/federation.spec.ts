@@ -69,7 +69,9 @@ test("curated catalog remains accessible when the discovery index is unavailable
   await expect(page.locator(".discovery-status")).toContainText(
     "Verification status unavailable",
   );
-  await page.getByRole("link", { name: "Catalog status", exact: true }).click();
+  await page
+    .getByRole("link", { name: "Coverage details", exact: true })
+    .click();
   await expect(
     page.getByText(
       "Discovery is temporarily unavailable. The curated catalog remains available.",

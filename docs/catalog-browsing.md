@@ -27,7 +27,7 @@ Every collapsed row has a View dataset action (View source for source-only entri
 
 ## Catalog status
 
-The Browse datasets heading has a plain status line with the last recorded successful verification date, the number successfully verified in the latest recorded attempt, a restrained status label, and a Catalog status link. Report generation times and total retained dataset counts are never substituted for successful verification. A failed latest attempt can show zero verifications alongside an earlier successful check; the status view explains retained records separately.
+The Browse datasets heading has a plain status line with "Last checked" and a full-month date, the number of datasets successfully verified, and a "Coverage details" link to the existing Catalog Status view. Status labels and attempt details appear in that secondary view. Report generation times and total retained dataset counts are never substituted for successful verification. A failed latest attempt can show zero verifications alongside an earlier successful check; the status view explains retained records separately.
 
 `#catalog-status` is a dedicated hash-routed view that preserves query parameters and catalog browsing state. It shows verification/attempt dates, publisher and issue counts, discovery coverage, collapsed publisher summaries, grouped diagnostic messages and original technical reports. Exact messages and distinct endpoints remain available in nested technical explanations and unchanged report URLs. Discovery delivery warnings appear here instead of in a banner above the catalog. Publisher source-update times remain on dataset pages.
 

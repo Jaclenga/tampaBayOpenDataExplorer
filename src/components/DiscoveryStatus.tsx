@@ -1,5 +1,5 @@
 import type { DiscoveryReport } from "../services/discovery/types";
-import { catalogStatus, displayStatusDate } from "../services/catalog-status";
+import { catalogStatus } from "../services/catalog-status";
 export default function DiscoveryStatus({
   report,
   warning,
@@ -12,9 +12,13 @@ export default function DiscoveryStatus({
     <p className="discovery-status">
       {status.successfulAt ? (
         <>
-          Catalog checked{" "}
+          Last checked{" "}
           <time dateTime={status.successfulAt}>
-            {displayStatusDate(status.successfulAt, true)}
+            {new Date(status.successfulAt).toLocaleDateString("en-US", {
+              month: "long",
+              day: "numeric",
+              year: "numeric",
+            })}
           </time>
         </>
       ) : (
@@ -23,13 +27,11 @@ export default function DiscoveryStatus({
       {status.verified !== null && (
         <>
           {" "}
-          {"\u00b7"} {status.verified} datasets verified in latest attempt
+          {"\u00b7"} {status.verified} datasets verified
         </>
       )}
       {" \u00b7 "}
-      {status.state}
-      {" \u00b7 "}
-      <a href="#catalog-status">Catalog status</a>
+      <a href="#catalog-status">Coverage details</a>
     </p>
   );
 }
