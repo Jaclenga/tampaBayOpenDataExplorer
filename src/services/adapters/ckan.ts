@@ -81,6 +81,9 @@ export const ckanAdapter: SourceAdapter = {
       limit,
       offset + result.records.length < result.total,
       "Live source results may change between pages. Map previews are unavailable for this adapter.",
+      metadata.objectIdField
+        ? { field: metadata.objectIdField, previousIds: request.previousIds }
+        : undefined,
     );
   },
 };

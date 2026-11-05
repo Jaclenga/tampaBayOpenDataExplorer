@@ -21,9 +21,13 @@ jobs:
       - run: npm test
       - run: npm run build
       - run: npm run build:functions
+      - run: npm run test:guard
       - run: npx playwright install --with-deps chromium
       - run: npm run test:e2e
-      - run: npx wrangler pages deploy dist --project-name=tampabay-open-data-explorer
+      - name: Deploy private request guard and Pages
+        run: |
+          npm run deploy:guard
+          npx wrangler pages deploy dist --project-name=tampabay-open-data-explorer
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}

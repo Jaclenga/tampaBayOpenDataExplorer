@@ -1,0 +1,7 @@
+{
+  "windowMs": 60000,
+  "perClient": 60,
+  "global": 120,
+  "concurrent": 8,
+  "leaseMs": 30000
+}

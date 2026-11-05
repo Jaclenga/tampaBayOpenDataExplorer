@@ -20,18 +20,23 @@ export function canonicalEndpoint(value: string) {
     )
   )
     throw Error("Encoded or traversing source paths are not allowed.");
-  url.pathname = url.pathname.replace(/\/+$/, "");
+  // ArcGIS's fixed REST prefix is case insensitive. Preserve service-name case.
+  url.pathname = url.pathname
+    .replace(/\/arcgis\/rest\/services(?=\/|$)/i, "/arcgis/rest/services")
+    .replace(/\/+$/, "");
   return url.href;
 }
 
 export function endpointAllowed(endpoint: string, prefixes: readonly string[]) {
   try {
     const normalized = canonicalEndpoint(endpoint);
-    return prefixes.some(
-      (prefix) =>
-        normalized.startsWith(prefix) &&
-        new URL(normalized).origin === new URL(prefix).origin,
-    );
+    return prefixes.some((prefix) => {
+      const base = canonicalEndpoint(prefix).replace(/\/+$/, "");
+      return (
+        (normalized === base || normalized.startsWith(base + "/")) &&
+        new URL(normalized).origin === new URL(base).origin
+      );
+    });
   } catch {
     return false;
   }

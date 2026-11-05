@@ -1,6 +1,6 @@
 # Tampa Bay Open Data Explorer
 
-A federated civic data portal for discovering public Tampa Bay datasets and exploring live publisher records. The 52 checked datasets in [tampaBayOpenData](https://github.com/Jaclenga/tampaBayOpenData) remain a curated subset alongside automatically discovered layers from six registered government portals. React, TypeScript, Vite, Tailwind CSS, Fuse.js, MapLibre GL JS, and Zod run on Cloudflare Pages, with two small Pages Functions for metadata-index delivery and an allowlisted CORS fallback. No accounts, database, paid APIs, or replicated record store.
+A federated civic data portal for discovering public Tampa Bay datasets and exploring live publisher records. The 52 checked datasets in [tampaBayOpenData](https://github.com/Jaclenga/tampaBayOpenData) remain a curated subset alongside automatically discovered layers from six registered government portals. React, TypeScript, Vite, Tailwind CSS, Fuse.js, MapLibre GL JS, and Zod run on Cloudflare Pages, with two small Pages Functions for metadata-index delivery and an allowlisted CORS fallback. A private Durable Object coordinates proxy request budgets. No accounts, PostgreSQL, paid APIs, or replicated government record store.
 
 ## Run locally
 
@@ -92,7 +92,7 @@ npx wrangler pages project create tampabay-open-data-explorer --production-branc
 npm run deploy
 ```
 
-Create the project only once. The manual `deploy.yml` workflow runs validation and tests before deploying. Set repository/environment secrets `CLOUDFLARE_API_TOKEN` (account Pages Edit scope) and `CLOUDFLARE_ACCOUNT_ID`. Alternatively configure Pages Git integration with the build/output settings above. Use one deployment approach consistently. [Cloudflare direct-upload documentation](https://developers.cloudflare.com/pages/get-started/direct-upload/) describes Wrangler deployment and the limitations of switching a Direct Upload project to Git integration.
+Create the project only once. The manual `deploy.yml` workflow runs validation and tests before deploying the private proxy guard and Pages. Set repository/environment secrets `CLOUDFLARE_API_TOKEN` (account Pages Edit and Workers Scripts Edit scopes) and `CLOUDFLARE_ACCOUNT_ID`. The guard must exist before the Pages Durable Object binding is deployed; `npm run deploy` preserves this order. [Cloudflare direct-upload documentation](https://developers.cloudflare.com/pages/get-started/direct-upload/) describes Wrangler deployment and the limitations of switching a Direct Upload project to Git integration. See [security and reliability fixes](docs/security-fixes.md) for request budgets, runtime verification and local setup.
 
 The initial deployment is live at https://tampabay-open-data-explorer.pages.dev. The project already exists; use `npm run deploy` for updates. In the installed Wrangler 4.157.0, initial creation required `--force` to bypass Workers delegation; this flag is unnecessary for the existing project and subsequent deploys. To run the mocked browser workflow against hosted assets, set `E2E_BASE_URL` to the deployed URL before `npm run test:e2e`.
 

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { boundedText } from "./bounded-response";
 
 export class ArcGISError extends Error {
   readonly networkFailure: boolean;
@@ -39,14 +40,29 @@ function delay(ms: number, signal?: AbortSignal) {
 }
 
 async function fetchJson(url: string, signal: AbortSignal): Promise<unknown> {
-  const response = await fetch(url, { signal });
-  if (!response.ok)
+  const response = await fetch(url, {
+    signal,
+    redirect: "manual",
+    credentials: "omit",
+  });
+  if (
+    response.type === "opaqueredirect" ||
+    (response.status >= 300 && response.status < 400)
+  ) {
+    await response.body?.cancel();
+    throw new ArcGISError(
+      "Publisher redirects are not followed. Use the original publisher link.",
+    );
+  }
+  if (!response.ok) {
+    await response.body?.cancel();
     throw new ArcGISError(
       `Publisher returned HTTP ${response.status}.`,
       transientStatuses.has(response.status),
       { retryAfterMs: retryAfter(response.headers.get("Retry-After")) },
     );
-  const body: unknown = await response.json();
+  }
+  const body: unknown = JSON.parse(await boundedText(response, 2097152));
   if (!body || typeof body !== "object" || !("error" in body)) return body;
   const result = errorSchema.safeParse(body);
   if (!result.success)

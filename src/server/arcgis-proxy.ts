@@ -68,10 +68,6 @@ export async function handleArcGISProxy(
     });
   } catch (error) {
     const status = error instanceof ProxyError ? error.status : 504;
-    const message =
-      error instanceof ProxyError
-        ? error.message
-        : "Publisher request failed or timed out.";
     console.error(
       JSON.stringify({
         event: "arcgis_proxy_error",
@@ -80,11 +76,26 @@ export async function handleArcGISProxy(
         durationMs: Date.now() - started,
       }),
     );
-    return Response.json(
-      { error: { code: status, message } },
-      { status, headers: { "Cache-Control": "no-store" } },
-    );
+    return proxyFailure(error);
   }
+}
+
+export function proxyFailure(error: unknown) {
+  const status = error instanceof ProxyError ? error.status : 504;
+  const message =
+    error instanceof ProxyError
+      ? error.message
+      : "Publisher request failed or timed out.";
+  const headers = new Headers({
+    "Cache-Control": "no-store",
+    "X-Content-Type-Options": "nosniff",
+  });
+  if (error instanceof ProxyError && error.retryAfter > 0)
+    headers.set("Retry-After", String(error.retryAfter));
+  return Response.json(
+    { error: { code: status, message } },
+    { status, headers },
+  );
 }
 
 async function boundedBody(response: Response) {

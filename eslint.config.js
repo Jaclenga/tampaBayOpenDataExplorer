@@ -10,6 +10,7 @@ export default ts.config(
       "playwright-report/**",
       "test-results/**",
       "coverage/**",
+      "worker-configuration.d.ts",
     ],
   },
   js.configs.recommended,

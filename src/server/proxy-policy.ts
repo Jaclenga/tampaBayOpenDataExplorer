@@ -27,9 +27,25 @@ export class ProxyError extends Error {
   constructor(
     message: string,
     public status = 400,
+    public retryAfter = 0,
   ) {
     super(message);
   }
+}
+
+export function validateProxyRequest(request: Request) {
+  const values = requestParameters(request);
+  const operation = validatedOperation(values);
+  const id = values.get("dataset");
+  if (
+    !id ||
+    id.length > 160 ||
+    !/^(?:[a-z0-9_-]+\/[a-z0-9_-]+|arcgis:[a-f0-9]{32}:\d+)$/i.test(id)
+  )
+    throw new ProxyError("Dataset is not registered.", 404);
+  if (operation === "query")
+    addQuery(new URL("https://validation.invalid/"), values);
+  return { id, operation };
 }
 
 export function proxyTarget(request: Request, datasets: readonly Dataset[]) {

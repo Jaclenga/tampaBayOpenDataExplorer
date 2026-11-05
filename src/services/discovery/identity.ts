@@ -15,13 +15,14 @@ export function mergeDatasets(curated: Dataset[], discovered: Dataset[]) {
   for (const dataset of curated) {
     const key = datasetKey(dataset);
     const live = byEndpoint.get(key);
+    const fresh = newestInspection(dataset, live);
     byEndpoint.set(key, {
       ...live,
       ...dataset,
       validationStatus: "curated",
-      lastVerifiedAt: live?.lastVerifiedAt ?? dataset.lastVerifiedAt,
-      sourceUpdatedAt: live?.sourceUpdatedAt ?? dataset.sourceUpdatedAt,
-      sourceUpdatedKind: live?.sourceUpdatedKind ?? dataset.sourceUpdatedKind,
+      lastVerifiedAt: fresh.lastVerifiedAt,
+      sourceUpdatedAt: fresh.sourceUpdatedAt,
+      sourceUpdatedKind: fresh.sourceUpdatedKind,
     });
   }
   const curatedIds = new Set(curated.map((d) => d.id));
@@ -32,9 +33,26 @@ export function mergeDatasets(curated: Dataset[], discovered: Dataset[]) {
 }
 
 export function preservePrevious(previous: Dataset[], current: Dataset[]) {
-  const byKey = new Map(
-    previous.map((dataset) => [datasetKey(dataset), dataset]),
+  const currentById = new Map(current.map((dataset) => [dataset.id, dataset]));
+  const previousById = new Map(
+    previous.map((dataset) => [dataset.id, dataset]),
   );
-  for (const dataset of current) byKey.set(datasetKey(dataset), dataset);
+  for (const id of currentById.keys()) previousById.delete(id);
+  const byKey = new Map(
+    [...previousById.values(), ...currentById.values()].map((dataset) => [
+      datasetKey(dataset),
+      dataset,
+    ]),
+  );
   return [...byKey.values()];
+}
+
+function newestInspection(curated: Dataset, discovered?: Dataset) {
+  if (!discovered?.lastVerifiedAt) return curated;
+  if (
+    curated.lastVerifiedAt &&
+    Date.parse(curated.lastVerifiedAt) >= Date.parse(discovered.lastVerifiedAt)
+  )
+    return curated;
+  return discovered;
 }

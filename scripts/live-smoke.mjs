@@ -2,6 +2,7 @@
 import assert from "node:assert/strict";
 import { chromium } from "playwright";
 import { readFile, mkdir } from "node:fs/promises";
+import { canonicalEndpoint } from "../src/services/source-url.ts";
 const base = process.argv[2] || "https://tampabay-open-data-explorer.pages.dev";
 const catalog = JSON.parse(await readFile("public/catalog.json", "utf8"));
 const expected = JSON.parse(await readFile("public/access.json", "utf8"));
@@ -12,7 +13,8 @@ const discovery = await discoveryResponse.json();
 const endpoints = new Set(
   [...catalog.datasets, ...discovery.datasets].map(
     (dataset) =>
-      dataset.resource?.url ?? `${dataset.serviceUrl}/${dataset.layerId}`,
+      dataset.resource?.url ??
+      canonicalEndpoint(`${dataset.serviceUrl}/${dataset.layerId}`),
   ),
 );
 const browser = await chromium.launch();

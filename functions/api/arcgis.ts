@@ -4,23 +4,18 @@ import { parseCatalog } from "../../src/services/catalog";
 import { discoverySchema } from "../../src/services/discovery/types";
 import { handleArcGISProxy } from "../../src/server/arcgis-proxy";
 import { latestIndex } from "../../src/server/discovery-index";
+import { handleProxyRequest } from "../../src/server/proxy-handler";
+import { admitProxy } from "../../src/server/proxy-admission";
 
 const datasets = [
   ...parseCatalog(curated).datasets,
   ...discoverySchema.parse(discovered).datasets,
 ];
-export async function onRequest(context: { request: Request }) {
-  const id = new URL(context.request.url).searchParams.get("dataset");
-  if (
-    !datasets.some((dataset) => dataset.id === id) &&
-    /^arcgis:[a-f0-9]{32}:\d+$/i.test(id ?? "") &&
-    context.request.method === "GET"
-  ) {
-    const latest = await latestIndex(context.request.signal);
-    return handleArcGISProxy(context.request, [
-      ...datasets,
-      ...latest.report.datasets,
-    ]);
-  }
-  return handleArcGISProxy(context.request, datasets);
+export function onRequest(context: { request: Request; env: PagesEnv }) {
+  return handleProxyRequest(context.request, {
+    bundled: datasets,
+    index: latestIndex,
+    admit: (request) => admitProxy(request, context.env),
+    forward: handleArcGISProxy,
+  });
 }

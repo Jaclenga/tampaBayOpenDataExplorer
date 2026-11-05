@@ -58,7 +58,13 @@ export function plainPage(
   limit: number,
   hasMore: boolean,
   warning: string | null = null,
+  identity?: { field: string; previousIds?: Set<string> },
 ): Page {
+  if (!rows.length && hasMore)
+    throw Error(
+      "Publisher reports more results but returned an empty page. Pagination stopped.",
+    );
+  if (identity) validatePageIds(rows, identity.field, identity.previousIds);
   return {
     records: rows.map((row) => ({ attributes: attributes(row) })),
     geojson: null,
@@ -68,4 +74,25 @@ export function plainPage(
     warning,
     retrievedAt: new Date().toISOString(),
   };
+}
+
+function validatePageIds(
+  rows: Record<string, unknown>[],
+  field: string,
+  previousIds?: Set<string>,
+) {
+  const seen = new Set<string>();
+  for (const row of rows) {
+    const id = row[field];
+    if (
+      id === null ||
+      id === undefined ||
+      seen.has(String(id)) ||
+      previousIds?.has(String(id))
+    )
+      throw Error(
+        "Publisher returned missing or repeated record IDs. Pagination stopped.",
+      );
+    seen.add(String(id));
+  }
 }

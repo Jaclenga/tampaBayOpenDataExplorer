@@ -10,8 +10,10 @@ export function parseCsv(text: string) {
   let row: string[] = [];
   let cell = "";
   let quoted = false;
+  let rowStarted = false;
   for (let i = 0; i < text.length; i++) {
     const char = text[i];
+    if (!isRowEnd(char)) rowStarted = true;
     if (char === '"') {
       const quote = readQuote(text, i, quoted);
       cell += quote.value;
@@ -23,13 +25,14 @@ export function parseCsv(text: string) {
     } else if (!quoted && isRowEnd(char)) {
       if (char === "\r" && text[i + 1] === "\n") i++;
       row.push(cell);
-      rows.push(row);
+      if (rowStarted) rows.push(row);
       row = [];
       cell = "";
+      rowStarted = false;
     } else cell += char;
   }
   if (quoted) throw Error("CSV contains an unterminated quoted field.");
-  if (cell || row.length) {
+  if (rowStarted) {
     row.push(cell);
     rows.push(row);
   }
@@ -51,13 +54,11 @@ function csvObjects(rows: string[][]) {
     new Set(headers).size !== headers.length
   )
     throw Error("CSV field names are missing or duplicated.");
-  return rows
-    .filter((row) => row.some(Boolean))
-    .map((row) => {
-      if (row.length !== headers.length)
-        throw Error("CSV row does not match its field schema.");
-      return Object.fromEntries(headers.map((h, index) => [h, row[index]]));
-    });
+  return rows.map((row) => {
+    if (row.length !== headers.length)
+      throw Error("CSV row does not match its field schema.");
+    return Object.fromEntries(headers.map((h, index) => [h, row[index]]));
+  });
 }
 async function load(dataset: Dataset, signal?: AbortSignal) {
   const response = await fetch(resource(dataset).url, {
@@ -65,7 +66,17 @@ async function load(dataset: Dataset, signal?: AbortSignal) {
       ? AbortSignal.any([signal, AbortSignal.timeout(15000)])
       : AbortSignal.timeout(15000),
     credentials: "omit",
+    redirect: "manual",
   });
+  if (
+    response.type === "opaqueredirect" ||
+    (response.status >= 300 && response.status < 400)
+  ) {
+    await response.body?.cancel();
+    throw Error(
+      "Publisher redirects are not followed. Use the original publisher link.",
+    );
+  }
   if (!response.ok) throw Error(`Publisher returned HTTP ${response.status}.`);
   const text = await boundedText(response, 1048576);
   const rows =
