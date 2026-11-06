@@ -26,9 +26,9 @@ test("real discovered categories filter normally and reveal provenance only in d
     row.getByText("Category assignment", { exact: true }),
   ).toHaveCount(0);
   await row.getByRole("button", { name: /Show details/ }).click();
-  await row.getByText("Category assignment", { exact: true }).click();
-  await expect(row.getByText(/Tiers describe rule strength/)).toBeVisible();
-  await expect(row.getByText("title:transit", { exact: true })).toBeVisible();
+  await expect(page.getByRole("dialog")).toContainText("Category (catalog)");
+  await expect(page.getByRole("dialog")).toContainText("Transportation");
+  await page.keyboard.press("Escape");
   expect(queries).toHaveLength(0);
   await page
     .getByRole("button", { name: "Clear all filters", exact: true })

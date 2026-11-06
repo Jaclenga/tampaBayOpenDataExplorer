@@ -26,17 +26,17 @@ test("new discoveries join the catalog, retain provenance, and query filtered li
   await page.goto("/");
   await expect(page.locator(".dataset-card")).toHaveCount(4);
   expect(queries).toHaveLength(0);
-  const row = page
-    .locator(".dataset-card")
-    .filter({
-      has: page.getByRole("heading", {
-        name: "Newly published parks",
-        exact: true,
-      }),
-    });
+  const row = page.locator(".dataset-card").filter({
+    has: page.getByRole("heading", {
+      name: "Newly published parks",
+      exact: true,
+    }),
+  });
   await row.getByRole("button", { name: /Show details/ }).click();
   await expect(
-    row.getByText("Publisher portal", { exact: true }),
+    page
+      .getByRole("dialog")
+      .getByText("Last verified endpoint", { exact: true }),
   ).toBeVisible();
   await expect(
     page.getByText(
@@ -49,7 +49,7 @@ test("new discoveries join the catalog, retain provenance, and query filtered li
     page.getByRole("combobox", { name: "Catalog group" }),
   ).toHaveCount(0);
   await page
-    .getByRole("link", { name: "Newly published parks", exact: true })
+    .getByRole("link", { name: "Explore dataset", exact: true })
     .click();
   await expect(
     page.getByText("Automatically discovered · not curator-reviewed"),

@@ -3,6 +3,7 @@ export const fieldSchema = z.object({
   name: z.string().min(1),
   type: z.string(),
   alias: z.string().optional(),
+  description: z.string().nullable().optional(),
 });
 export const datasetSchema = z
   .object({
@@ -108,6 +109,8 @@ export interface RecordFeature {
   geometry?: Record<string, unknown> | null;
 }
 export interface LayerMetadata {
+  description?: string | null;
+  attribution?: string | null;
   filterOperators?: string[];
   fields: Field[];
   objectIdField: string | null;

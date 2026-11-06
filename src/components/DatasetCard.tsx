@@ -26,7 +26,7 @@ export default function DatasetCard({
   );
   const url = `#${encodeURIComponent(dataset.id)}`;
   return (
-    <article className={expanded ? "dataset-card is-expanded" : "dataset-card"}>
+    <article className="dataset-card">
       <div className="dataset-row">
         <div className="dataset-summary">
           <h3>
@@ -45,15 +45,16 @@ export default function DatasetCard({
         <div className="dataset-row-actions">
           <a
             href={sourceOnly ? dataset.sourceUrl : url}
-            aria-label={`${sourceOnly ? "View source" : "View dataset"}: ${dataset.title}`}
+            aria-label={`${sourceOnly ? "View source" : "Explore"}: ${dataset.title}`}
             target={sourceOnly ? "_blank" : undefined}
             rel={sourceOnly ? "noreferrer" : undefined}
           >
-            {sourceOnly ? "View source" : "View dataset"}
+            {sourceOnly ? "View source" : "Explore"}
           </a>
           <button
             className="text-button dataset-expand"
             aria-expanded={expanded}
+            aria-haspopup="dialog"
             aria-controls={detailsId}
             aria-label={`${expanded ? "Hide" : "Show"} details for ${dataset.title}`}
             onClick={onExpand}
@@ -62,15 +63,14 @@ export default function DatasetCard({
           </button>
         </div>
       </div>
-      <div id={detailsId} hidden={!expanded} className="dataset-expanded">
-        {expanded && (
-          <CatalogDatasetDetails
-            dataset={dataset}
-            sourceOnly={sourceOnly}
-            status={status}
-          />
-        )}
-      </div>
+      {expanded && (
+        <CatalogDatasetDetails
+          id={detailsId}
+          dataset={dataset}
+          recordCount={access && access.recordCount}
+          onClose={onExpand}
+        />
+      )}
     </article>
   );
 }

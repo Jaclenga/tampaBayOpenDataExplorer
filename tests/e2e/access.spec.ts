@@ -1,5 +1,5 @@
 import { test, expect } from "@playwright/test";
-import { accessReport } from "../fixtures";
+import { accessReport, dataset } from "../fixtures";
 import { record } from "../fixtures";
 import type { Page } from "@playwright/test";
 import { installApi } from "./helpers";
@@ -197,9 +197,8 @@ test("source-only datasets remain discoverable and link to the publisher without
     row.getByText("Preview not available", { exact: true }),
   ).toHaveCount(0);
   await row.getByRole("button", { name: /Show details/ }).click();
-  await expect(
-    row.getByText("Preview not available", { exact: true }),
-  ).toBeVisible();
+  await expect(page.getByRole("dialog")).toBeVisible();
+  await page.keyboard.press("Escape");
   await expect(page.locator(".source-only-badge")).toHaveCount(0);
   await page
     .getByRole("link", { name: "Neighborhood parks", exact: true })
@@ -219,5 +218,5 @@ test("source-only datasets remain discoverable and link to the publisher without
   ).toHaveAttribute("href", "https://data.example.test/parks");
   await expect(page.getByRole("button", { name: /Page CSV/ })).toHaveCount(0);
   expect(api.queries).toHaveLength(0);
-  expect(requests).toEqual([]);
+  expect(requests).toEqual([`${dataset.serviceUrl}/${dataset.layerId}?f=json`]);
 });

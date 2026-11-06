@@ -47,7 +47,7 @@ test("desktop rows fit the density target and sticky filters stop before the foo
     page
       .locator(".dataset-card")
       .first()
-      .getByRole("link", { name: /View dataset:/ }),
+      .getByRole("link", { name: /Explore:/ }),
   ).toBeVisible();
   const height = (await page.locator("aside").boundingBox())!.height;
   expect(height).toBeLessThan(400);
@@ -132,7 +132,7 @@ for (const width of [768, 390])
     const row = page.locator(".dataset-card").nth(2);
     await row.getByRole("button", { name: /Show details/ }).click();
     await expect(
-      row.getByText("Dataset identifier", { exact: true }),
+      row.getByText("Original dataset URL", { exact: true }),
     ).toBeVisible();
     expect(
       await page.evaluate(

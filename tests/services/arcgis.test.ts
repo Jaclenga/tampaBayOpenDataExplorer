@@ -9,6 +9,36 @@ import { dataset, fields, layerResponse, metadata, record } from "../fixtures";
 const respond = (body: unknown) =>
   vi.mocked(fetch).mockImplementation(async () => Response.json(body));
 describe("live ArcGIS capability parsing", () => {
+  it("preserves source descriptions, attribution and field descriptions without deriving them", async () => {
+    respond({
+      ...layerResponse,
+      description: "Publisher text",
+      copyrightText: "City credit",
+      fields: [
+        {
+          name: "NAME",
+          type: "esriFieldTypeString",
+          description: "Source definition",
+        },
+      ],
+    });
+    expect(await getMetadata(dataset)).toMatchObject({
+      description: "Publisher text",
+      attribution: "City credit",
+      fields: [
+        {
+          name: "NAME",
+          type: "esriFieldTypeString",
+          description: "Source definition",
+        },
+      ],
+    });
+    respond({ fields });
+    const missing = await getMetadata(dataset);
+    expect(missing.description).toBeUndefined();
+    expect(missing.attribution).toBeUndefined();
+    expect(missing.fields[0].description).toBeUndefined();
+  });
   it("falls back to the advertised OID field and safe nonspatial defaults", async () => {
     respond({ fields });
     const result = await getMetadata(dataset);

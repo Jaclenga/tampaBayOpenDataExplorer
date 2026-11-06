@@ -48,13 +48,16 @@ test("page sizes, counts, navigation, URL/detail restoration and expansion clean
   expect(await page.evaluate(() => history.length)).toBe(historyLength);
   const row = rows(page).first();
   await row.getByRole("button", { name: /Show details/ }).click();
-  await row.getByRole("link", { name: "View dataset", exact: true }).click();
+  await page
+    .getByRole("link", { name: "Explore dataset", exact: true })
+    .click();
   await page.goBack();
   await expect(size(page)).toHaveValue("10");
   await expect(page.getByText("Page 2 of 13", { exact: true })).toBeVisible();
   await page.goForward();
   await expect(page.getByRole("link", { name: /All datasets/ })).toBeVisible();
   await page.getByRole("link", { name: /All datasets/ }).click();
+  await page.keyboard.press("Escape");
   await next(page).click();
   await expect(page.getByRole("button", { name: /Hide details/ })).toHaveCount(
     0,

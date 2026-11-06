@@ -12,6 +12,8 @@ import {
   type RecordFeature,
 } from "../types";
 const metadataSchema = z.object({
+  description: z.string().nullable().optional(),
+  copyrightText: z.string().nullable().optional(),
   fields: z.array(fieldSchema),
   objectIdField: z.string().optional(),
   objectIdFieldName: z.string().optional(),
@@ -94,6 +96,8 @@ export async function getMetadata(
   const m = parsed.data;
   return {
     fields: m.fields,
+    description: m.description,
+    attribution: m.copyrightText,
     sourceUpdatedAt: sourceTimestamp(m.editingInfo?.lastEditDate),
     sourceUpdatedKind: m.editingInfo?.lastEditDate != null ? "records" : null,
     inspectedAt: new Date().toISOString(),

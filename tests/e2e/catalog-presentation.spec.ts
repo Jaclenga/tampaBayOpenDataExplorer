@@ -34,23 +34,14 @@ test("restrained row metadata, actions, wrapping and genuine failure indicators"
   await expect(details).toHaveText("Details");
   await details.focus();
   await page.keyboard.press("Enter");
-  await expect(row.locator(".catalog-preview-status")).toContainText(
-    "Publisher HTTP 503",
-  );
-  await expect(
-    row.getByText("Preview not available", { exact: true }),
-  ).toHaveCount(0);
-  await expect(row.locator(".catalog-preview-status")).toHaveCSS(
-    "background-color",
-    "rgba(0, 0, 0, 0)",
-  );
+  await expect(page.getByRole("dialog")).toBeVisible();
   await page.setViewportSize({ width: 390, height: 844 });
   expect(
     await page.evaluate(
       () => document.documentElement.scrollWidth <= innerWidth,
     ),
   ).toBe(true);
-  await row.getByRole("button", { name: /Hide details/ }).click();
+  await page.getByRole("button", { name: "Close dataset details" }).click();
   await expect(row.locator(".catalog-preview-status")).toHaveCount(0);
 });
 
@@ -70,11 +61,9 @@ test("long titles wrap above separated metadata without overlapping actions", as
     }),
   );
   await page.goto("/");
-  const row = page
-    .locator(".dataset-card")
-    .filter({
-      has: page.getByRole("heading", { name: title.trim(), exact: true }),
-    });
+  const row = page.locator(".dataset-card").filter({
+    has: page.getByRole("heading", { name: title.trim(), exact: true }),
+  });
   await expect(row.locator(".dataset-meta")).toHaveText(
     "Test City \u00b7 Point layer",
   );

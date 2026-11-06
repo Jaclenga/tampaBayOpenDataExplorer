@@ -22,9 +22,11 @@ test("compact rows, combined search/sort, keyboard expansion and persistent URL 
   await expect(
     row.getByRole("button", { name: /Hide details/ }),
   ).toHaveAttribute("aria-expanded", "true");
-  await expect(row.getByText("test/parks", { exact: true })).toBeVisible();
+  await expect(page.getByRole("dialog")).toBeVisible();
   expect(api.queries).toHaveLength(0);
-  await row.getByRole("link", { name: "View dataset", exact: true }).click();
+  await page
+    .getByRole("link", { name: "Explore dataset", exact: true })
+    .click();
   await expect(
     page.getByRole("heading", { name: "Neighborhood parks", exact: true }),
   ).toBeVisible();
@@ -38,6 +40,7 @@ test("compact rows, combined search/sort, keyboard expansion and persistent URL 
   await expect(
     page.getByRole("button", { name: /Hide details for Neighborhood/ }),
   ).toHaveAttribute("aria-expanded", "true");
+  await page.keyboard.press("Escape");
   await page.getByRole("searchbox").fill("test/roads");
   await expect(page.locator(".dataset-card")).toHaveCount(1);
   await page
@@ -100,9 +103,7 @@ test("pagination and sticky filters survive opening a dataset", async ({
     .toBeGreaterThan(y - 100);
 });
 
-test("expanded checked datasets reuse real safe R identifiers and clipboard feedback", async ({
-  page,
-}) => {
+test("metadata details keep R code in exploration", async ({ page }) => {
   await installApi(page);
   const real = JSON.parse(readFileSync("public/catalog.json", "utf8"))
     .datasets as Dataset[];
@@ -140,34 +141,15 @@ test("expanded checked datasets reuse real safe R identifiers and clipboard feed
     has: page.getByRole("heading", { name: checked.title, exact: true }),
   });
   await row.getByRole("button", { name: /Show details/ }).click();
-  await expect(
-    row.getByRole("textbox", { name: "R code", exact: true }),
-  ).toHaveValue(/tbod_get_dataset\("construction-permits", limit = 100\)/);
-  await row.getByRole("button", { name: "Copy Code", exact: true }).click();
-  await expect(row.getByRole("status")).toHaveText("R code copied.");
-  expect(
-    await page.evaluate(() => sessionStorage.getItem("catalog-copy")),
-  ).toContain('tbod_get_dataset("construction-permits"');
-  await expect(
-    row.getByRole("link", { name: "Map layer at publisher" }),
-  ).toHaveAttribute("href", `${checked.serviceUrl}/${checked.layerId}`);
-  await page.setViewportSize({ width: 390, height: 844 });
-  expect(
-    await page.evaluate(
-      () => document.documentElement.scrollWidth <= innerWidth,
-    ),
-  ).toBe(true);
-  await page.screenshot({
-    path: "test-results/catalog-r-mobile.png",
-    fullPage: true,
-  });
-  await row.getByRole("button", { name: /Hide details/ }).click();
-  await expect(
-    row.getByRole("textbox", { name: "R code", exact: true }),
-  ).toHaveCount(0);
+  await expect(page.getByRole("dialog")).toBeVisible();
+  await expect(page.getByRole("textbox", { name: "R code" })).toHaveCount(0);
+  await expect(page.getByRole("link", { name: "Explore dataset" })).toHaveCount(
+    1,
+  );
+  await page.keyboard.press("Escape");
 });
 
-test("mobile filter panel, inline details, and R code fit narrow screens", async ({
+test("mobile filter panel and metadata drawer fit narrow screens", async ({
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
@@ -183,7 +165,7 @@ test("mobile filter panel, inline details, and R code fit narrow screens", async
   await page.getByRole("button", { name: /Hide filters/ }).click();
   await page.getByRole("button", { name: /Show details/ }).click();
   await expect(
-    page.getByText("Dataset identifier", { exact: true }),
+    page.getByText("Original dataset URL", { exact: true }),
   ).toBeVisible();
   expect(
     await page.evaluate(
