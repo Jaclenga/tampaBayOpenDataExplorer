@@ -14,16 +14,9 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - run: npm run catalog:validate
-      - run: npm run access:validate
-      - run: npm run discovery:validate
-      - run: npm run lint
-      - run: npm test
-      - run: npm run build
-      - run: npm run build:functions
-      - run: npm run test:guard
-      - run: npx playwright install --with-deps chromium
-      - run: npm run test:e2e
+      # Full validation and browser tests run separately in ci.yml on each push/PR.
+      - name: Build website
+        run: npm run build
       - name: Deploy private request guard and Pages
         run: |
           npm run deploy:guard

@@ -45,7 +45,7 @@ With Cloudflare credentials configured for the existing project:
 npm run deploy
 ```
 
-This builds the app, deploys the private guard, then publishes the site. The manual [deployment workflow](.github/workflows/deploy.yml) runs validation and tests before deploying.
+This builds the app, deploys the private guard, then publishes the site. The manual [deployment workflow](.github/workflows/deploy.yml) does the same. Validation and tests run separately in [Application checks](.github/workflows/ci.yml) on every push and pull request; check those results before publishing.
 
 ## Technical guides
 
