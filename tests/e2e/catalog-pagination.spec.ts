@@ -57,7 +57,11 @@ test("page sizes, counts, navigation, URL/detail restoration and expansion clean
   await page.goForward();
   await expect(page.getByRole("link", { name: /All datasets/ })).toBeVisible();
   await page.getByRole("link", { name: /All datasets/ }).click();
+  // Hash navigation restores the drawer asynchronously. Wait until it is open
+  // before sending Escape, otherwise the key can arrive on the detail page.
+  await expect(page.getByRole("dialog")).toBeVisible();
   await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog")).toHaveCount(0);
   await next(page).click();
   await expect(page.getByRole("button", { name: /Hide details/ })).toHaveCount(
     0,
